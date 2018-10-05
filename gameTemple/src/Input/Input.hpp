@@ -13,7 +13,7 @@
 class Input final
 {
 private:
-	class Singleton
+	class Singleton final
 	{
 	private:
 		//ƒL[‚Ì“ü—Íó‘Ô‚ğŠi”[‚·‚é
