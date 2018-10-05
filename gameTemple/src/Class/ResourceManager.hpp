@@ -30,7 +30,7 @@ private:
 		{
 			for (auto& it : divGraphs_)
 			{
-				RenderUtility::SafeDeleteArray(it.second.first);
+				Utility::SafeDeleteArray(it.second.first);
 			}
 			InitGraph();
 		}
@@ -240,7 +240,7 @@ private:
 				return;
 			}
 			DeleteGraph(*divGraphs_[a].first);
-			RenderUtility::SafeDeleteArray(divGraphs_[a].first);
+			Utility::SafeDeleteArray(divGraphs_[a].first);
 			divGraphs_.erase(a);
 		}
 		/**

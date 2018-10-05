@@ -65,7 +65,7 @@ namespace ECS
 		{}
 	};
 
-	//!Render系の処理に共通する処理をまとめたものです
+	//!描画系の処理に共通する処理をまとめたものです
 	namespace RenderUtility
 	{
 		//!色を設定します

@@ -10,7 +10,32 @@
 #include <cstdio>
 #include <windows.h>
 
-namespace RenderUtility
+#ifdef _DEBUG
+ //!デバッグ時にコンソールを表示します
+#define ShowConsole() Utility::Console c
+//!コンソールにcoutを許可します
+#define StartOutputDbgString() Utility::coutDbgString c
+/**
+* @brief デバッグ時にコンソールへの出力をする命令です。
+* @details 呼び出した関数名も出力されます
+* ラムダ式では使えません。関数オブジェクトではoperator()となってしまいます。
+*/
+#define DOUT_BY_FUNCTION std::cout << __func__ << ":"
+//!デバッグ時にコンソールへの出力をする命令です。
+#define DOUT std::cout
+/**
+* @brief コンソールへの出力時にファイル名と行数を表示します
+* @details DOUT << FILENAME_AND_LINE; のように使います
+*/
+#define FILENAME_AND_LINE __FILE__ << ":" << __LINE__
+#else 
+#define DOUT_BY_FUNCTION 0 && std::cout 
+#define DOUT 0 && std::cout
+#define FILENAME_AND_LINE 0 && std::cout
+#define ShowConsole() __noop
+#define StartOutputDbgString() __noop
+#endif
+namespace Utility
 {
 	/*!
 	* @class Console
@@ -72,33 +97,6 @@ namespace RenderUtility
 			std::cout.rdbuf(default_stream);
 		}
 	};
-
-#ifdef _DEBUG
-//!デバッグ時にコンソールを表示します
-#define ShowConsole() Console c
-//!コンソールにcoutを許可します
-#define StartOutputDbgString() coutDbgString c
-/**
-* @brief デバッグ時にコンソールへの出力をする命令です。
-* @details 呼び出した関数名も出力されます
-* ラムダ式では使えません。関数オブジェクトではoperator()となってしまいます。
-*/
-#define DOUT_BY_FUNCTION std::cout << __func__ << ":"
-//!デバッグ時にコンソールへの出力をする命令です。
-#define DOUT std::cout
-/**
-* @brief コンソールへの出力時にファイル名と行数を表示します
-* @details DOUT << FILENAME_AND_LINE; のように使います
-*/
-#define FILENAME_AND_LINE __FILE__ << ":" << __LINE__
-#else 
-#define DOUT_BY_FUNCTION 0 && std::cout 
-#define DOUT 0 && std::cout
-#define FILENAME_AND_LINE 0 && std::cout
-#define ShowConsole() __noop
-#define StartOutputDbgString() __noop
-#endif
-
 
 	//!引数に入れたポインタを解放します
 	template<class T> void SafeDelete(T& t)
@@ -195,5 +193,4 @@ namespace RenderUtility
 			isActive_ = false;
 		}
 	};
-
 }
