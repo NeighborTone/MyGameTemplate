@@ -2,6 +2,8 @@
 * @file FPS.hpp
 * @brief FPSを扱うクラスです
 * 参考元 https://dixq.net/g/03_14.html
+* @author tonarinohito
+* @date 2018/10/05
 */
 #pragma once
 #include <memory>

@@ -81,7 +81,6 @@ namespace ECS
 	*/
 	struct ComponentData : public Component
 	{
-	private:
 		void initialize() override final {}
 		void update() override final {}
 		void draw3D() override final {}
@@ -285,7 +284,7 @@ namespace ECS
 		* @brief グループごとの描画を登録順に行います
 		* @param MaxGroup 最大グループ数
 		*/
-		void OrderByDraw(const size_t MaxGroup)
+		void orderByDraw(const size_t MaxGroup)
 		{
 			for (auto i(0u); i < MaxGroup; ++i)
 			{
