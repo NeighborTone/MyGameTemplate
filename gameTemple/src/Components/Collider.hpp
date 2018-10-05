@@ -68,7 +68,7 @@ namespace ECS
 	@brief 矩形です.
 	@details  Positionが必要です
 	*/
-	class BoxCollider final : public Component, public IBoxCollider
+	class BoxCollider final : public ComponentSystem, public IBoxCollider
 	{
 	private:
 		Position* pos_ = nullptr;
@@ -128,7 +128,7 @@ namespace ECS
 	@brief 円です.
 	@details  Positionが必要です
 	*/
-	class CircleCollider final : public Component, public ICircleCollider
+	class CircleCollider final : public ComponentSystem, public ICircleCollider
 	{
 	private:
 		Position* pos_ = nullptr;

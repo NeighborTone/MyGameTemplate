@@ -1,3 +1,9 @@
+/**
+ * @file GameController.hpp
+ * @brief アプリケーションの処理を行います
+ * @author tonarinohito
+ * @date 2018/10/06
+ */
 #pragma once
 #include "../ECS/ECS.hpp"
 #define ENTITY_GROUP (ECS::Group)GameController::GameGroup
@@ -7,9 +13,16 @@ private:
 	ECS::EntityManager entityManager_;
 	void resourceLoad();
 public:
+
+	/**
+	* @brief エンティティ属するのグループです
+	* 描画レイヤー、処理順、エンティティの取得に使います
+	*/
 	enum class GameGroup : ECS::Group
 	{
 		//OrderByDraw使用時、番号が大きいほど手前に描画される
+		LAYER0,
+		LAYER1,
 		MAX,		//Group最大数
 	};
 	GameController();

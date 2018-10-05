@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <windows.h>
 
-namespace Utility
+namespace RenderUtility
 {
 	/*!
 	* @class Console
@@ -135,8 +135,8 @@ namespace Utility
 
 	public:
 		//!計測を開始します
-		ProcessingTime(const std::string& name = "Process", bool start = true) :
-			name_(name),
+		ProcessingTime(const std::string& a = "Process", bool start = true) :
+			name_(a),
 			isActive_(start)
 		{
 			if (start)

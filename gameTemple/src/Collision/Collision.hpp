@@ -26,12 +26,12 @@ public:
 	template<class T = ECS::BoxCollider, class T2 = ECS::BoxCollider>
 	[[nodiscard]] inline static bool BoxAndBox(const ECS::Entity& b1, const ECS::Entity& b2)
 	{
-		if (!b1.HasComponent<T>() || !b2.HasComponent<T2>())
+		if (!b1.hasComponent<T>() || !b2.hasComponent<T2>())
 		{
 			return false;
 		}
-		const auto& box1 = b1.GetComponent<T>();
-		const auto& box2 = b2.GetComponent<T2>();
+		const auto& box1 = b1.getComponent<T>();
+		const auto& box2 = b2.getComponent<T2>();
 		if (box1.x() < box2.x() + box2.w() &&
 			box2.x() < box1.x() + box1.w() &&
 			box1.y() < box2.y() + box2.h() &&
@@ -72,12 +72,12 @@ public:
 	template<class T = ECS::CircleCollider, class T2 = ECS::CircleCollider>
 	[[nodiscard]] inline static bool CircleAndCircle(const ECS::Entity& e1, const ECS::Entity& e2)
 	{
-		if (!e1.HasComponent<T>() || !e2.HasComponent<T2>())
+		if (!e1.hasComponent<T>() || !e2.hasComponent<T2>())
 		{
 			return false;
 		}
-		const auto& c1 = e1.GetComponent<T>();
-		const auto& c2 = e2.GetComponent<T2>();
+		const auto& c1 = e1.getComponent<T>();
+		const auto& c2 = e2.getComponent<T2>();
 		if (((c1.x() - c2.x()) *(c1.x() - c2.x())) + ((c1.y() - c2.y()) * (c1.y() - c2.y())) <=
 			(c1.radius() + c2.radius()) * (c1.radius() + c2.radius()))
 		{
@@ -115,12 +115,12 @@ public:
 	template<class T = ECS::CircleCollider, class T2 = ECS::Position>
 	[[nodiscard]] inline static bool CircleAndPoint(const ECS::Entity& e1, const ECS::Entity& e2)
 	{
-		if (!e1.HasComponent<T>() || !e2.HasComponent<T2>())
+		if (!e1.hasComponent<T>() || !e2.hasComponent<T2>())
 		{
 			return false;
 		}
-		const auto& circle = e1.GetComponent<T>();
-		const auto& point = e2.GetComponent<T2>();
+		const auto& circle = e1.getComponent<T>();
+		const auto& point = e2.getComponent<T2>();
 
 		Vec2 buttonPos = Vec2(circle.x(), circle.y());
 		Vec2 distance = buttonPos - point.val();

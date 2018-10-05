@@ -86,7 +86,7 @@ namespace ECS
 	@details Gravity, Velocity, Positionが必要です。衝突応答を行う場合はColliderが必要です
 	現状だと1つのグループとの衝突応答しかできないのでこれを別のコンポーネントにするかもしれない
 	*/
-	class Physics final : public Component
+	class Physics final : public ComponentSystem
 	{
 	private:
 		
@@ -199,7 +199,7 @@ namespace ECS
 	/*!
 	@brief PositionとRotationとScaleをまとめます
 	*/
-	class Transform final : public Component
+	class Transform final : public ComponentSystem
 	{
 	private:
 		Position* pos_;
@@ -244,7 +244,7 @@ namespace ECS
 	/*!
 	@brief コンストラクタで指定したフレーム後にEntityを殺します
 	*/
-	class KillEntity final : public Component
+	class KillEntity final : public ComponentSystem
 	{
 	private:
 		int cnt_;

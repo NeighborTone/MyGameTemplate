@@ -20,7 +20,7 @@
 namespace ECS
 {
 	class Entity;
-	class Component;
+	class ComponentSystem;
 	class EntityManager;
 
 	using ComponentID = std::size_t;
@@ -47,7 +47,7 @@ namespace ECS
 	//!コンポーネントのフラグ管理用
 	using ComponentBitSet = std::bitset<MaxComponents>;
 	//!フラグとIDを関連付けるために静的配列で用意
-	using ComponentArray = std::array<Component*, MaxComponents>;
+	using ComponentArray = std::array<ComponentSystem*, MaxComponents>;
 	//!Groupも同様にIDを関連付けるために静的配列で用意
 	using GroupBitSet = std::bitset<MaxGroups>;
 
@@ -55,7 +55,7 @@ namespace ECS
     * @brief Componentの基底クラスです
 	* @details Entityに対するすべての振る舞いはこのクラスを継承し実装します
 	*/
-	class Component
+	class ComponentSystem
 	{
 	private:
 		//Entityによって殺されたいのでこうなった
@@ -68,7 +68,7 @@ namespace ECS
 		virtual void update() {};
 		virtual void draw3D() {};
 		virtual void draw2D() {};
-		virtual ~Component() {}
+		virtual ~ComponentSystem() {}
 		//このコンポーネントが生きているか返します
 		[[nodiscard]] virtual bool isActive() const final { return active_; }
 
@@ -77,14 +77,13 @@ namespace ECS
 	/**
 	* @brief ComponentDataの基底クラスです
 	* @details データにはメソッドを持たせません。
-	* 複数の振る舞いにおいて共通で使用したい値が該当します
+	* 複数の振る舞いにおいて共通で使用したい値やパブリックな値が該当します
 	*/
-	struct ComponentData : public Component
+	struct ComponentData : public ComponentSystem
 	{
-		void initialize() override final {}
-		void update() override final {}
-		void draw3D() override final {}
-		void draw2D() override final {}
+		[[deprecated("can not use")]] void update() override final {}
+		[[deprecated("can not use")]] void draw3D() override final {}
+		[[deprecated("can not use")]] void draw2D() override final {}
 	};
 
 	/**
@@ -98,7 +97,7 @@ namespace ECS
 		std::string tag_;
 		EntityManager& manager_;
 		bool isActive_ = true;
-		std::vector<std::unique_ptr<Component>> components_;
+		std::vector<std::unique_ptr<ComponentSystem>> components_;
 		ComponentArray  componentArray_;
 		ComponentBitSet componentBitSet_;
 		GroupBitSet groupBitSet_;
@@ -106,7 +105,7 @@ namespace ECS
 		void refreshComponent()
 		{
 			components_.erase(std::remove_if(std::begin(components_), std::end(components_),
-				[](const std::unique_ptr<Component> &pCom)
+				[](const std::unique_ptr<ComponentSystem> &pCom)
 			{
 				return !pCom->isActive();
 			}),
@@ -139,7 +138,13 @@ namespace ECS
 		//!このEntityについているComponentの3D描画処理を行います
 		void draw3D()
 		{
-			for (auto& c : components_) c->draw3D();
+			for (auto& c : components_) {
+				if (c == nullptr)
+				{
+					continue;
+				}
+				c->draw3D();
+			}
 		}
 
 		//!このEntityについているComponentの2D描画処理を行います
@@ -197,13 +202,14 @@ namespace ECS
 			//重複は許可しない
 			if (hasComponent<T>())
 			{
+				std::cerr << "addComponent is failed" << std::endl;
 				return getComponent<T>();
 			}
 			//Tips: std::forward
 			//関数テンプレートの引数を転送する。
 			T* c(new T(std::forward<TArgs>(args)...));
 			c->entity = this;
-			std::unique_ptr<Component> uPtr(c);
+			std::unique_ptr<ComponentSystem> uPtr(c);
 			components_.emplace_back(std::move(uPtr));
 
 			//識別するためのIDと生存フラグをセット
@@ -233,7 +239,7 @@ namespace ECS
 		{
 			if (!hasComponent<T>())
 			{
-				std::cout << typeid(T).name() << std::endl;
+				std::cerr << typeid(T).name() << std::endl;
 				assert(hasComponent<T>());
 			}
 			auto ptr(componentArray_[GetComponentTypeID<T>()]);
@@ -369,6 +375,13 @@ namespace ECS
 			return *e;
 		}
 	};
+
+	//!vectorに格納されているエンティティの更新を行います
+	void EntitiesUpdate(const std::vector<Entity*>& entities);
+	//!vectorに格納されているエンティティの2D描画を行います
+	void EntitiesDraw2D(const std::vector<Entity*>& entities);
+	//!vectorに格納されているエンティティの3D描画を行います
+	void EntitiesDraw3D(const std::vector<Entity*>& entities);
 
 }
 

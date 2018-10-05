@@ -33,7 +33,7 @@ namespace Scene
 		public:
 			~Singleton()
 			{
-				Utility::SafeDelete(pScene_);
+				RenderUtility::SafeDelete(pScene_);
 			}
 			/**
 			* @brief ˆ—‚µ‚½‚¢ƒV[ƒ“‚ğŒˆ’è‚µ‚Ü‚·
@@ -42,7 +42,7 @@ namespace Scene
 			*/
 			void changeScene(const State& scene, ECS::EntityManager& entityManager)
 			{
-				Utility::SafeDelete(pScene_);
+				RenderUtility::SafeDelete(pScene_);
 				switch (scene)
 				{
 				case State::TITLE:  pScene_ = new Title(entityManager); break;
