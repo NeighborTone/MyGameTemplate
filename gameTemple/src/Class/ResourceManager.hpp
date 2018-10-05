@@ -11,12 +11,8 @@
 #include <string>
 #include <assert.h>
 #include "../Utility/Utility.hpp"
-//SetUseASyncLoadFlag( TRUE ); // 非同期読み込みフラグON
-//int a = LoadGraph("a.png"); // 非同期読み込み終わるまでは無効なハンドルが返る
-//SetUseASyncLoadFlag(FALSE); // 非同期読み込みフラグOFF
-//int b = LoadGraph("b.png"); // 同期読み込みなので有効なハンドルが返る
 
-
+//!グラフィックやサウンドのハンドル管理をします
 class ResourceManager final
 {
 private:
