@@ -29,6 +29,7 @@ namespace Scene
 		class Singleton final
 		{
 		private:
+			State state_;
 			IScene* pScene_ = nullptr;
 		public:
 			~Singleton()
@@ -52,6 +53,7 @@ namespace Scene
 				case State::GAME:   pScene_ = new Game(entityManager); break;
 				case State::RESULT: break;
 				}
+				state_ = scene;
 			}
 			//!現在指定されているシーンの更新を行います
 			void update()
@@ -62,6 +64,11 @@ namespace Scene
 			void draw()
 			{
 				pScene_->draw();
+			}
+			//!現在のシーンを返します
+			const State& getCurrentScene() const
+			{
+				return state_;
 			}
 		};
 	public:

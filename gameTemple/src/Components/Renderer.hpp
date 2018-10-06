@@ -1,7 +1,7 @@
 ﻿/**
 * @file  Renderer.hpp
 * @brief 描画関連のコンポーネントです。
-* @note  特に理由がなければSpriteDrawやSpriteAnimationDraw最も多機能なのでそれを推奨します
+* @note  特に理由がなければSpriteDrawやSpriteAnimationDrawが最も多機能なのでそれらの使用を推奨します
 * @author tonarinohito
 * @date 2018/10/06
 */
@@ -59,7 +59,7 @@ namespace ECS
 		BlendMode blendMode;
 		int alpha;
 		AlphaBlend() :
-			blendMode(NOBLEND),
+			blendMode(ALPHA),
 			alpha(255)
 		{}
 		AlphaBlend(const BlendMode& brend, const int alpha) :
@@ -69,10 +69,10 @@ namespace ECS
 	};
 
 	//!描画系の処理に共通する処理をまとめたものです
-	namespace RenderUtility
+	struct RenderUtility final
 	{
 		//!色を設定します
-		void SetColor(const Color* color)
+		static void SetColor(const Color* color)
 		{
 			if (color != nullptr)
 			{
@@ -81,7 +81,7 @@ namespace ECS
 			}
 		}
 		//!アルファブレンドを設定します
-		void SetBlend(const AlphaBlend* blend)
+		static void SetBlend(const AlphaBlend* blend)
 		{
 			if (blend != nullptr)
 			{
@@ -90,14 +90,14 @@ namespace ECS
 			}
 		}
 		//!描画の状態をもとに戻します。必ず描画終了時に呼び出してください
-		void ResetRenderState()
+		static void ResetRenderState()
 		{
 			//変更した色の情報を元に戻す
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 			SetDrawBright(255, 255, 255);
 		}
 		//!エンティティにColorとAlphaBlendを安全に参照させます。
-		void SatRenderDetail(const Entity* entity, Color** color, AlphaBlend** blend)
+		static void SatRenderDetail(const Entity* entity, Color** color, AlphaBlend** blend)
 		{
 			//色データがあれば反映する
 			if (entity->hasComponent<Color>())
@@ -110,7 +110,7 @@ namespace ECS
 				*blend = &entity->getComponent<AlphaBlend>();
 			}
 		}
-	}
+	};
 	
 	/*!
 	@brief 簡易画像描画機能です。左上基準です

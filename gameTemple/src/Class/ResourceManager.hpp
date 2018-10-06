@@ -17,7 +17,6 @@ class ResourceManager final
 {
 private:
 	/*!
-	@class GraphicManager
 	@brief Graphicハンドルを管理します
 	*/
 	class GraphicManager final
@@ -99,6 +98,28 @@ private:
 			case FALSE: return true;	//非同期読み込み済み
 			case TRUE:  return false;	//まだ
 			
+			}
+		}
+		/**
+		* @brief  指定したハンドルの読み込みが完了しているか返します
+		* @param  name 登録名
+		* @return 読み込み済みならしたらture
+		*/
+		[[nodiscard]] bool isLoadedDiv(const std::string& name)
+		{
+			switch (CheckHandleASyncLoad(*divGraphs_[name].first))
+			{
+			case -1:
+				if (*divGraphs_[name].first = -1)
+				{
+					DOUT << name + "loadAsync is failed" << std::endl;
+					assert(false);
+				}
+				break;
+
+			case FALSE: return true;	//非同期読み込み済み
+			case TRUE:  return false;	//まだ
+
 			}
 		}
 		/**
@@ -237,6 +258,7 @@ private:
 		{
 			if (divGraphs_.find(name) == divGraphs_.end() || !divGraphs_[name].first)
 			{
+				DOUT << "Registered name :" + name + " is remove failed" << std::endl;
 				return;
 			}
 			DeleteGraph(*divGraphs_[name].first);
@@ -252,6 +274,7 @@ private:
 		{
 			if (graphs_.find(name) == graphs_.end() || !graphs_[name])
 			{
+				DOUT << "Registered name :" + name + " is remove failed" << std::endl;
 				return;
 			}
 			DeleteGraph(graphs_[name]);
@@ -376,6 +399,7 @@ private:
 		{
 			if (sounds_.find(name) == sounds_.end() || !sounds_[name])
 			{
+				DOUT << "Registered name :" + name + " is remove failed" << std::endl;
 				return;
 			}
 			DeleteSoundMem(sounds_[name]);

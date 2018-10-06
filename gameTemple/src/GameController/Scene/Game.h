@@ -13,7 +13,6 @@ namespace Scene
 	class Game final : public IScene
 	{
 	private:
-		ECS::Entity* hoge;
 		ECS::Entity* fuga;
 		ECS::EntityManager& entityManager_;
 	public:

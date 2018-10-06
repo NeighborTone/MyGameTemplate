@@ -46,6 +46,12 @@
     <Filter Include="src\GameController\Scene">
       <UniqueIdentifier>{5fde29c5-4a8d-40f6-a68d-3b888fe30941}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ArcheType">
+      <UniqueIdentifier>{c378c3aa-b671-4bea-9c09-379ed5d86dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Events">
+      <UniqueIdentifier>{09cd9463-74ad-430b-b401-017133c19e7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utility\Vec.hpp">
@@ -107,6 +113,15 @@
     </ClInclude>
     <ClInclude Include="src\Components\Renderer.hpp">
       <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\EventManager.hpp">
+      <Filter>src\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArcheType\Fuga.hpp">
+      <Filter>src\ArcheType</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\FugaEvent.hpp">
+      <Filter>src\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
