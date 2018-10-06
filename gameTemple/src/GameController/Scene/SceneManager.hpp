@@ -64,7 +64,7 @@ namespace Scene
 			}
 		};
 	public:
-		inline static Singleton& Get()
+		static Singleton& Get()
 		{
 			static std::unique_ptr<Singleton> inst =
 				std::make_unique<Singleton>();

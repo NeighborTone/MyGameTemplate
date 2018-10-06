@@ -10,14 +10,13 @@
 #include "../System/System.hpp"
 #include <DxLib.h>
 
-
 namespace ECS
 {
 	/*!
 	@brief 色のデータです
 	*RGBを扱います。データの型はintです
 	*/
-	struct Color : public ComponentData
+	struct Color final : public ComponentData
 	{
 		int red, green, blue;
 
@@ -37,7 +36,7 @@ namespace ECS
 	@brief アルファブレンドに関するデータです
 	*ブレンドモードとアルファ値を扱います。データの型はenum BlendStateとintです
 	*/
-	struct AlphaBlend : public ComponentData
+	struct AlphaBlend final : public ComponentData
 	{
 		//!DXライブラリのブレンドモードを簡潔にまとめたものです
 		enum BlendMode
@@ -110,7 +109,7 @@ namespace ECS
 	}
 	
 	/*!
-	@brief 簡易画像描画機能です.
+	@brief 簡易画像描画機能です。左上基準です
 	* - Positionが必要です。
 	* - 色を変えたい場合はColorが必要です
 	* - アルファブレンドをしたい場合はAlphaBlendが必要です
@@ -123,10 +122,12 @@ namespace ECS
 		AlphaBlend* blend_ = nullptr;
 		std::string name_;
 		bool isDraw_ = true;
+		bool isCenter_ = false;
 	public:
+		//!登録した画像名を指定して初期化します
 		SimpleDraw(const char* name)
 		{
-			assert(ResourceManager::GetGraph().isExistenceHandle(name));
+			assert(ResourceManager::GetGraph().hasHanle(name));
 			name_ = name;
 		}
 		void initialize() override
@@ -136,12 +137,27 @@ namespace ECS
 		}
 		void draw2D() override
 		{
-			if (ResourceManager::GetGraph().isExistenceHandle(name_) &&
+			if (ResourceManager::GetGraph().hasHanle(name_) &&
 				isDraw_)
 			{
 				RenderUtility::SetColor(color_);
 				RenderUtility::SetBlend(blend_);
-				DrawGraphF(pos_->val.x, pos_->val.y, ResourceManager::GetGraph().getHandle(name_), true);
+				if (!isCenter_)
+				{
+					DrawGraphF(
+						pos_->val.x,
+						pos_->val.y,
+						ResourceManager::GetGraph().getHandle(name_), true);
+				}
+				else
+				{
+					int w(0), h(0);
+					GetGraphSize(ResourceManager::GetGraph().getHandle(name_),&w,&h);
+					DrawGraphF(
+						pos_->val.x - (static_cast<float>(w) / 2),
+						pos_->val.y -(static_cast<float>(h) / 2),
+						ResourceManager::GetGraph().getHandle(name_), true);
+				}
 				RenderUtility::ResetRenderState();
 			}
 			
@@ -156,11 +172,18 @@ namespace ECS
 		{
 			isDraw_ = false;
 		}
+		//!描画する基準座標を中心にするか引数で指定します
+		void doCenter(const bool isCenter)
+		{
+			isCenter_ = isCenter;
+		}
 	};
+
 	/*!
-	@class RectDraw
-	@brief 指定した範囲を描画する機能です。
-	@note  Positionが必要です
+	@brief 指定した範囲を描画する機能です。左上基準です
+	* - Positionが必要です。
+	* - 色を変えたい場合はColorが必要です
+	* - アルファブレンドをしたい場合はAlphaBlendが必要です
 	*/
 	class RectDraw final : public ComponentSystem
 	{
@@ -172,9 +195,10 @@ namespace ECS
 		std::string name_;
 		bool isDraw_ = true;
 	public:
+		//!登録した画像名を指定して初期化します
 		RectDraw(const char* name, const int srcX, const int srcY, const int w, const int h)
 		{
-			assert(ResourceManager::GetGraph().isExistenceHandle(name));
+			assert(ResourceManager::GetGraph().hasHanle(name));
 			rect.left = srcX;
 			rect.right = srcY;
 			rect.bottom = w;
@@ -188,7 +212,7 @@ namespace ECS
 		}
 		void draw2D() override
 		{
-			if (ResourceManager::GetGraph().isExistenceHandle(name_) &&
+			if (ResourceManager::GetGraph().hasHanle(name_) &&
 				isDraw_)
 			{
 				RenderUtility::SetColor(color_);
@@ -216,9 +240,11 @@ namespace ECS
 	};
 
 	/*!
-	@class AnimationDraw
-	@brief 分割画像を描画する機能です。
-	@note  PositionとDirectionが必要です、また向きによって反転します
+	@brief 分割画像を描画する機能です。また向きによって反転します。左上基準です
+	* - Position必要です。
+	* - Directionが必要です。
+	* - 色を変えたい場合はColorが必要です
+	* - アルファブレンドをしたい場合はAlphaBlendが必要です
 	*/
 	class AnimationDraw final : public ComponentSystem
 	{
@@ -232,9 +258,10 @@ namespace ECS
 		bool isTurn = false;
 		bool isDraw_ = true;
 	public:
+		//!登録した画像名を指定して初期化します
 		AnimationDraw(const char* name)
 		{
-			assert(ResourceManager::GetGraph().isExistenceDivHandle(name));
+			assert(ResourceManager::GetGraph().hasDivHandle(name));
 			name_ = name;
 		}
 		void initialize() override
@@ -259,7 +286,7 @@ namespace ECS
 		}
 		void draw2D() override
 		{
-			if (ResourceManager::GetGraph().isExistenceDivHandle(name_) &&
+			if (ResourceManager::GetGraph().hasDivHandle(name_) &&
 				isDraw_)
 			{
 				RenderUtility::SetColor(color_);

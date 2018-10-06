@@ -39,8 +39,19 @@ namespace ECS
 	{
 		float val;
 		Scale() = default;
-		explicit Scale(const float& scale_) : val(scale_) {}
+		explicit Scale(const float& scale) : val(scale) {}
 		
+	};
+	/*!
+	@brief  x,y方向の拡大率です,データの型はVec2です
+	*/
+	struct Scale2 final : public ComponentData
+	{
+		Vec2 val;
+		Scale2() = default;
+		explicit Scale2(const Vec2& scale) : val(scale) {}
+		explicit Scale2(const float& scale) : val(scale, scale) {}
+		explicit Scale2(const float& scaleX, const float& scaleY ) : val(scaleX, scaleY) {}
 	};
 	/*!
 	@brief  速度です,データの型はVec2です
@@ -205,7 +216,6 @@ namespace ECS
 		Position* pos_;
 		Rotation* rota_;
 		Scale* scale_;
-
 	public:
 		Transform() :pos_(nullptr), rota_(nullptr) {}
 		void initialize() override

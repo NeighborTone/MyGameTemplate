@@ -40,16 +40,16 @@ private:
 		* @param  name 登録名
 		* @detail 既に登録した名前は使えません
 		*/
-		void load(const std::string& path, const std::string& a)
+		void load(const std::string& path, const std::string& name)
 		{
 			//名前の重複防止
-			if (graphs_.count(a))
+			if (graphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + a + " add is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
-			graphs_[a] = LoadGraph(path.c_str());
-			if (graphs_[a] == -1)
+			graphs_[name] = LoadGraph(path.c_str());
+			if (graphs_[name] == -1)
 			{
 				DOUT << path + "load is failed" << std::endl;
 				assert(false);
@@ -62,17 +62,17 @@ private:
 		* @detail 既に登録した名前は使えません。非同期なのでこのメソッドで処理が止まることはありません
 		*
 		*/
-		void loadAsync(const std::string& path, const std::string& a)
+		void loadAsync(const std::string& path, const std::string& name)
 		{
 			//名前の重複防止
-			if (graphs_.count(a))
+			if (graphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + a + " add is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
 			SetUseASyncLoadFlag(TRUE); // 非同期読み込みフラグON
-			graphs_[a] = LoadGraph(path.c_str());
-			if (graphs_[a] == -1)
+			graphs_[name] = LoadGraph(path.c_str());
+			if (graphs_[name] == -1)
 			{
 				DOUT << path + "load is failed" << std::endl;
 				assert(false);
@@ -84,14 +84,14 @@ private:
 		* @param  name 登録名
 		* @return 読み込み済みならしたらture
 		*/
-		[[nodiscard]] bool isLoaded(const std::string& a)
+		[[nodiscard]] bool isLoaded(const std::string& name)
 		{
-			switch (CheckHandleASyncLoad(graphs_[a]))
+			switch (CheckHandleASyncLoad(graphs_[name]))
 			{
 			case -1:
-				if (graphs_[a] = -1)
+				if (graphs_[name] = -1)
 				{
-					DOUT << a + "loadAsync is failed" << std::endl;
+					DOUT << name + "loadAsync is failed" << std::endl;
 					assert(false);
 				}
 				break;
@@ -102,31 +102,31 @@ private:
 			}
 		}
 		/**
-		* @brief 分割画像をロードします
-		* @param (path) ファイルパス
-		* @param (name) 登録名
-		* @param (AllNum) 画像の分割総数
-		* @param (XNum) 横方向の数
-		* @param (YNum) 縦方向の数
-		* @param (XSize) 分割した画像一枚分の横のサイズ
-		* @param (YSize) 分割した画像一枚分の縦のサイズ
+		* @brief  分割画像をロードします
+		* @param  path ファイルパス
+		* @param  name 登録名
+		* @param  allNum 画像の分割総数
+		* @param  xNum 横方向の数
+		* @param  yNum 縦方向の数
+		* @param  xSize 分割した画像一枚分の横のサイズ
+		* @param  ySize 分割した画像一枚分の縦のサイズ
 		* @return 成功したらture
 		* @detail 既に登録した名前は使えません
 		*/
-		void loadDiv(const std::string& path, const std::string& a,
-			const int AllNum,
-			const int XNum, const int YNum,
-			const int XSize, const int YSize)
+		void loadDiv(const std::string& path, const std::string& name,
+			const int allNum,
+			const int xNum, const int yNum,
+			const int xSize, const int ySize)
 		{
 			//名前の重複防止
-			if (divGraphs_.count(a))
+			if (divGraphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + a + " add is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
-			divGraphs_[a].first = new int[AllNum];
-			divGraphs_[a].second = (size_t)AllNum;
-			int isOk = LoadDivGraph(path.c_str(), AllNum, XNum, YNum, XSize, YSize, divGraphs_[a].first);
+			divGraphs_[name].first = new int[allNum];
+			divGraphs_[name].second = (size_t)allNum;
+			int isOk = LoadDivGraph(path.c_str(), allNum, xNum, yNum, xSize, ySize, divGraphs_[name].first);
 			if (isOk == -1)
 			{
 				DOUT << path + " is failed" << std::endl;
@@ -137,28 +137,28 @@ private:
 		* @brief  分割画像を非同期でロードします
 		* @param  path	ファイルパス
 		* @param  name	登録名
-		* @param  AllNum 画像の分割総数
-		* @param  XNum   横方向の数
-		* @param  YNum   縦方向の数
-		* @param  XSize  分割した画像一枚分の横のサイズ
-		* @param  YSize  分割した画像一枚分の縦のサイズ
+		* @param  allNum 画像の分割総数
+		* @param  xNum 横方向の数
+		* @param  yNum 縦方向の数
+		* @param  xSize 分割した画像一枚分の横のサイズ
+		* @param  ySize 分割した画像一枚分の縦のサイズ
 		* @detail 既に登録した名前は使えません。非同期なのでこのメソッドで処理が止まることはありません
 		*/
-		void loadDivAsync(const std::string& path, const std::string& a,
-			const int AllNum,
-			const int XNum, const int YNum,
-			const int XSize, const int YSize)
+		void loadDivAsync(const std::string& path, const std::string& name,
+			const int allNum,
+			const int xNum, const int yNum,
+			const int xSize, const int ySize)
 		{
 			//名前の重複防止
-			if (divGraphs_.count(a))
+			if (divGraphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + a + " add is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
 			SetUseASyncLoadFlag(TRUE); // 非同期読み込みフラグON
-			divGraphs_[a].first = new int[AllNum];
-			divGraphs_[a].second = (size_t)AllNum;
-			int isOk = LoadDivGraph(path.c_str(), AllNum, XNum, YNum, XSize, YSize, divGraphs_[a].first);
+			divGraphs_[name].first = new int[allNum];
+			divGraphs_[name].second = (size_t)allNum;
+			int isOk = LoadDivGraph(path.c_str(), allNum, xNum, yNum, xSize, ySize, divGraphs_[name].first);
 			if (isOk == -1)
 			{
 				DOUT << path + " is failed" << std::endl;
@@ -167,95 +167,97 @@ private:
 			SetUseASyncLoadFlag(FALSE); // 非同期読み込みフラグOFF
 		}
 		/**
-		* @brief メモリに読み込んだ画像のハンドルを返します
-		* @param (name) 登録名
+		* @brief  メモリに読み込んだ画像のハンドルを返します
+		* @param  name 登録名
 		* @return 成功したらハンドルが返ります
 		* @detail 存在しない名前にアクセスするとエラーになります
 		*/
-		[[nodiscard]] int getHandle(const std::string& a)
+		[[nodiscard]] int getHandle(const std::string& name)
 		{
-			if (graphs_.find(a) == graphs_.end())
+			if (graphs_.find(name) == graphs_.end())
 			{
-				DOUT << "Registered name :" + a + " is not found" << std::endl;
+				DOUT << "Registered name :" + name + " is not found" << std::endl;
 				assert(false);
 			}
-			return graphs_[a];
+			return graphs_[name];
 		}
 		/**
-		* @brief メモリに読み込んだ分割画像のハンドルを返します
-		* @param (name) 登録名
-		* @param (index) 配列の要素数
+		* @brief  メモリに読み込んだ分割画像のハンドルを返します
+		* @param  name 登録名
+		* @param  index 配列の要素数
 		* @return 成功したらハンドルが返ります
 		* @detail 存在しない名前にアクセスするか分割数を超えた値を指定するとエラーになります
 		*/
-		[[nodiscard]] int getDivHandle(const std::string& a, const int index)
+		[[nodiscard]] int getDivHandle(const std::string& name, const int index)
 		{
-			if (divGraphs_.find(a) == divGraphs_.end())
+			if (divGraphs_.find(name) == divGraphs_.end())
 			{
-				DOUT << "Registered name :" + a + " is not found" << std::endl;
+				DOUT << "Registered name :" + name + " is not found" << std::endl;
 				assert(false);
 			}
-			if ((size_t)index >= divGraphs_[a].second)
+			if ((size_t)index >= divGraphs_[name].second)
 			{
-				DOUT << "Registered name :" + a + " is out of range" << std::endl;
+				DOUT << "Registered name :" + name + " is out of range" << std::endl;
 				assert(false);
 			}
-			return divGraphs_[a].first[index];
+			return divGraphs_[name].first[index];
 		}
 		/**
-		* @brief メモリに読み込んだ画像のハンドルが存在するか返します
-		* @param (name) 登録名
+		* @brief  メモリに読み込んだ画像のハンドルが存在するか返します
+		* @param  name 登録名
 		* @return ハンドルが存在したらtrue
 		*/
-		[[nodiscard]] bool isExistenceHandle(const std::string& a)
+		[[nodiscard]] bool hasHanle(const std::string& name)
 		{
-			if (graphs_.count(a))
+			if (graphs_.count(name))
 			{
 				return true;
 			}
 			return false;
 		}
 		/**
-		* @brief メモリに読み込んだ分割画像のハンドルが存在するか返します
-		* @param (name) 登録名
+		* @brief  メモリに読み込んだ分割画像のハンドルが存在するか返します
+		* @param  name 登録名
 		* @return ハンドルが存在したらtrue
 		*/
-		[[nodiscard]] bool isExistenceDivHandle(const std::string& a)
+		[[nodiscard]] bool hasDivHandle(const std::string& name)
 		{
-			if (divGraphs_.count(a))
+			if (divGraphs_.count(name))
 			{
 				return true;
 			}
 			return false;
 		}
 		/**
-		* @brief メモリに読み込んだ画像リソースを解放します
-		* @param (name) 登録名
+		* @brief  メモリに読み込んだ画像リソースを解放します
+		* @param  name 登録名
 		* @return 登録名が存在しない場合何も起きません
 		*/
-		void removeDivGraph(const std::string& a)
+		void removeDivGraph(const std::string& name)
 		{
-			if (divGraphs_.find(a) == divGraphs_.end() || !divGraphs_[a].first)
+			if (divGraphs_.find(name) == divGraphs_.end() || !divGraphs_[name].first)
 			{
 				return;
 			}
-			DeleteGraph(*divGraphs_[a].first);
-			Utility::SafeDeleteArray(divGraphs_[a].first);
-			divGraphs_.erase(a);
+			DOUT << "remove handle :" + name + " successful" << std::endl;
+			DeleteGraph(*divGraphs_[name].first);
+			Utility::SafeDeleteArray(divGraphs_[name].first);
+			divGraphs_.erase(name);
 		}
 		/**
-		* @brief メモリに読み込んだ分割画像リソースを解放します
-		* @param (name) 登録名
+		* @brief  メモリに読み込んだ分割画像リソースを解放します
+		* @param  name 登録名
 		* @return 登録名が存在しない場合何も起きません
 		*/
-		void removeGraph(const std::string& a)
+		void removeGraph(const std::string& name)
 		{
-			if (graphs_.find(a) == graphs_.end() || !graphs_[a])
+			if (graphs_.find(name) == graphs_.end() || !graphs_[name])
 			{
 				return;
 			}
-			DeleteGraph(graphs_[a]);
-			graphs_.erase(a);
+			DOUT << "remove handle :" + name + " successful" << std::endl;
+			DeleteGraph(graphs_[name]);
+			graphs_.erase(name);
 		}
 	};
 
@@ -274,20 +276,20 @@ private:
 		}
 		/**
 		* @brief サウンドをロードします
-		* @param (path) ファイルパス
-		* @param (name) 登録名
+		* @param  path ファイルパス
+		* @param  name 登録名
 		* @detail 既に登録した名前は使えません
 		*/
-		void load(const std::string& path, const std::string& a)
+		void load(const std::string& path, const std::string& name)
 		{
 			//名前の重複防止
-			if (sounds_.count(a))
+			if (sounds_.count(name))
 			{
-				DOUT << "SoundHandle :" + a + " add is failed" << std::endl;
+				DOUT << "SoundHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
-			sounds_[a] = LoadSoundMem(path.c_str());
-			if (sounds_[a] == -1)
+			sounds_[name] = LoadSoundMem(path.c_str());
+			if (sounds_[name] == -1)
 			{
 				DOUT << path + " is failed" << std::endl;
 				assert(false);
@@ -300,17 +302,17 @@ private:
 		* @detail 既に登録した名前は使えません。非同期なのでこのメソッドで処理が止まることはありません
 		*
 		*/
-		void loadAsync(const std::string& path, const std::string& a)
+		void loadAsync(const std::string& path, const std::string& name)
 		{
 			//名前の重複防止
-			if (sounds_.count(a))
+			if (sounds_.count(name))
 			{
-				DOUT << "SoundHandle :" + a + " add is failed" << std::endl;
+				DOUT << "SoundHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
 			SetUseASyncLoadFlag(TRUE); // 非同期読み込みフラグON
-			sounds_[a] = LoadSoundMem(path.c_str());
-			if (sounds_[a] = -1)
+			sounds_[name] = LoadSoundMem(path.c_str());
+			if (sounds_[name] = -1)
 			{
 				DOUT << path + " is failed" << std::endl;
 				assert(false);
@@ -322,14 +324,14 @@ private:
 		* @param  name 登録名
 		* @return 読み込み済みならしたらture
 		*/
-		[[nodiscard]] bool isLoaded(const std::string& a)
+		[[nodiscard]] bool isLoaded(const std::string& name)
 		{
-			switch (CheckHandleASyncLoad(sounds_[a]))
+			switch (CheckHandleASyncLoad(sounds_[name]))
 			{
 			case -1:
-				if (sounds_[a] = -1)
+				if (sounds_[name] = -1)
 				{
-					DOUT << a + "loadAsync is failed" << std::endl;
+					DOUT << name + "loadAsync is failed" << std::endl;
 					assert(false);
 				}
 				break;
@@ -340,28 +342,28 @@ private:
 			}
 		}
 		/**
-		* @brief メモリに読み込んだサウンドハンドルを返します
-		* @param (name) 登録名
+		* @brief  メモリに読み込んだサウンドハンドルを返します
+		* @param  name 登録名
 		* @return 成功したらハンドルが返ります
 		* @detail 存在しない名前にアクセスするとエラーになります
 		*/
-		[[nodiscard]] int getHandle(const std::string& a)
+		[[nodiscard]] int getHandle(const std::string& name)
 		{
-			if (sounds_.find(a) == sounds_.end())
+			if (sounds_.find(name) == sounds_.end())
 			{
-				DOUT << "Registered name :" + a + " is not found" << std::endl;
+				DOUT << "Registered name :" + name + " is not found" << std::endl;
 				assert(false);
 			}
-			return sounds_[a];
+			return sounds_[name];
 		}
 		/**
 		* @brief メモリに読み込んだサウンドハンドルが存在するか返します
-		* @param (name) 登録名
+		* @param name 登録名
 		* @return ハンドルが存在したらtrue
 		*/
-		[[nodiscard]] bool isExistenceHandle(const std::string& a)
+		[[nodiscard]] bool hasHandle(const std::string& name)
 		{
-			if (sounds_.count(a))
+			if (sounds_.count(name))
 			{
 				return true;
 			}
@@ -369,17 +371,18 @@ private:
 		}
 		/**
 		* @brief メモリに読み込んだサウンドリソースを解放します
-		* @param (name) 登録名
+		* @param name 登録名
 		* @return 登録名が存在しない場合何も起きません
 		*/
-		void remove(const std::string& a)
+		void remove(const std::string& name)
 		{
-			if (sounds_.find(a) == sounds_.end() || !sounds_[a])
+			if (sounds_.find(name) == sounds_.end() || !sounds_[name])
 			{
 				return;
 			}
-			DeleteSoundMem(sounds_[a]);
-			sounds_.erase(a);
+			DOUT << "remove handle :" + name + " successful" << std::endl;
+			DeleteSoundMem(sounds_[name]);
+			sounds_.erase(name);
 		}
 	};
 

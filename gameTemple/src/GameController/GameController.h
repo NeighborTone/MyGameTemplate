@@ -16,14 +16,14 @@ public:
 
 	/**
 	* @brief エンティティ属するのグループです
-	* 描画レイヤー、処理順、エンティティの取得に使います
+	* - 描画レイヤー、処理順、エンティティの取得に使います
+	* - OrderByDraw使用時、番号が大きいほど手前に描画されます
 	*/
 	enum class GameGroup : ECS::Group
 	{
-		//OrderByDraw使用時、番号が大きいほど手前に描画される
 		LAYER0,
 		LAYER1,
-		MAX,		//Group最大数
+		MAX,
 	};
 	GameController();
 	//!EntityおよびEventの更新処理を行います

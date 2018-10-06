@@ -5,7 +5,7 @@
 
 void GameController::resourceLoad()
 {
-
+	
 }
 
 GameController::GameController()
@@ -20,7 +20,7 @@ GameController::GameController()
 void GameController::update()
 {
 	entityManager_.refresh();
-	Input::Get().udateKey();
+	Input::Get().updateKey();
 	Scene::SceneManager::Get().update();
 }
 

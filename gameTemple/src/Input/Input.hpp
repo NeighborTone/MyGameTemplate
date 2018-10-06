@@ -26,7 +26,7 @@ private:
 		/**
 		* @brief キーの入力状態を更新します
 		*/
-		void udateKey()
+		void updateKey()
 		{
 			char tmpKey[256];
 			GetHitKeyStateAll(tmpKey);	//現在のキーの状態を格納

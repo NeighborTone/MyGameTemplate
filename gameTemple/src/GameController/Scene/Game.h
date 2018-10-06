@@ -13,9 +13,12 @@ namespace Scene
 	class Game final : public IScene
 	{
 	private:
+		ECS::Entity* hoge;
+		ECS::Entity* fuga;
 		ECS::EntityManager& entityManager_;
 	public:
 		Game(ECS::EntityManager& manager); 
+		~Game();
 		void update() override;
 		void draw() override;
 	};
