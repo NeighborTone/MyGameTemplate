@@ -117,6 +117,15 @@ namespace Utility
 		}
 	}
 
+	//!引数に入れたオブジェクトを解放します
+	template<class T> void SafeRelease(T& t)
+	{
+		if (t)
+		{
+			t->release();
+			t = nullptr;
+		}
+	}
 
 	/*!
 	* @class ProcessingTime

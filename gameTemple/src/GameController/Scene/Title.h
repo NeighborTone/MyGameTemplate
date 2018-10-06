@@ -16,8 +16,9 @@ namespace Scene
 		ECS::EntityManager& entityManager_;
 	public:
 		Title(ECS::EntityManager& manager);
+		~Title() = default;
 		void update() override;
 		void draw() override;
-		
+		void release() override;
 	};
 }

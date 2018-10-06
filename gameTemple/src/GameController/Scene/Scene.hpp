@@ -12,8 +12,12 @@ namespace Scene
 	{
 	public:
 		virtual ~IScene() = default;
+		//!更新処理を行います
 		virtual void update() = 0;
+		//!描画処理を行います
 		virtual void draw() = 0;
+		//!リソースの開放を行います
+		virtual void release() = 0;
 	};
 }
 

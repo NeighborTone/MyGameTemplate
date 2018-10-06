@@ -33,25 +33,15 @@ namespace ECS
 		
 	};
 	/*!
-	@brief  拡大率です,データの型はfloatです
+	@brief  x,y方向の拡大率です,データの型はVec2です
 	*/
 	struct Scale final : public ComponentData
 	{
-		float val;
-		Scale() = default;
-		explicit Scale(const float& scale) : val(scale) {}
-		
-	};
-	/*!
-	@brief  x,y方向の拡大率です,データの型はVec2です
-	*/
-	struct Scale2 final : public ComponentData
-	{
 		Vec2 val;
-		Scale2() = default;
-		explicit Scale2(const Vec2& scale) : val(scale) {}
-		explicit Scale2(const float& scale) : val(scale, scale) {}
-		explicit Scale2(const float& scaleX, const float& scaleY ) : val(scaleX, scaleY) {}
+		Scale() = default;
+		explicit Scale(const Vec2& scale) : val(scale) {}
+		explicit Scale(const float& scale) : val(scale, scale) {}
+		explicit Scale(const float& scaleX, const float& scaleY ) : val(scaleX, scaleY) {}
 	};
 	/*!
 	@brief  速度です,データの型はVec2です
@@ -245,9 +235,10 @@ namespace ECS
 		{
 			rota_->val = r;
 		}
-		void setScale(const float& scale)
+		void setScale(const float& scaleX, const float& scaleY)
 		{
-			scale_->val = scale;
+			scale_->val.x = scaleX;
+			scale_->val.y = scaleY;
 		}
 	};
 

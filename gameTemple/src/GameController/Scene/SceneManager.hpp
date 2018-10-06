@@ -42,6 +42,7 @@ namespace Scene
 			*/
 			void changeScene(const State& scene, ECS::EntityManager& entityManager)
 			{
+				Utility::SafeRelease(pScene_);
 				Utility::SafeDelete(pScene_);
 				switch (scene)
 				{

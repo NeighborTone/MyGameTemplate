@@ -207,7 +207,7 @@ private:
 		* @param  name “o˜^–¼
 		* @return ƒnƒ“ƒhƒ‹‚ª‘¶İ‚µ‚½‚çtrue
 		*/
-		[[nodiscard]] bool hasHanle(const std::string& name)
+		[[nodiscard]] bool hasHandle(const std::string& name)
 		{
 			if (graphs_.count(name))
 			{
@@ -239,7 +239,6 @@ private:
 			{
 				return;
 			}
-			DOUT << "remove handle :" + name + " successful" << std::endl;
 			DeleteGraph(*divGraphs_[name].first);
 			Utility::SafeDeleteArray(divGraphs_[name].first);
 			divGraphs_.erase(name);
@@ -255,7 +254,6 @@ private:
 			{
 				return;
 			}
-			DOUT << "remove handle :" + name + " successful" << std::endl;
 			DeleteGraph(graphs_[name]);
 			graphs_.erase(name);
 		}
@@ -380,7 +378,6 @@ private:
 			{
 				return;
 			}
-			DOUT << "remove handle :" + name + " successful" << std::endl;
 			DeleteSoundMem(sounds_[name]);
 			sounds_.erase(name);
 		}

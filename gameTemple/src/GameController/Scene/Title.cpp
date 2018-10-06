@@ -17,4 +17,7 @@ namespace Scene
 	{
 		
 	}
+	void Title::release()
+	{
+	}
 }

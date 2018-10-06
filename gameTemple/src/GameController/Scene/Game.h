@@ -18,8 +18,9 @@ namespace Scene
 		ECS::EntityManager& entityManager_;
 	public:
 		Game(ECS::EntityManager& manager); 
-		~Game();
+		~Game() = default;
 		void update() override;
 		void draw() override;
+		void release() override;
 	};
 }
