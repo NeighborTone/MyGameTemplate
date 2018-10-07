@@ -445,7 +445,7 @@ namespace ECS
 	* - アルファブレンドをしたい場合はAlphaBlendが必要です
 	* - setPivotで基準座標を変更できます
 	*/
-	class SpriteAnimationDraw : public ComponentSystem
+	class SpriteAnimationDraw final : public ComponentSystem
 	{
 	private:
 		Position* pos_ = nullptr;

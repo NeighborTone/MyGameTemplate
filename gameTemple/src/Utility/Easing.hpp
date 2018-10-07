@@ -40,7 +40,6 @@ public:
 
 	/**
 	* @brief 実行中のイージングの現在値を取得
-	* @details 詳細な説明(あれば)
 	* @param startPoint 始点(float)
 	* @param endPoint 終点(float)-始点(float)
 	* @details run()を呼び出さなければ機能しない

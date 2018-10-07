@@ -7,7 +7,7 @@ namespace Scene
 	Game::Game(ECS::EntityManager& manager) :
 			entityManager_(manager)
 	{
-		ResourceManager::GetGraph().loadDiv("Resource/graph1.png", "Fuga", 48, 6, 8, 64, 64);
+		ResourceManager::GetGraph().loadDiv("Resource/Act_Chara2.png", "Fuga", 48, 6, 8, 64, 64);
 		
 		fuga = ECS::ArcheType::CreateFuga("Fuga", Vec2{100.f,300.f}, entityManager_);
 	}
