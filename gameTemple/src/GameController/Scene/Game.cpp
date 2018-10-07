@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "SceneManager.hpp"
-#include "../../ArcheType/Fuga.hpp"
+#include "../../ArcheType/TestArcheType.hpp"
 
 namespace Scene
 {

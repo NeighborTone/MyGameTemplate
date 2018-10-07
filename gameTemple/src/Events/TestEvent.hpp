@@ -3,7 +3,7 @@
 #include "../Components/Renderer.hpp"
 namespace Event
 {
-	struct FugaEvents
+	struct TestEvents
 	{
 		static void BlendSelect(ECS::EntityManager& mana)
 		{

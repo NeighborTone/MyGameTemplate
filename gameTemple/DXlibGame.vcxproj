@@ -26,7 +26,7 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ArcheType\Fuga.hpp" />
+    <ClInclude Include="src\ArcheType\TestArcheType.hpp" />
     <ClInclude Include="src\Class\ResourceManager.hpp" />
     <ClInclude Include="src\Collision\Collision.hpp" />
     <ClInclude Include="src\Components\BasicComponents.hpp" />
@@ -34,7 +34,7 @@
     <ClInclude Include="src\Components\Renderer.hpp" />
     <ClInclude Include="src\ECS\ECS.hpp" />
     <ClInclude Include="src\Events\EventManager.hpp" />
-    <ClInclude Include="src\Events\FugaEvent.hpp" />
+    <ClInclude Include="src\Events\TestEvent.hpp" />
     <ClInclude Include="src\GameController\GameController.h" />
     <ClInclude Include="src\GameController\GameMain.hpp" />
     <ClInclude Include="src\GameController\Scene\Game.h" />

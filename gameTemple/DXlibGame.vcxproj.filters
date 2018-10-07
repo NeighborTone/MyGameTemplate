@@ -117,10 +117,10 @@
     <ClInclude Include="src\Events\EventManager.hpp">
       <Filter>src\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\ArcheType\Fuga.hpp">
+    <ClInclude Include="src\ArcheType\TestArcheType.hpp">
       <Filter>src\ArcheType</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\FugaEvent.hpp">
+    <ClInclude Include="src\Events\TestEvent.hpp">
       <Filter>src\Events</Filter>
     </ClInclude>
   </ItemGroup>

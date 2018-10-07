@@ -3,7 +3,7 @@
 #include "Scene/SceneManager.hpp"
 #include "../Input/Input.hpp"
 #include "../Events/EventManager.hpp"
-#include "../Events/FugaEvent.hpp"
+#include "../Events/TestEvent.hpp"
 void GameController::resourceLoad()
 {
 	
@@ -16,7 +16,7 @@ GameController::GameController()
 	//初期シーンの設定
 	Scene::SceneManager::Get().changeScene(Scene::SceneManager::State::TITLE, entityManager_);
 	//イベント追加
-	Event::EventManager::Get().addEvent(Scene::SceneManager::State::GAME, Event::FugaEvents::BlendSelect);
+	Event::EventManager::Get().addEvent(Scene::SceneManager::State::GAME, Event::TestEvents::BlendSelect);
 }
 
 
