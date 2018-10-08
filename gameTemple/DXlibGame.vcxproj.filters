@@ -123,5 +123,8 @@
     <ClInclude Include="src\Events\TestEvent.hpp">
       <Filter>src\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Class\Sound.hpp">
+      <Filter>src\Class</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

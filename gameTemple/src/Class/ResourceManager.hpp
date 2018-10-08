@@ -22,8 +22,10 @@ private:
 	class GraphicManager final
 	{
 	private:
-		std::unordered_map<std::string, int> graphs_;
-		std::unordered_map<std::string, std::pair<int*, size_t>> divGraphs_;
+		typedef std::unordered_map<std::string, int> GraphMap;
+		typedef std::unordered_map<std::string, std::pair<int*, size_t>> DivGraphMap;
+		GraphMap graphs_;
+		DivGraphMap divGraphs_;
 	public:
 		~GraphicManager()
 		{
@@ -289,7 +291,8 @@ private:
 	class SoundManager final
 	{
 	private:
-		std::unordered_map<std::string, int> sounds_;
+		typedef std::unordered_map<std::string, int> SoundMap;
+		SoundMap sounds_;
 	public:
 		~SoundManager()
 		{
@@ -404,6 +407,11 @@ private:
 			}
 			DeleteSoundMem(sounds_[name]);
 			sounds_.erase(name);
+		}
+		//!‚·‚×‚Ä‚Ìƒnƒ“ƒhƒ‹‚ðunordered_map‚Å•Ô‚µ‚Ü‚·
+		[[nodiscard]] const SoundMap& getSoundMap() const
+		{
+			return sounds_;
 		}
 	};
 

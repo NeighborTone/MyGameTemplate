@@ -7,9 +7,9 @@ namespace Scene
 	Game::Game(ECS::EntityManager& manager) :
 			entityManager_(manager)
 	{
-		ResourceManager::GetGraph().loadDiv("Resource/Act_Chara2.png", "Fuga", 48, 6, 8, 64, 64);
-		
-		fuga = ECS::ArcheType::CreateFuga("Fuga", Vec2{100.f,300.f}, entityManager_);
+		ResourceManager::GetGraph().loadDiv("Resource/Act_Chara2.png", "test", 48, 6, 8, 64, 64);
+		ResourceManager::GetSound().load("Resource/onion.ogg", "onion");
+		testEntity = ECS::ArcheType::CreateTestEntity("test", Vec2{100.f,300.f}, entityManager_);
 	}
 
 	void Game::update()
@@ -27,7 +27,7 @@ namespace Scene
 
 	void Game::release()
 	{
-		ResourceManager::GetGraph().removeDivGraph("Fuga");
-		fuga->destroy();
+		ResourceManager::GetGraph().removeDivGraph("test");
+		testEntity->destroy();
 	}
 }

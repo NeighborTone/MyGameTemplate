@@ -28,6 +28,7 @@
   <ItemGroup>
     <ClInclude Include="src\ArcheType\TestArcheType.hpp" />
     <ClInclude Include="src\Class\ResourceManager.hpp" />
+    <ClInclude Include="src\Class\Sound.hpp" />
     <ClInclude Include="src\Collision\Collision.hpp" />
     <ClInclude Include="src\Components\BasicComponents.hpp" />
     <ClInclude Include="src\Components\Collider.hpp" />

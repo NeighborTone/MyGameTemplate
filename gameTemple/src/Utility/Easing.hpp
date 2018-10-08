@@ -1,8 +1,7 @@
 ﻿/**
 * @file Easing.hpp
 * @brief Easingのまとめ
-* @author feveleK5563
-* @date 2018/??/??
+* @author tonarinohito
 * @par History
 - 2018/08/20 tonarinohito
 -# 静的でないメソッド名をキャメルケースに変更

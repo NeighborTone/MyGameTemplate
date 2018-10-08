@@ -68,7 +68,6 @@ public:
 	{
 		systemInit();
 	}
-
 	~System()
 	{
 		DxLib_End();
