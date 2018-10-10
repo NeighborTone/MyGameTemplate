@@ -90,7 +90,7 @@ private:
 			switch (CheckHandleASyncLoad(graphs_[name]))
 			{
 			case -1:
-				if (graphs_[name] = -1)
+				if (graphs_[name] == -1)
 				{
 					DOUT << name + "loadAsync is failed" << std::endl;
 					assert(false);
@@ -112,7 +112,7 @@ private:
 			switch (CheckHandleASyncLoad(*divGraphs_[name].first))
 			{
 			case -1:
-				if (*divGraphs_[name].first = -1)
+				if (*divGraphs_[name].first == -1)
 				{
 					DOUT << name + "loadAsync is failed" << std::endl;
 					assert(false);
@@ -336,7 +336,7 @@ private:
 			}
 			SetUseASyncLoadFlag(TRUE); // ”ñ“¯Šú“Ç‚Ýž‚Ýƒtƒ‰ƒOON
 			sounds_[name] = LoadSoundMem(path.c_str());
-			if (sounds_[name] = -1)
+			if (sounds_[name] == -1)
 			{
 				DOUT << path + " is failed" << std::endl;
 				assert(false);
@@ -353,7 +353,7 @@ private:
 			switch (CheckHandleASyncLoad(sounds_[name]))
 			{
 			case -1:
-				if (sounds_[name] = -1)
+				if (sounds_[name] == -1)
 				{
 					DOUT << name + "loadAsync is failed" << std::endl;
 					assert(false);
