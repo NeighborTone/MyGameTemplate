@@ -1,6 +1,6 @@
-/**
+﻿/**
 * @file Title.hpp
-* @brief �^�C�g���V�[���ł̓�����L�q���܂�
+* @brief タイトルシーンでの動作を記述します
 * @author 
 * @date 
 */

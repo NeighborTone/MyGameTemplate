@@ -1,6 +1,6 @@
-/**
+ï»¿/**
 * @file EventManager.hpp
-* @brief ƒCƒxƒ“ƒgˆ—‚ğŠÇ—‚·‚éƒNƒ‰ƒX‚Å‚·
+* @brief ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã§ã™
 * @author tonarinohito
 * @date 2018/10/05
 */
@@ -12,7 +12,7 @@
 #include "../GameController/Scene/SceneManager.hpp"
 namespace Event
 {
-	//!ƒV[ƒ“‚²‚Æ‚ÌƒCƒxƒ“ƒgˆ—‚ğŠÇ—‚·‚éƒNƒ‰ƒX‚Å‚·
+	//!ã‚·ãƒ¼ãƒ³ã”ã¨ã®ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã§ã™
 	class EventManager final
 	{
 	private:
@@ -23,15 +23,15 @@ namespace Event
 			std::vector<std::pair<SceneManager::State, std::function<void(ECS::EntityManager&)>>> events_;
 		public:
 			/**
-			* @brief  ƒCƒxƒ“ƒgŠÖ”‚ğ’Ç‰Á‚µ‚Ü‚·
-			* @param  state ˆ—‚ğs‚¤ƒV[ƒ“
-			* @param  func ƒCƒxƒ“ƒgˆ—
+			* @brief  ã‚¤ãƒ™ãƒ³ãƒˆé–¢æ•°ã‚’è¿½åŠ ã—ã¾ã™
+			* @param  state å‡¦ç†ã‚’è¡Œã†ã‚·ãƒ¼ãƒ³
+			* @param  func ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†
 			*/
 			void addEvent(const SceneManager::State state, std::function<void(ECS::EntityManager&)> func)
 			{
 				events_.emplace_back(std::make_pair(state, func));
 			}
-			//!ƒCƒxƒ“ƒg‚ğÀs‚µ‚Ü‚·
+			//!ã‚¤ãƒ™ãƒ³ãƒˆã‚’å®Ÿè¡Œã—ã¾ã™
 			void update(ECS::EntityManager& entityManager)
 			{
 				for (auto& it : events_)

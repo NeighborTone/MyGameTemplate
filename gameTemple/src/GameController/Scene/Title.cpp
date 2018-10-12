@@ -1,4 +1,4 @@
-#include "Title.h"
+ï»¿#include "Title.h"
 #include "../../Input/Input.hpp"
 #include "SceneManager.hpp"
 #include "../GameController.h"
@@ -18,7 +18,7 @@ namespace Scene
 	}
 	void Title::draw()
 	{
-		DrawFormatString(0,0,0xffffffff,"SƒL[‰Ÿ‚µ‚ÄƒQ[ƒ€ƒV[ƒ“‚Ö");
+		DrawFormatString(0,0,0xffffffff,"Sã‚­ãƒ¼æŠ¼ã—ã¦ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã¸");
 	}
 	void Title::release()
 	{

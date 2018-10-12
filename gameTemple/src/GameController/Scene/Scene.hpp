@@ -1,22 +1,22 @@
-/**
+ï»¿/**
 * @file Scene.hpp
-* @brief Scene‚ÌŠî’êƒNƒ‰ƒX‚Å‚·
+* @brief Sceneã®åŸºåº•ã‚¯ãƒ©ã‚¹ã§ã™
 * @author tonarinohito
 * @date 2018/10/06
 */
 #pragma once
 namespace Scene
 {
-	//!Scene‚ÌŠî’êƒNƒ‰ƒX‚Å‚·
+	//!Sceneã®åŸºåº•ã‚¯ãƒ©ã‚¹ã§ã™
 	class IScene
 	{
 	public:
 		virtual ~IScene() = default;
-		//!XVˆ—‚ğs‚¢‚Ü‚·
+		//!æ›´æ–°å‡¦ç†ã‚’è¡Œã„ã¾ã™
 		virtual void update() = 0;
-		//!•`‰æˆ—‚ğs‚¢‚Ü‚·
+		//!æç”»å‡¦ç†ã‚’è¡Œã„ã¾ã™
 		virtual void draw() = 0;
-		//!ƒŠƒ\[ƒX‚ÌŠJ•ú‚ğs‚¢‚Ü‚·
+		//!ãƒªã‚½ãƒ¼ã‚¹ã®é–‹æ”¾ã‚’è¡Œã„ã¾ã™
 		virtual void release() = 0;
 	};
 }

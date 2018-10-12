@@ -1,6 +1,6 @@
-/**
+ï»¿/**
 * @file Test.hpp
-* @brief ƒGƒ“ƒeƒBƒeƒB‚ÌŒ´Œ^‚ğì‚éƒeƒXƒg
+* @brief ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®åŸå‹ã‚’ä½œã‚‹ãƒ†ã‚¹ãƒˆ
 * @author tonarinohito
 * @date 2018/10/05
 */
@@ -11,7 +11,7 @@ namespace ECS
 {
 	namespace ArcheType
 	{
-		//!ƒGƒ“ƒeƒBƒeƒB‚Ì¶¬ƒeƒXƒg
+		//!ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®ç”Ÿæˆãƒ†ã‚¹ãƒˆ
 		Entity* CreateTestEntity(const char* graphicName, const Vec2 pos, EntityManager& entityManager_)
 		{
 			auto* entity = &entityManager_.addEntity();

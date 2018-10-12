@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../Input/Input.hpp"
 #include "../Components/Renderer.hpp"
 #include "../Class/Sound.hpp"

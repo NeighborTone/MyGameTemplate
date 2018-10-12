@@ -1,6 +1,6 @@
-/**
+ï»¿/**
 * @file SceneManager.hpp
-* @brief SceneƒIƒuƒWƒFƒNƒg‚ğŠÇ—‚µ‚Ü‚·	
+* @brief Sceneã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç®¡ç†ã—ã¾ã™	
 * @author tonarinohito
 * @date 2018/10/06
 */
@@ -12,11 +12,11 @@
 
 namespace Scene
 {
-	//!ƒV[ƒ“‚ÌŠÇ—‚ğs‚¢‚Ü‚·
+	//!ã‚·ãƒ¼ãƒ³ã®ç®¡ç†ã‚’è¡Œã„ã¾ã™
 	class SceneManager final
 	{
 	public:
-		//!ƒV[ƒ“‚Ìó‘Ô‚Å‚·
+		//!ã‚·ãƒ¼ãƒ³ã®çŠ¶æ…‹ã§ã™
 		enum class State : short
 		{
 			TITLE,
@@ -37,8 +37,8 @@ namespace Scene
 				Utility::SafeDelete(pScene_);
 			}
 			/**
-			* @brief ˆ—‚µ‚½‚¢ƒV[ƒ“‚ğŒˆ’è‚µ‚Ü‚·
-			* @param scene w’è‚µ‚½‚¢ƒV[ƒ“
+			* @brief å‡¦ç†ã—ãŸã„ã‚·ãƒ¼ãƒ³ã‚’æ±ºå®šã—ã¾ã™
+			* @param scene æŒ‡å®šã—ãŸã„ã‚·ãƒ¼ãƒ³
 			* @param entityManager EntityManager
 			*/
 			void changeScene(const State& scene, ECS::EntityManager& entityManager)
@@ -55,17 +55,17 @@ namespace Scene
 				}
 				state_ = scene;
 			}
-			//!Œ»İw’è‚³‚ê‚Ä‚¢‚éƒV[ƒ“‚ÌXV‚ğs‚¢‚Ü‚·
+			//!ç¾åœ¨æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã‚·ãƒ¼ãƒ³ã®æ›´æ–°ã‚’è¡Œã„ã¾ã™
 			void update()
 			{
 				pScene_->update();
 			}
-			//!Œ»İw’è‚³‚ê‚Ä‚¢‚éƒV[ƒ“‚Ì•`‰æ‚ğs‚¢‚Ü‚·
+			//!ç¾åœ¨æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã‚·ãƒ¼ãƒ³ã®æç”»ã‚’è¡Œã„ã¾ã™
 			void draw()
 			{
 				pScene_->draw();
 			}
-			//!Œ»İ‚ÌƒV[ƒ“‚ğ•Ô‚µ‚Ü‚·
+			//!ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã‚’è¿”ã—ã¾ã™
 			const State& getCurrentScene() const
 			{
 				return state_;

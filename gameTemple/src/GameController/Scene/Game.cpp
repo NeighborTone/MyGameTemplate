@@ -1,4 +1,4 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 #include "SceneManager.hpp"
 #include "../../ArcheType/TestArcheType.hpp"
 
@@ -20,10 +20,10 @@ namespace Scene
 	void Game::draw()
 	{
 		SetDrawMode(DX_DRAWMODE_BILINEAR);
-		//ƒOƒ‹[ƒv‡‚É•`‰æ
+		//ã‚°ãƒ«ãƒ¼ãƒ—é †ã«æç”»
 		entityManager_.orderByDraw(ENTITY_GROUP::MAX);
 		SetDrawMode(DX_DRAWMODE_NEAREST);
-		DrawFormatString(0, 0, 0xffffffff, "ZƒL[‚ğ‰Ÿ‚·‚Æ...?");
+		DrawFormatString(0, 0, 0xffffffff, "Zã‚­ãƒ¼ã‚’æŠ¼ã™ã¨...?");
 	}
 
 	void Game::release()

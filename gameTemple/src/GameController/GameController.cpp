@@ -1,4 +1,4 @@
-#include "GameController.h"
+ï»¿#include "GameController.h"
 #include "../Class/ResourceManager.hpp"
 #include "Scene/SceneManager.hpp"
 #include "../Input/Input.hpp"
@@ -11,11 +11,11 @@ void GameController::resourceLoad()
 
 GameController::GameController()
 {
-	//Å‰‚É•K—v‚ÈƒŠƒ\[ƒX‚âEntity‚Ì¶¬Aƒ[ƒh‚ğs‚¤
+	//æœ€åˆã«å¿…è¦ãªãƒªã‚½ãƒ¼ã‚¹ã‚„Entityã®ç”Ÿæˆã€ãƒ­ãƒ¼ãƒ‰ã‚’è¡Œã†
 	resourceLoad();
-	//‰ŠúƒV[ƒ“‚Ìİ’è
+	//åˆæœŸã‚·ãƒ¼ãƒ³ã®è¨­å®š
 	Scene::SceneManager::Get().changeScene(Scene::SceneManager::State::TITLE, entityManager_);
-	//ƒCƒxƒ“ƒg’Ç‰Á
+	//ã‚¤ãƒ™ãƒ³ãƒˆè¿½åŠ 
 	Event::EventManager::Get().addEvent(Scene::SceneManager::State::GAME, Event::TestEvents::BlendSelect);
 }
 
@@ -24,14 +24,14 @@ void GameController::update()
 {
 	entityManager_.refresh();
 	Input::Get().updateKey();
-	//ƒV[ƒ“XV
+	//ã‚·ãƒ¼ãƒ³æ›´æ–°
 	Scene::SceneManager::Get().update();
-	//ƒCƒxƒ“ƒgXV
+	//ã‚¤ãƒ™ãƒ³ãƒˆæ›´æ–°
 	Event::EventManager::Get().update(entityManager_);
 }
 
 void GameController::draw()
 {
-	//ƒV[ƒ“•`‰æ
+	//ã‚·ãƒ¼ãƒ³æç”»
 	Scene::SceneManager::Get().draw();
 }

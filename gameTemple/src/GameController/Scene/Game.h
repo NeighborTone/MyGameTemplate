@@ -1,6 +1,6 @@
-/**
+﻿/**
 * @file Game.hpp
-* @brief �Q�[���V�[���ł̓�����L�q���܂�
+* @brief ゲームシーンでの動作を記述します
 * @author 
 * @date 
 */
