@@ -1,11 +1,58 @@
 ﻿/**
 * @file Sound.hpp
 * @brief DXライブラリのサウンド関数をラップします
+* @detail ResourceManagerで読み込んだハンドルが対象です
 * @author tonarinohito
 * @date 2018/10/08
 */
 #pragma once
 #include "ResourceManager.hpp"
+
+//!すべてのサウンドの音量に対しての処理を行います
+class MasterSound final
+{
+private:
+	class Singleton final
+	{
+	private:
+		float seGain_ = 1.0f;
+		float bgmGain_ = 1.0f;
+	public:
+		//!すべてのSEサウンドの音量を0.0f~1.fで指定
+		void setAllSEGain(float gain)
+		{
+			seGain_ = gain;
+		}
+		//!すべてのBGMサウンドの音量を0.0f~1.fで指定
+		void setAllBGMGain(float gain)
+		{
+			bgmGain_ = gain;
+		}
+		//!登録されているサウンドの更新を行います
+		void update()
+		{
+			auto& sounds = ResourceManager::GetSound().getSoundMap();
+			for (auto&[key, val] : sounds)
+			{
+				switch (val.second)
+				{
+				case SoundType::SE:
+					ChangeVolumeSoundMem(int(255 * seGain_), val.first);
+					break;
+				case SoundType::BGM:
+					ChangeVolumeSoundMem(int(255 * bgmGain_), val.first);
+					break;
+				}
+			}
+		}
+	};
+public:
+	inline static Singleton& Get()
+	{
+		static auto inst = std::make_unique<Singleton>();
+		return *inst;
+	}
+};
 
 //!サウンド操作クラスです
 class Sound final
@@ -13,7 +60,9 @@ class Sound final
 private:
 	std::string name_;
 	int handle_;
+	float gain_ = 1.f;
 public:
+
 	//!コンストラクタで登録したサウンドハンドル名を指定します
 	Sound(const std::string& soundName)
 	{
@@ -21,19 +70,24 @@ public:
 		handle_ = ResourceManager::GetSound().getHandle(soundName);
 		name_ = soundName;
 	}
-	//!サウンドを再生します
-	void play(bool isLoop)
+	/**
+	* @brief サウンドを再生します
+	* @param  isLoop ループ再生するかどうか
+	* @param  isContinuation stop()で止めたサウンドを続きから再生するかどうか。falseで続きから再生する
+	*/
+	void play(const bool isLoop, bool isContinuation = false)
 	{
 		if (isLoop)
 		{
-			PlaySoundMem(handle_, DX_PLAYTYPE_LOOP);
+			//trueなら最初から再生
+			PlaySoundMem(handle_, DX_PLAYTYPE_LOOP, isContinuation);
 		}
 		else
 		{
-			PlaySoundMem(handle_, DX_PLAYTYPE_BACK);
+			PlaySoundMem(handle_, DX_PLAYTYPE_BACK, isContinuation);
 		}
 	}
-	//!サウンドの再生中を止めます
+	//!サウンドの再生を止めます
 	void stop()
 	{
 		StopSoundMem(handle_);
@@ -66,19 +120,4 @@ public:
 	{
 		ChangePanSoundMem(panPosition,handle_);
 	}
-	//!このサウンドの音量を0.0f~1.fで指定
-	void setGain(float gain)
-	{
-		ChangeVolumeSoundMem(int(255 * gain), handle_);
-	}
-	//!すべてのサウンドの音量を0.0f~1.fで指定
-	static void SetAllGain(float gain)
-	{
-		auto& sounds = ResourceManager::GetSound().getSoundMap();
-		for (auto&[key, val] : sounds)
-		{
-			ChangeVolumeSoundMem(int(255 * gain), val);
-		}
-	}
-	
 };

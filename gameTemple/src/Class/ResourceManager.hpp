@@ -12,6 +12,12 @@
 #include <assert.h>
 #include "../Utility/Utility.hpp"
 
+//!サウンドの種類
+enum class SoundType
+{
+	BGM,
+	SE
+};
 //!グラフィックやサウンドのハンドル管理をします
 class ResourceManager final
 {
@@ -291,9 +297,10 @@ private:
 	class SoundManager final
 	{
 	private:
-		typedef std::unordered_map<std::string, int> SoundMap;
+		typedef std::unordered_map<std::string, std::pair<int,SoundType>> SoundMap;
 		SoundMap sounds_;
 	public:
+	
 		~SoundManager()
 		{
 			InitSoundMem();
@@ -302,9 +309,10 @@ private:
 		* @brief サウンドをロードします
 		* @param  path ファイルパス
 		* @param  name 登録名
+		* @param  soundType BGMかSEか列挙型で指定
 		* @detail 既に登録した名前は使えません
 		*/
-		void load(const std::string& path, const std::string& name)
+		void load(const std::string& path, const std::string& name,const SoundType& soundType)
 		{
 			//名前の重複防止
 			if (sounds_.count(name))
@@ -312,8 +320,9 @@ private:
 				DOUT << "SoundHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
-			sounds_[name] = LoadSoundMem(path.c_str());
-			if (sounds_[name] == -1)
+			sounds_[name].second = soundType;
+			sounds_[name].first = LoadSoundMem(path.c_str());
+			if (sounds_[name].first == -1)
 			{
 				DOUT << path + " is failed" << std::endl;
 				assert(false);
@@ -326,7 +335,7 @@ private:
 		* @detail 既に登録した名前は使えません。非同期なのでこのメソッドで処理が止まることはありません
 		*
 		*/
-		void loadAsync(const std::string& path, const std::string& name)
+		void loadAsync(const std::string& path, const std::string& name, const SoundType& soundType)
 		{
 			//名前の重複防止
 			if (sounds_.count(name))
@@ -334,9 +343,10 @@ private:
 				DOUT << "SoundHandle :" + name + " add is failed" << std::endl;
 				assert(false);
 			}
+			sounds_[name].second = soundType;
 			SetUseASyncLoadFlag(TRUE); // 非同期読み込みフラグON
-			sounds_[name] = LoadSoundMem(path.c_str());
-			if (sounds_[name] == -1)
+			sounds_[name].first = LoadSoundMem(path.c_str());
+			if (sounds_[name].first == -1)
 			{
 				DOUT << path + " is failed" << std::endl;
 				assert(false);
@@ -350,10 +360,10 @@ private:
 		*/
 		[[nodiscard]] bool isLoaded(const std::string& name)
 		{
-			switch (CheckHandleASyncLoad(sounds_[name]))
+			switch (CheckHandleASyncLoad(sounds_[name].first))
 			{
 			case -1:
-				if (sounds_[name] == -1)
+				if (sounds_[name].first == -1)
 				{
 					DOUT << name + "loadAsync is failed" << std::endl;
 					assert(false);
@@ -378,7 +388,7 @@ private:
 				DOUT << "Registered name :" + name + " is not found" << std::endl;
 				assert(false);
 			}
-			return sounds_[name];
+			return sounds_[name].first;
 		}
 		/**
 		* @brief メモリに読み込んだサウンドハンドルが存在するか返します
@@ -400,12 +410,12 @@ private:
 		*/
 		void remove(const std::string& name)
 		{
-			if (sounds_.find(name) == sounds_.end() || !sounds_[name])
+			if (sounds_.find(name) == sounds_.end() || !sounds_[name].first)
 			{
 				DOUT << "Registered name :" + name + " is remove failed" << std::endl;
 				return;
 			}
-			DeleteSoundMem(sounds_[name]);
+			DeleteSoundMem(sounds_[name].first);
 			sounds_.erase(name);
 		}
 		//!すべてのハンドルをunordered_mapで返します

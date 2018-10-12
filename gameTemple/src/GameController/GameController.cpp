@@ -28,6 +28,8 @@ void GameController::update()
 	Scene::SceneManager::Get().update();
 	//イベント更新
 	Event::EventManager::Get().update(entityManager_);
+	//サウンドの音量を更新
+	MasterSound::Get().update();
 }
 
 void GameController::draw()
