@@ -15,7 +15,7 @@ public:
 	Parameter() = default;
 	/*!
 	* @brief Parameterコンテナに要素の追加をします。
-	* - テンプレート引数に挿入したい方を指定してください
+	* - テンプレート引数に挿入したい型を指定してください
 	* @param key キー
 	* @param value 挿入したい値
 	*/
