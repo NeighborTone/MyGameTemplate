@@ -332,7 +332,14 @@ namespace ECS
 			}),
 				std::end(entityes_));
 		}
-
+		//!すべてのエンティティを殺します
+		void allKill()
+		{
+			for (auto& e : entityes_)
+			{
+				e->destroy();
+			}
+		}
 		//!指定したグループに登録されているEntity達を返します
 		[[nodiscard]] std::vector<Entity*>& getEntitiesByGroup(Group group)
 		{

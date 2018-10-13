@@ -49,9 +49,6 @@
     <Filter Include="src\ArcheType">
       <UniqueIdentifier>{c378c3aa-b671-4bea-9c09-379ed5d86dce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Events">
-      <UniqueIdentifier>{09cd9463-74ad-430b-b401-017133c19e7f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utility\Vec.hpp">
@@ -102,9 +99,6 @@
     <ClInclude Include="src\GameController\Scene\Game.h">
       <Filter>src\GameController\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameController\Scene\Scene.hpp">
-      <Filter>src\GameController\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameController\Scene\SceneManager.hpp">
       <Filter>src\GameController\Scene</Filter>
     </ClInclude>
@@ -114,17 +108,14 @@
     <ClInclude Include="src\Components\Renderer.hpp">
       <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\EventManager.hpp">
-      <Filter>src\Events</Filter>
-    </ClInclude>
     <ClInclude Include="src\ArcheType\TestArcheType.hpp">
       <Filter>src\ArcheType</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\TestEvent.hpp">
-      <Filter>src\Events</Filter>
-    </ClInclude>
     <ClInclude Include="src\Class\Sound.hpp">
       <Filter>src\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameController\Scene\Parameter.hpp">
+      <Filter>src\GameController\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

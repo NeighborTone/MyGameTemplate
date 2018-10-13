@@ -2,6 +2,7 @@
 #include "../Input/Input.hpp"
 #include "../Components/Renderer.hpp"
 #include "../Class/Sound.hpp"
+#include "../GameController/GameController.h"
 namespace Event
 {
 	struct TestEvents
