@@ -1,82 +1,49 @@
 ﻿/**
 * @file SceneManager.hpp
-* @brief Sceneオブジェクトを管理します	
+* @brief Sceneオブジェクトに必要な基底クラスや列挙型です
 * @author tonarinohito
-* @date 2018/10/06
+* @date 2018/10/14
 */
 #pragma once
 #include "../../ECS/ECS.hpp"
 #include "../../Utility/Utility.hpp"
-#include "Title.h"
-#include "Game.h"
+#include "../Scene/Parameter.hpp"
+#include <map>
+#include <any>
 
 namespace Scene
 {
-	//!シーンの管理を行います
-	class SceneManager final
+	//!シーンの状態
+	enum class SceneName
+	{
+		TITLE,
+		GAME,
+		BACK_TO_SCENE	//前のシーンに戻る
+	};
+
+	//!シーン変更時のコールバックです
+	class IOnSceneChangeCallback
 	{
 	public:
-		//!シーンの状態です
-		enum class State : short
-		{
-			TITLE,
-			SELECT,
-			PAUSE,
-			GAME,
-			RESULT
-		};
-	private:
-		class Singleton final
-		{
-		private:
-			State state_;
-			IScene* pScene_ = nullptr;
-		public:
-			~Singleton()
-			{
-				Utility::SafeDelete(pScene_);
-			}
-			/**
-			* @brief 処理したいシーンを決定します
-			* @param scene 指定したいシーン
-			* @param entityManager EntityManager
-			*/
-			void changeScene(const State& scene, ECS::EntityManager& entityManager)
-			{
-				Utility::SafeRelease(pScene_);
-				Utility::SafeDelete(pScene_);
-				switch (scene)
-				{
-				case State::TITLE:  pScene_ = new Title(entityManager); break;
-				case State::SELECT:	break;
-				case State::PAUSE:  break;
-				case State::GAME:   pScene_ = new Game(entityManager); break;
-				case State::RESULT: break;
-				}
-				state_ = scene;
-			}
-			//!現在指定されているシーンの更新を行います
-			void update()
-			{
-				pScene_->update();
-			}
-			//!現在指定されているシーンの描画を行います
-			void draw()
-			{
-				pScene_->draw();
-			}
-			//!現在のシーンを返します
-			const State& getCurrentScene() const
-			{
-				return state_;
-			}
-		};
+		IOnSceneChangeCallback() = default;
+		virtual ~IOnSceneChangeCallback() = default;
+		virtual void onSceneChange(const SceneName& scene, const Parameter* parame, const bool stackClear) = 0;
+		virtual void stackClear() = 0;
+	};
+
+	//!シーンの基底クラスです
+	class AbstractScene
+	{
 	public:
-		static Singleton& Get()
+		AbstractScene(IOnSceneChangeCallback* sceneCallback)
 		{
-			static std::unique_ptr<Singleton> inst =
-				std::make_unique<Singleton>();
-			return *inst;
+			callBack = sceneCallback;
 		}
+		virtual ~AbstractScene() = default;
+		virtual void update() = 0;
+		virtual void draw() = 0;
+		IOnSceneChangeCallback& getCallBack() const { return *callBack; }
+	private:
+		IOnSceneChangeCallback* callBack;
 	};
 }

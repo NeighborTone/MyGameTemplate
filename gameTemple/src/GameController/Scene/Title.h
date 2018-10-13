@@ -6,19 +6,20 @@
 */
 #pragma once
 #include "../../ECS/ECS.hpp"
-#include "Scene.hpp"
+#include "Parameter.hpp"
+#include "../Scene/SceneManager.hpp"
+
 
 namespace Scene
 {
-	class Title final : public IScene
+	class Title : public AbstractScene
 	{
 	private:
-		ECS::EntityManager& entityManager_;
+		ECS::EntityManager* entitytManager_;
 	public:
-		Title(ECS::EntityManager& manager);
-		~Title() = default;
-		void update() override;
-		void draw() override;
-		void release() override;
+		Title(IOnSceneChangeCallback* sceneTitleChange, [[maybe_unused]]const Parameter& parame, ECS::EntityManager* entityManager);
+		virtual void update() override;
+		virtual void draw() override;
 	};
+
 }

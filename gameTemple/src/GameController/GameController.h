@@ -3,14 +3,23 @@
  * @brief アプリケーションの処理を行います
  * @author tonarinohito
  * @date 2018/10/06
+ * @par History
+ - 2018/10/14 tonarinohito
+ -# このクラスでシーンのスタックを監視するように変更 
  */
 #pragma once
 #include "../ECS/ECS.hpp"
+#include "Scene/SceneManager.hpp"
+#include "Scene/Parameter.hpp"
+#include <stack>
 #define ENTITY_GROUP (ECS::Group)GameController::GameGroup
-class GameController final
+
+class GameController final : public Scene::IOnSceneChangeCallback
 {
 private:
 	ECS::EntityManager entityManager_;
+	std::stack<std::unique_ptr<Scene::AbstractScene>> sceneStack;	//シーンのスタック
+	Parameter param;
 	void resourceLoad();
 public:
 
@@ -22,24 +31,19 @@ public:
 	enum class GameGroup : ECS::Group
 	{
 		LAYER1,			//テスト用
-		BACK,			//最背面背景
-		BACK_OBJECT,	//背景の鍋や皿などの調理器具
-		BACK_STAFF,		//後ろで働く従業員
-		MASTER,			//おやっさん
-		KITCHENWARE,	//調理台に上に載ったオブジェクト
-		COOKING_AREA,	//調理台や床
-		GIRL,			//女の子
-		RECEIVE_STAFF,	//食材を受け取るスタッフ
-		NOTE,			//音符(食材)
-		EFFECT,			//演出用エフェクト
-		UI,				//時計やスコアゲージ等のUI
-		FADE,			//フェード用
-		PAUSE_UI,		//ポーズ用UI
-		TOP_FADE,		//最前面フェード
 		MAX,			//最大数
 	};
 	GameController();
-	//!EntityおよびEventの更新処理を行います
+	~GameController() = default;
+	/*!
+	* @brief シーン変更(各シーンからコールバックされる)
+	* @param scene 変更するシーンのenum
+	* @param stackClear 現在のシーンのスタックをクリアするか
+	*/
+	void onSceneChange(const Scene::SceneName& scene, const Parameter* parame, bool stackClear) override;
+	//!すべてのシーンスタックをクリアします
+	void stackClear() override;
+	//!Entityの更新処理を行います
 	void update();
 	//!Entityの描画を行います
 	void draw();
