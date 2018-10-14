@@ -1,5 +1,5 @@
 ﻿/**
-* @file Test.hpp
+* @file TestArcheType.hpp
 * @brief エンティティの原型を作るテスト
 * @author tonarinohito
 * @date 2018/10/05
