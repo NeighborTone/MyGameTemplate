@@ -8,17 +8,19 @@
 #include "../../ECS/ECS.hpp"
 #include "../../Utility/Utility.hpp"
 #include "../Scene/Parameter.hpp"
-#include <map>
-#include <any>
 
 namespace Scene
 {
-	//!シーンの状態
+	/**
+	* @briefシーンの状態を表します
+	* - BACK_TO_SCENEを指定した場合前のシーンに戻ります。その場合は第三引数をtrueにして下さい
+	* -
+	*/
 	enum class SceneName
 	{
 		TITLE,
 		GAME,
-		BACK_TO_SCENE	//前のシーンに戻る
+		BACK_TO_SCENE	//前のスタック(シーン)が残っていれば戻る
 	};
 
 	//!シーン変更時のコールバックです
@@ -27,7 +29,14 @@ namespace Scene
 	public:
 		IOnSceneChangeCallback() = default;
 		virtual ~IOnSceneChangeCallback() = default;
+		/*!
+		* @brief シーン変更(各シーンからコールバックされる)
+		* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
+		* @param scene 変更するシーンのenum
+		* @param stackClear 現在のシーンのスタックをクリアするか
+		*/
 		virtual void onSceneChange(const SceneName& scene, const Parameter* parame, const bool stackClear) = 0;
+		//!スタックオールクリア
 		virtual void stackClear() = 0;
 	};
 

@@ -32,7 +32,7 @@ namespace Scene
 		entityManager_->update();
 		if (Input::Get().getKeyFrame(KEY_INPUT_A)== 1)
 		{
-			getCallBack().onSceneChange(SceneName::TITLE, nullptr, true);
+			getCallBack().onSceneChange(SceneName::BACK_TO_SCENE, nullptr, true);
 		}
 	}
 

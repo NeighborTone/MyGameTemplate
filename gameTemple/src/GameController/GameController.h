@@ -21,6 +21,8 @@ private:
 	std::stack<std::unique_ptr<Scene::AbstractScene>> sceneStack;	//シーンのスタック
 	Parameter param;
 	void resourceLoad();
+	//!シーンスタックのチェックを行います
+	void isSceneEmpty();
 public:
 
 	/**
@@ -34,7 +36,7 @@ public:
 		MAX,			//最大数
 	};
 	GameController();
-	~GameController() = default;
+	~GameController();
 	/*!
 	* @brief シーン変更(各シーンからコールバックされる)
 	* @param scene 変更するシーンのenum

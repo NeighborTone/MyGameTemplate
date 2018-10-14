@@ -6,7 +6,7 @@
  */
 #pragma once
 #include <DxLib.h>
-#include <assert.h>
+#include <cassert>
 #include <Windows.h>
 
 /*!

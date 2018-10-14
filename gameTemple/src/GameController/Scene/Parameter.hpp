@@ -1,6 +1,6 @@
 ﻿/**
 * @file Parameter.hpp
-* @brief Scene間で渡すことのできるParameterクラスです
+* @brief Scene間で渡すことのできるコンテナクラスです
 * @author tonarinohito
 * @date 2018/10/14
 */
@@ -8,7 +8,7 @@
 #include <any>
 #include <map>
 
-//!パラメータを自由に扱えるクラスです
+//!あらゆる型を自由に扱えるコンテナクラスです
 class Parameter final
 {
 public:
@@ -20,7 +20,7 @@ public:
 	* @param value 挿入したい値
 	*/
 	template<typename ValueType>
-	void add(const std::string& key, ValueType value)
+	void add(const std::string& key, const ValueType& value)
 	{
 		map[key] = value;
 	}

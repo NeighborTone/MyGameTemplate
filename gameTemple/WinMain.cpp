@@ -1,17 +1,21 @@
-#include <memory>
-#include <new>
+#define _CRTDBG_MAP_ALLOC
+#include <stdio.h>
 #include <crtdbg.h>
+#ifdef _DEBUG
+#ifndef DBG_NEW 
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 
+#define new DBG_NEW
+#endif
+#endif
 #include "src/Utility/Vec.hpp"
 #include "src/Utility/Utility.hpp"
 #include "src/GameController/GameMain.hpp"
-#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(7087);
+	//_CrtSetBreakAlloc(98);
 	ShowConsole();
 	GameMain main;
 	main.run();
-
 }

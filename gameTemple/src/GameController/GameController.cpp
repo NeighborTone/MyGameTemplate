@@ -18,6 +18,11 @@ GameController::GameController()
 	sceneStack.push(std::make_unique< Scene::Title >(this, param,&entityManager_));	//タイトルシーンを作成し、プッシュ
 }
 
+GameController::~GameController()
+{
+	stackClear();
+}
+
 void GameController::onSceneChange(const Scene::SceneName& scene, const Parameter* parame, bool isStackClear)
 {
 	if (isStackClear)
@@ -50,11 +55,18 @@ void GameController::update()
 	entityManager_.refresh();
 	Input::Get().updateKey();
 	//シーン更新
+	isSceneEmpty();
 	sceneStack.top()->update();
 }
 
 void GameController::draw()
 {
 	//シーン描画
+	isSceneEmpty();
 	sceneStack.top()->draw();
+}
+
+void GameController::isSceneEmpty()
+{
+	assert(!sceneStack.empty() && "シーンスタックが空です!");
 }
