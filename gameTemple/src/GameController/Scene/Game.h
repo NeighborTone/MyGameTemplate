@@ -14,7 +14,7 @@ namespace Scene
 	class Game : public AbstractScene
 	{
 	private:
-		Parameter playerDetail;
+		Parameter playerDetail_;
 		ECS::EntityManager* entityManager_;
 	public:
 		Game(IOnSceneChangeCallback* sceneTitleChange, const Parameter& parame, ECS::EntityManager* entityManager);

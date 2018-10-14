@@ -14,27 +14,27 @@
 class GameMain final
 {
 private:
-	std::unique_ptr<System> system;
-	std::unique_ptr<GameController> game;
+	std::unique_ptr<System> system_;
+	std::unique_ptr<GameController> game_;
 	void update()
 	{
-		game->update();
+		game_->update();
 	}
 	void draw()
 	{
-		game->draw();
+		game_->draw();
 	}
 
 public:
 	GameMain()
 	{
-		system = std::make_unique<System>();
-		game = std::make_unique<GameController>();
+		system_ = std::make_unique<System>();
+		game_ = std::make_unique<GameController>();
 	}
 	//!アプリケーションの更新を行います
 	void run()
 	{
-		while (system->isOk())
+		while (system_->isOk())
 		{
 			Fps::Get().update();
 			update();

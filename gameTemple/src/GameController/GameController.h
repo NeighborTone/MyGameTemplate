@@ -18,8 +18,8 @@ class GameController final : public Scene::IOnSceneChangeCallback
 {
 private:
 	ECS::EntityManager entityManager_;
-	std::stack<std::unique_ptr<Scene::AbstractScene>> sceneStack;	//シーンのスタック
-	Parameter param;
+	std::stack<std::unique_ptr<Scene::AbstractScene>> sceneStack_;	//シーンのスタック
+	Parameter param_;
 	void resourceLoad();
 	//!シーンスタックのチェックを行います
 	void isSceneEmpty();
@@ -40,6 +40,7 @@ public:
 	/*!
 	* @brief シーン変更(各シーンからコールバックされる)
 	* @param scene 変更するシーンのenum
+	* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
 	* @param stackClear 現在のシーンのスタックをクリアするか
 	*/
 	void onSceneChange(const Scene::SceneName& scene, const Parameter* parame, bool stackClear) override;

@@ -15,7 +15,7 @@ GameController::GameController()
 	//最初に必要なリソースやEntityの生成、ロードを行う
 	resourceLoad();
 	//初期シーンの設定
-	sceneStack.push(std::make_unique< Scene::Title >(this, param,&entityManager_));	//タイトルシーンを作成し、プッシュ
+	sceneStack_.push(std::make_unique< Scene::Title >(this, param_,&entityManager_));	//タイトルシーンを作成し、プッシュ
 }
 
 GameController::~GameController()
@@ -27,15 +27,15 @@ void GameController::onSceneChange(const Scene::SceneName& scene, const Paramete
 {
 	if (isStackClear)
 	{
-		sceneStack.pop();
+		sceneStack_.pop();
 	}
 	switch (scene)
 	{
 	case Scene::SceneName::TITLE:
-		sceneStack.push(std::make_unique<Scene::Title>(this, *parame, &entityManager_));
+		sceneStack_.push(std::make_unique<Scene::Title>(this, *parame, &entityManager_));
 		break;
 	case Scene::SceneName::GAME:
-		sceneStack.push(std::make_unique<Scene::Game>(this, *parame, &entityManager_));
+		sceneStack_.push(std::make_unique<Scene::Game>(this, *parame, &entityManager_));
 		break;
 	default:
 		break;
@@ -44,9 +44,9 @@ void GameController::onSceneChange(const Scene::SceneName& scene, const Paramete
 
 void GameController::stackClear()
 {
-	while (!sceneStack.empty())
+	while (!sceneStack_.empty())
 	{
-		sceneStack.pop();
+		sceneStack_.pop();
 	}
 }
 
@@ -56,17 +56,17 @@ void GameController::update()
 	Input::Get().updateKey();
 	//シーン更新
 	isSceneEmpty();
-	sceneStack.top()->update();
+	sceneStack_.top()->update();
 }
 
 void GameController::draw()
 {
 	//シーン描画
 	isSceneEmpty();
-	sceneStack.top()->draw();
+	sceneStack_.top()->draw();
 }
 
 void GameController::isSceneEmpty()
 {
-	assert(!sceneStack.empty() && "シーンスタックが空です!");
+	assert(!sceneStack_.empty() && "シーンスタックが空です!");
 }

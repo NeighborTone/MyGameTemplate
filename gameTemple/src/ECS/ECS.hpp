@@ -333,7 +333,7 @@ namespace ECS
 				std::end(entityes_));
 		}
 		//!すべてのエンティティを殺します
-		void allKill()
+		void allDestroy()
 		{
 			for (auto& e : entityes_)
 			{

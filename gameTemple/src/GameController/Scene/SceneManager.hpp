@@ -31,8 +31,8 @@ namespace Scene
 		virtual ~IOnSceneChangeCallback() = default;
 		/*!
 		* @brief シーン変更(各シーンからコールバックされる)
-		* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
 		* @param scene 変更するシーンのenum
+		* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
 		* @param stackClear 現在のシーンのスタックをクリアするか
 		*/
 		virtual void onSceneChange(const SceneName& scene, const Parameter* parame, const bool stackClear) = 0;
