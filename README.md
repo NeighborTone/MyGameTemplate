@@ -1,1 +1,2 @@
 # MyGameTemplate
++ EntityComponentSystemでDXライブラリの機能をラップしたプロジェクト
