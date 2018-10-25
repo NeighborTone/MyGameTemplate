@@ -30,9 +30,11 @@ void GameController::onSceneChange(const Scene::SceneName& scene, const Paramete
 	case Scene::StackPopFlag::NON:
 		break;
 	case Scene::StackPopFlag::POP:
+		DOUT << "poped the scene stack" << std::endl;
 		sceneStack_.pop();
 		break;
-	case Scene::StackPopFlag::ALL_CLEAR: 
+	case Scene::StackPopFlag::ALL_CLEAR:
+		DOUT << "poped the scene stack all" << std::endl;
 		stackClear();
 		break;
 	default:

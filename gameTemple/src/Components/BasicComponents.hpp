@@ -256,9 +256,7 @@ namespace ECS
 		Family() :pos_(nullptr) {}
 		void initialize() override
 		{
-			
 			pos_ = &entity->getComponent<Position>();
-	
 		}
 
 		void update() override
