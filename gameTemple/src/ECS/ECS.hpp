@@ -61,6 +61,7 @@ namespace ECS
 		//Entityによって殺されたいのでこうなった
 		friend class Entity;
 		bool active_ = true;
+		bool isStop_ = false;
 		void removeThis() { active_ = false;}
 	public:
 		Entity* entity;
@@ -127,7 +128,7 @@ namespace ECS
 			refreshComponent();
 			for (auto& c : components_)
 			{
-				if (c == nullptr)
+				if (c == nullptr || c->isStop_)
 				{
 					continue;
 				}
@@ -182,6 +183,17 @@ namespace ECS
 		void removeGroup(Group group) noexcept
 		{
 			groupBitSet_[group] = false;
+		}
+
+		//!指定したコンポーネントの更新処理を止めます
+		template<typename T> void stopComponent() noexcept
+		{
+			getComponent<T>().isStop_ = true;
+		}
+		//!指定したコンポーネントの更新処理を実行可能にします
+		template<typename T> void updateComponent() noexcept
+		{
+			getComponent<T>().isStop_ = false;
 		}
 
 		//!Entityに指定したComponentがあるか返します
