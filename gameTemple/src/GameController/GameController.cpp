@@ -23,11 +23,20 @@ GameController::~GameController()
 	stackClear();
 }
 
-void GameController::onSceneChange(const Scene::SceneName& scene, const Parameter* parame, bool isStackClear)
+void GameController::onSceneChange(const Scene::SceneName& scene, const Parameter* parame, Scene::StackPopFlag stackClearFlag)
 {
-	if (isStackClear)
+	switch (stackClearFlag)
 	{
+	case Scene::StackPopFlag::NON:
+		break;
+	case Scene::StackPopFlag::POP:
 		sceneStack_.pop();
+		break;
+	case Scene::StackPopFlag::ALL_CLEAR: 
+		stackClear();
+		break;
+	default:
+		break;
 	}
 	switch (scene)
 	{

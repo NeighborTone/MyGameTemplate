@@ -207,6 +207,7 @@ namespace ECS
 		Rotation* rota_;
 		Scale* scale_;
 	public:
+	
 		Transform() :pos_(nullptr), rota_(nullptr) {}
 		void initialize() override
 		{
@@ -226,6 +227,7 @@ namespace ECS
 			rota_ = &entity->getComponent<Rotation>();
 			scale_ = &entity->getComponent<Scale>();
 		}
+
 		void setPosition(const float& x, const float& y)
 		{
 			pos_->val.x = x;
@@ -240,8 +242,39 @@ namespace ECS
 			scale_->val.x = scaleX;
 			scale_->val.y = scaleY;
 		}
-	};
 
+	};
+	//!子を作る（未実装）
+	class Family final : public ComponentSystem
+	{
+	private:
+		float angle = 40;
+		Entity* root_ = nullptr;
+		Position* pos_;
+	public:
+
+		Family() :pos_(nullptr) {}
+		void initialize() override
+		{
+			
+			pos_ = &entity->getComponent<Position>();
+	
+		}
+
+		void update() override
+		{
+			angle += 3.14f / 180.f * 4;
+			float distance = root_->getComponent<Position>().val.getDistance(pos_->val);
+			pos_->val = Vec2(root_->getComponent<Position>().val.x + float(cos(angle)) * distance,
+				root_->getComponent<Position>().val.y + float(sin(angle)) * distance);
+
+		}
+
+		void setRoot(Entity* root)
+		{
+			root_ = root;
+		}
+	};
 	/*!
 	@brief コンストラクタで指定したフレーム後にEntityを殺します
 	*/

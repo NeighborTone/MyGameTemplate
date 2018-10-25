@@ -43,7 +43,7 @@ public:
 	* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
 	* @param stackClear 現在のシーンのスタックをクリアするか
 	*/
-	void onSceneChange(const Scene::SceneName& scene, const Parameter* parame, bool stackClear) override;
+	void onSceneChange(const Scene::SceneName& scene, const Parameter* parame, Scene::StackPopFlag stackClear) override;
 	//!すべてのシーンスタックをクリアします
 	void stackClear() override;
 	//!Entityの更新処理を行います

@@ -16,6 +16,8 @@ namespace Scene
 	private:
 		Parameter playerDetail_;
 		ECS::EntityManager* entityManager_;
+		ECS::Entity* me;
+		ECS::Entity* you;
 	public:
 		Game(IOnSceneChangeCallback* sceneTitleChange, const Parameter& parame, ECS::EntityManager* entityManager);
 		~Game();
