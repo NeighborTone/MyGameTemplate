@@ -14,13 +14,11 @@ namespace Scene
 	class Game : public AbstractScene
 	{
 	private:
-		Parameter playerDetail_;
 		ECS::EntityManager* entityManager_;
-		ECS::Entity* me;
-		ECS::Entity* you;
 	public:
-		Game(IOnSceneChangeCallback* sceneTitleChange, const Parameter& parame, ECS::EntityManager* entityManager);
+		Game(IOnSceneChangeCallback* sceneTitleChange, Parameter* parame, ECS::EntityManager* entityManager);
 		~Game();
+		virtual void initialize() override;
 		virtual void update() override;
 		virtual void draw() override;
 	

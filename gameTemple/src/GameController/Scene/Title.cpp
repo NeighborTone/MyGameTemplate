@@ -7,17 +7,21 @@
 
 namespace Scene
 {
-	Title::Title(IOnSceneChangeCallback* sceneTitleChange, [[maybe_unused]] const Parameter& parame, ECS::EntityManager* entityManager)
+	Title::Title(IOnSceneChangeCallback* sceneTitleChange, [[maybe_unused]] Parameter* parame, ECS::EntityManager* entityManager)
 		: AbstractScene(sceneTitleChange)
 		, entitytManager_(entityManager)
 	{
 		
 	}
+	void Title::initialize()
+	{
+
+	}
 	void Title::update()
 	{
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
 		{
-			getCallBack().onSceneChange(SceneName::GAME, nullptr, StackPopFlag::POP);
+			ON_SCENE_CHANGE(SceneName::GAME, nullptr, StackPopFlag::POP,true);
 			return;
 		}
 		

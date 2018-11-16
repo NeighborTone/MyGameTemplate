@@ -36,14 +36,14 @@ public:
 		MAX,			//最大数
 	};
 	GameController();
-	~GameController();
+	~GameController() = default;
 	/*!
 	* @brief シーン変更(各シーンからコールバックされる)
-	* @param scene 変更するシーンのenum
 	* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
+	* @param scene 変更するシーンのenum
 	* @param stackClear 現在のシーンのスタックをクリアするか
 	*/
-	void onSceneChange(const Scene::SceneName& scene, const Parameter* parame, Scene::StackPopFlag stackClear) override;
+	void onSceneChange(const Scene::SceneName& scene, Parameter* parame, const Scene::StackPopFlag stackClear, const bool isInitialize) override;
 	//!すべてのシーンスタックをクリアします
 	void stackClear() override;
 	//!Entityの更新処理を行います
