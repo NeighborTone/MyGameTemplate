@@ -22,7 +22,7 @@ namespace Scene
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
 		{
 			ON_SCENE_CHANGE(SceneName::GAME, nullptr, StackPopFlag::POP,true);
-			return;
+
 		}
 		
 	}
