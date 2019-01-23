@@ -3,7 +3,7 @@
 #include "SceneManager.hpp"
 #include "../GameController.h"
 #include "../../System/System.hpp"
-
+#include "../../Components/Collider.hpp"
 
 namespace Scene
 {
@@ -13,22 +13,26 @@ namespace Scene
 	{
 		
 	}
+
 	void Title::initialize()
 	{
-
+	
 	}
+
 	void Title::update()
 	{
+		entitytManager_->update();
+
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
 		{
 			ON_SCENE_CHANGE(SceneName::GAME, nullptr, StackPopFlag::POP,true);
-
 		}
 		
 	}
+
 	void Title::draw()
 	{
-		DrawFormatString(0, 0, 0xffffffff, "タイトル画面");
+		entitytManager_->orderByDraw(ENTITY_GROUP::MAX);
 	}
 
 }

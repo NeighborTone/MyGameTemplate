@@ -16,6 +16,7 @@ namespace Scene
 	{
 	private:
 		ECS::EntityManager* entitytManager_;
+
 	public:
 		~Title() = default;
 		Title(IOnSceneChangeCallback* sceneTitleChange, [[maybe_unused]] Parameter* parame, ECS::EntityManager* entityManager);

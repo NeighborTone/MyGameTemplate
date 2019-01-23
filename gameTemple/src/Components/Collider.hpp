@@ -180,4 +180,38 @@ namespace ECS
 		float x() const override { return pos_->val.x + offSetPos_.x; }
 		float y() const override { return pos_->val.y + offSetPos_.y; }
 	};
+
+	/*!
+   @brief 線分です.
+   @details LineDataが必要です
+   */
+	class LineCollider final : public ComponentSystem
+	{
+	private:
+		LineData* line_ = nullptr;
+		unsigned int color_ = 4294967295;
+		bool isDraw_ = true;
+	public:
+		void initialize() override
+		{
+			if (!entity->hasComponent<LineData>())
+			{
+				entity->addComponent<LineData>();
+			}
+			line_ = &entity->getComponent<LineData>();
+		}
+		void draw2D() override
+		{
+			if (isDraw_)
+			{
+				DrawLineAA(line_->p1.x, line_->p1.y, line_->p2.x, line_->p2.y,color_,1);
+			}
+		}
+		void setColor(const int r, const int g, const int b) 
+		{
+			color_ = GetColor(r, g, b);
+		}
+		void drawEnable() { isDraw_ = true; }
+		void drawDisable() { isDraw_ = false; }
+	};
 }

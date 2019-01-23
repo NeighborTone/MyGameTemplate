@@ -12,9 +12,6 @@
 #pragma once
 #include "../GameController/GameController.h"
 #include "../Components/Renderer.hpp"
-#include "../Components/Animator.hpp"
-#include "../Components/PlayerController.hpp"
-#include "../Components/UIComponents.hpp"
 #include "../Input/Input.hpp"
 namespace ECS
 {

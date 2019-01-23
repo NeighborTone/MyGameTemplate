@@ -134,8 +134,7 @@ public:
 	[[nodiscard]] const Vec2T&  getNormalize() const
 	{
 		Vec2T result = *this;
-		result.normalize();
-		return result;
+		return result.normalize();
 	}
 
 	Vec2T operator+() const

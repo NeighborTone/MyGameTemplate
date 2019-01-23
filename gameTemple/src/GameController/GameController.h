@@ -21,8 +21,6 @@ private:
 	std::stack<std::unique_ptr<Scene::AbstractScene>> sceneStack_;	//シーンのスタック
 	Parameter param_;
 	void resourceLoad();
-	//!シーンスタックのチェックを行います
-	void isSceneEmpty();
 public:
 
 	/**

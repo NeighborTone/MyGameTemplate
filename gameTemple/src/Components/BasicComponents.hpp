@@ -25,6 +25,22 @@ namespace ECS
 		explicit Position(const float& x, const float& y) :val(x, y) {}
 
 	};
+
+	/*!
+	@brief  線分です,データの型は始点、終点ともにVec2です
+	*/
+	struct LineData final : public ComponentData
+	{
+		Vec2 p1;
+		Vec2 p2;
+		LineData() = default;
+		explicit LineData(const Vec2& start, const Vec2& end) :
+			p1(start),
+			p2(end)
+		{}
+		
+	};
+
 	/*!
 	@brief  回転値です,データの型はfloatです
 	*/
