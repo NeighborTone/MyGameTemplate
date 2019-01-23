@@ -108,14 +108,14 @@
     <ClInclude Include="src\Components\Renderer.hpp">
       <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\ArcheType\TestArcheType.hpp">
-      <Filter>src\ArcheType</Filter>
-    </ClInclude>
     <ClInclude Include="src\Class\Sound.hpp">
       <Filter>src\Class</Filter>
     </ClInclude>
     <ClInclude Include="src\GameController\Scene\Parameter.hpp">
       <Filter>src\GameController\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArcheType\ArcheType.hpp">
+      <Filter>src\ArcheType</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

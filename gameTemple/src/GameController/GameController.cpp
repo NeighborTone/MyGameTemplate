@@ -4,6 +4,7 @@
 #include "../Input/Input.hpp"
 #include "Scene/Title.h"
 #include "Scene/Game.h"
+#include "../Class/Sound.hpp"
 
 void GameController::resourceLoad()
 {
@@ -46,7 +47,7 @@ void GameController::onSceneChange(const Scene::SceneName& scene, Parameter* par
 	default:
 		break;
 	}
-
+	MasterSound::Get().update();
 	if (isInitialize)
 	{
 		sceneStack_.top()->initialize();
@@ -63,8 +64,9 @@ void GameController::stackClear()
 
 void GameController::update()
 {
-	entityManager_.refresh();
+	MasterSound::Get().update();
 	Input::Get().updateKey();
+	entityManager_.refresh();
 	//シーン更新
 	sceneStack_.top()->update();
 }

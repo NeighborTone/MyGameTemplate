@@ -3,6 +3,11 @@
 * @brief EntityComponentSystem
 * @author tonarinohito
 * @date 2018/10/05
+* @par History
+- 2018/10/14 tonarinohito
+-# すべてのエンティティを削除するallDestory()追加
+- 2018/10/16 tonarinohito
+-# コンポーネントをEntity::stopComponent<>()で停止できるようにした
 * @note  参考元 https://github.com/SuperV1234/Tutorials
 */
 #pragma once
@@ -10,7 +15,7 @@
 #include <array>
 #include <memory>
 #include <vector>
-#include <cassert>
+#include <assert.h>
 #include <iostream>
 #include <algorithm>
 
@@ -33,14 +38,14 @@ namespace ECS
 		return ++lastID;
 	}
 	//!複数のコンポーネントをIDによって管理するための関数
-	template <typename T> [[nodiscard]] inline ComponentID GetComponentTypeID() noexcept
+	template <typename T>[[nodiscard]] inline ComponentID GetComponentTypeID() noexcept
 	{
 		static ComponentID typeID = GetNewComponentTypeID();
 		return typeID;
 	}
 
 	//!最大コンポーネント数。必要に応じて限界値は変える
-	constexpr std::size_t MaxComponents = 32;
+	constexpr std::size_t MaxComponents = 64;
 	//!最大グループ数。必要に応じて限界値は変える
 	constexpr std::size_t MaxGroups = 32;
 
@@ -51,8 +56,8 @@ namespace ECS
 	//!Groupも同様にIDを関連付けるために静的配列で用意
 	using GroupBitSet = std::bitset<MaxGroups>;
 
-	/** 
-    * @brief Componentの基底クラスです
+	/**
+	* @brief Componentの基底クラスです
 	* @details Entityに対するすべての振る舞いはこのクラスを継承し実装します
 	*/
 	class ComponentSystem
@@ -61,17 +66,19 @@ namespace ECS
 		//Entityによって殺されたいのでこうなった
 		friend class Entity;
 		bool active_ = true;
+		void removeThis() { active_ = false; }
 		bool isStop_ = false;
-		void removeThis() { active_ = false;}
 	public:
-		Entity* entity;
+		Entity* entity = nullptr;
 		virtual void initialize() {};
 		virtual void update() {};
 		virtual void draw3D() {};
 		virtual void draw2D() {};
 		virtual ~ComponentSystem() {}
-		//このコンポーネントが生きているか返します
+		//!このコンポーネントが生きているか返します
 		[[nodiscard]] virtual bool isActive() const final { return active_; }
+		//!このコンポーネントが更新しているか返します
+		[[nodiscard]] virtual bool isStop() const final { return isStop_; }
 
 	};
 
@@ -95,8 +102,9 @@ namespace ECS
 	{
 	private:
 		friend class EntityManager;
-		std::string tag_;
+		std::string tag_ = "";
 		EntityManager& manager_;
+		Group nowGroup_;
 		bool isActive_ = true;
 		std::vector<std::unique_ptr<ComponentSystem>> components_;
 		ComponentArray  componentArray_;
@@ -112,7 +120,7 @@ namespace ECS
 			}),
 				std::end(components_));
 		}
-		
+
 	public:
 		//!コンストラクタでマネージャーを指定してください
 		Entity(EntityManager& manager) : manager_(manager) {}
@@ -139,7 +147,8 @@ namespace ECS
 		//!このEntityについているComponentの3D描画処理を行います
 		void draw3D()
 		{
-			for (auto& c : components_) {
+			for (auto& c : components_)
+			{
 				if (c == nullptr)
 				{
 					continue;
@@ -165,39 +174,32 @@ namespace ECS
 		[[nodiscard]] bool isActive() const { return isActive_; }
 
 		//!Entityを殺します
-		void destroy() 
-		{
-			isActive_ = false; 
-		}
+		void destroy() { isActive_ = false; }
 
 		//!Entityが指定したグループに登録されているか返します
-		[[nodiscard]] bool hasGroup(Group group) const noexcept
+		[[nodiscard]] bool hasGroup(const Group& group) const noexcept
 		{
 			return groupBitSet_[group];
 		}
 
 		//!Entityをグループに登録します
-		void addGroup(Group group) noexcept;
+		void addGroup(const Group& group) noexcept;
 
 		//!Entityをグループから消します
-		void removeGroup(Group group) noexcept
+		void removeGroup(const Group& group) noexcept
 		{
 			groupBitSet_[group] = false;
 		}
-
-		//!指定したコンポーネントの更新処理を止めます
-		template<typename T> void stopComponent() noexcept
+		//!グループを登録し直します
+		void changeGroup(const Group& setGroup) noexcept
 		{
-			getComponent<T>().isStop_ = true;
-		}
-		//!指定したコンポーネントの更新処理を実行可能にします
-		template<typename T> void updateComponent() noexcept
-		{
-			getComponent<T>().isStop_ = false;
-		}
+			removeGroup(nowGroup_);
 
+			addGroup(setGroup);
+			nowGroup_ = setGroup;
+		}
 		//!Entityに指定したComponentがあるか返します
-		template <typename T> [[nodiscard]] bool hasComponent() const
+		template <typename T>[[nodiscard]] bool hasComponent() const
 		{
 			return componentBitSet_[GetComponentTypeID<T>()];
 		}
@@ -207,7 +209,7 @@ namespace ECS
 		* @param args コンポーネントのコンストラクタと同じものになります
 		* @return T 追加したコンポーネントのポインタ
 		* @details 追加されたらコンポーネントの初期化メソッドが呼ばれます
-		* - 重複はできません
+		* - 重複はできません。重複した場合はそのコンポーネントが返ります
 		*/
 		template <typename T, typename... TArgs> T& addComponent(TArgs&&... args)
 		{
@@ -241,13 +243,23 @@ namespace ECS
 				componentBitSet_[GetComponentTypeID<T>()] = false;
 			}
 		}
+		//!指定したコンポーネントの更新処理を止めます
+		template<typename T> void stopComponent() noexcept
+		{
+			getComponent<T>().isStop_ = true;
+		}
+		//!指定したコンポーネントの更新処理を実行可能にします
+		template<typename T> void updateComponent() noexcept
+		{
+			getComponent<T>().isStop_ = false;
+		}
 
 		/**
 		* @brief 登録済みのコンポーネントを取得します
 		* @return T 指定したコンポーネントのポインタ
 		* @details 失敗した場合例外が発生し、コンソール画面に取得に失敗したコンポーネントが出力されます
 		*/
-		template<typename T> [[nodiscard]] T& getComponent() const
+		template<typename T>[[nodiscard]] T& getComponent() const
 		{
 			if (!hasComponent<T>())
 			{
@@ -302,7 +314,7 @@ namespace ECS
 		* @brief グループごとの描画を登録順に行います
 		* @param MaxGroup 最大グループ数
 		*/
-		void orderByDraw(const size_t MaxGroup)
+		void orderByDraw(const Group& MaxGroup)
 		{
 			for (auto i(0u); i < MaxGroup; ++i)
 			{
@@ -319,6 +331,14 @@ namespace ECS
 			for (auto& e : entityes_)
 			{
 				e->draw2D();
+			}
+		}
+		//!すべてのエンティティを削除します
+		void removeAll()
+		{
+			for (auto& e : entityes_)
+			{
+				e->destroy();
 			}
 		}
 		//!アクティブでないEntityを削除します。必ず更新処理で呼んでください
@@ -344,22 +364,15 @@ namespace ECS
 			}),
 				std::end(entityes_));
 		}
-		//!すべてのエンティティを殺します
-		void allDestroy()
-		{
-			for (auto& e : entityes_)
-			{
-				e->destroy();
-			}
-		}
+
 		//!指定したグループに登録されているEntity達を返します
-		[[nodiscard]] std::vector<Entity*>& getEntitiesByGroup(Group group)
+		[[nodiscard]] std::vector<Entity*>& getEntitiesByGroup(const Group& group)
 		{
 			return groupedEntities_[group];
 		}
 
 		//!Entityを指定したグループに登録します
-		void addToGroup(Entity* pEntity, Group group)
+		void addToGroup(Entity* pEntity, const Group& group)
 		{
 			groupedEntities_[group].emplace_back(pEntity);
 		}
@@ -369,7 +382,7 @@ namespace ECS
 		* @param tag 名前の文字列
 		* @return Entity& Entityへの参照
 		* @details タグを設定しておくとデバッグするときに追いかけやすいため用意してあります
-		* 作られたEntityはマネージャーが保持します 
+		* 作られたEntityはマネージャーが保持します
 		*/
 		[[nodiscard]] Entity& addEntityAddTag(const std::string& tag)
 		{
@@ -395,6 +408,8 @@ namespace ECS
 		}
 	};
 
+	//以下の処理は必要ないかもしれない//
+
 	//!vectorに格納されているエンティティの更新を行います
 	void EntitiesUpdate(const std::vector<Entity*>& entities);
 	//!vectorに格納されているエンティティの2D描画を行います
@@ -402,5 +417,4 @@ namespace ECS
 	//!vectorに格納されているエンティティの3D描画を行います
 	void EntitiesDraw3D(const std::vector<Entity*>& entities);
 
-}
-
+}  //namespace ECS

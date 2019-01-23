@@ -6,6 +6,8 @@
 * @par History
 - 2018/10/12 tonarinohito
 -# reset()修正
+- 2018/10/16 tonarinohito
+-# ++や--の属性を消した
 */
 #pragma once
 
@@ -65,18 +67,20 @@ public:
 		max_ = max;
 	}
 	/*!* @brief カウンターを初期化します*/
-	void SetCounter(T now, T add, T min, T max) 
+	void setCounter(T now, T add, T min, T max) 
 	{
 		now_ = now;
 		add_ = add;
 		min_ = min;
 		max_ = max;
+		isMax_ = false;
+		isMin_ = false;
 	}
 	/*!
 	* @brief カウンターを加算値分足します
 	* @return 現在のカウンターの値
 	*/
-	[[nodiscard]] const T operator++()
+	const T operator++()
 	{
 		if (now_ >= max_)
 		{
@@ -93,7 +97,7 @@ public:
 	* @brief カウンターを加算値分引きます
 	* @return 現在のカウンターの値
 	*/
-	[[nodiscard]] const T operator--()
+	const T operator--()
 	{
 		if (now_ <= min_)
 		{
@@ -124,11 +128,11 @@ public:
 		now_ -= add_;
 	}
 	//!経過時間を0にし、フラグを再セットします
-	void reset() 
+	void reset(const T& resetNow = 0) 
 	{
 		isMax_ = false;
 		isMin_ = false;
-		now_ = 0;
+		now_ = resetNow;
 	}
 
 	//!現在のカウンターの値をミリ秒で返します

@@ -59,7 +59,7 @@ private:
 			//名前の重複防止
 			if (graphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + name +" load is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				return graphs_[name];
 			}
 			graphs_[name] = LoadGraph(path.c_str());
@@ -75,7 +75,7 @@ private:
 		* @param  path ファイルパス
 		* @param  name 登録名
 		* @detail 既に登録した名前は使えません。非同期なのでこのメソッドで処理が止まることはありません
-		* @return 正常に読み込めたら1が返ります 
+		* @return 正常に読み込めたら1が返ります
 		* - すでに登録した名前を指定したらそのハンドルが返ります
 		*/
 		int loadAsync(const std::string& path, const std::string& name)
@@ -83,7 +83,7 @@ private:
 			//名前の重複防止
 			if (graphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + name +" load is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				return graphs_[name];
 			}
 			SetUseASyncLoadFlag(TRUE); // 非同期読み込みフラグON
@@ -115,7 +115,7 @@ private:
 
 			case FALSE: return true;	//非同期読み込み済み
 			case TRUE:  return false;	//まだ
-			
+
 			}
 		}
 		/**
@@ -160,7 +160,7 @@ private:
 			//名前の重複防止
 			if (divGraphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + name +" load is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				return divGraphs_[name].first[0];
 			}
 			divGraphs_[name].first = new int[allNum];
@@ -193,7 +193,7 @@ private:
 			//名前の重複防止
 			if (divGraphs_.count(name))
 			{
-				DOUT << "GraphicHandle :" + name +" load is failed" << std::endl;
+				DOUT << "GraphicHandle :" + name + " add is failed" << std::endl;
 				return divGraphs_[name].first[0];
 			}
 			SetUseASyncLoadFlag(TRUE); // 非同期読み込みフラグON
@@ -273,7 +273,7 @@ private:
 		/**
 		* @brief  メモリに読み込んだ画像リソースを解放します
 		* @param  name 登録名
-		* @return 登録名が存在しない場合何も起きません
+		* @detail 登録名が存在しない場合何も起きません
 		*/
 		void removeDivGraph(const std::string& name)
 		{
@@ -289,7 +289,7 @@ private:
 		/**
 		* @brief  メモリに読み込んだ分割画像リソースを解放します
 		* @param  name 登録名
-		* @return 登録名が存在しない場合何も起きません
+		* @detail 登録名が存在しない場合何も起きません
 		*/
 		void removeGraph(const std::string& name)
 		{
@@ -301,6 +301,27 @@ private:
 			DeleteGraph(graphs_[name]);
 			graphs_.erase(name);
 		}
+		/**
+		* @brief  メモリに読み込んだ画像リソースをすべて解放します
+		*/
+		void removeAll()
+		{
+			for (const auto&[key, value] : graphs_)
+			{
+				DeleteGraph(value);
+			}
+			for (const auto&[key, value] : divGraphs_)
+			{
+				DeleteGraph(*value.first);
+			}
+			for (auto& it : divGraphs_)
+			{
+				Utility::SafeDeleteArray(it.second.first);
+			}
+			divGraphs_.clear();
+			graphs_.clear();
+
+		}
 	};
 
 	/*!
@@ -310,10 +331,10 @@ private:
 	class SoundManager final
 	{
 	private:
-		typedef std::unordered_map<std::string, std::pair<int,SoundType>> SoundMap;
+		typedef std::unordered_map<std::string, std::pair<int, SoundType>> SoundMap;
 		SoundMap sounds_;
 	public:
-	
+
 		~SoundManager()
 		{
 			InitSoundMem();
@@ -326,12 +347,12 @@ private:
 		* @return 登録したハンドルが返ります。
 		* - すでに登録した名前を指定したらそのハンドルが返ります
 		*/
-		int load(const std::string& path, const std::string& name,const SoundType& soundType)
+		int load(const std::string& path, const std::string& name, const SoundType& soundType)
 		{
 			//名前の重複防止
 			if (sounds_.count(name))
 			{
-				DOUT << "SoundHandle :" + name +" load is failed" << std::endl;
+				DOUT << "SoundHandle :" + name + " add is failed" << std::endl;
 				return sounds_[name].first;
 			}
 			sounds_[name].second = soundType;
@@ -347,7 +368,7 @@ private:
 		* @brief  サウンドを非同期でロードします
 		* @param  path ファイルパス
 		* @param  name 登録名
-		* @return 正常に読み込めたら1が返ります 
+		* @return 正常に読み込めたら1が返ります
 		* - すでに登録した名前を指定したらそのハンドルが返ります
 		*/
 		int loadAsync(const std::string& path, const std::string& name, const SoundType& soundType)
@@ -355,7 +376,7 @@ private:
 			//名前の重複防止
 			if (sounds_.count(name))
 			{
-				DOUT << "SoundHandle :" + name +" load is failed" << std::endl;
+				DOUT << "SoundHandle :" + name + " add is failed" << std::endl;
 				return sounds_[name].first;
 			}
 			sounds_[name].second = soundType;
@@ -434,6 +455,19 @@ private:
 			DeleteSoundMem(sounds_[name].first);
 			sounds_.erase(name);
 		}
+
+		/**
+		* @brief  メモリに読み込んだサウンドリソースをすべて解放します
+		*/
+		void removeAll()
+		{
+			for (const auto&[key, value] : sounds_)
+			{
+				DeleteSoundMem(value.first);
+			}
+			sounds_.clear();
+		}
+
 		//!すべてのハンドルをunordered_mapで返します
 		[[nodiscard]] const SoundMap& getSoundMap() const
 		{

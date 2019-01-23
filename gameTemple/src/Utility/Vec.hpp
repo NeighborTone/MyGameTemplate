@@ -281,11 +281,11 @@ public:
 
 	}
 
-	[[nodiscard]] bool operator==(const Vec2T &v) const
+	bool operator==(const Vec2T &v) const
 	{
 		return x == v.x && y == v.y;
 	}
-	[[nodiscard]] bool operator!=(const Vec2T &v) const
+	bool operator!=(const Vec2T &v) const
 	{
 		return !(*this == v);
 	}
@@ -587,11 +587,11 @@ public:
 		if (idx == 2) return z;
 	}
 
-	[[nodiscard]] bool operator==(const Vec3T &v) const
+	bool operator==(const Vec3T &v) const
 	{
 		return (x == v.x && y == v.y && v.z == z);
 	}
-	[[nodiscard]] bool operator!=(const Vec3T &v) const
+	bool operator!=(const Vec3T &v) const
 	{
 		return !(*this == v);
 	}

@@ -1,11 +1,10 @@
 ﻿#include "Game.h"
-#include "SceneManager.hpp"
-#include "../../ArcheType/TestArcheType.hpp"
+#include "../GameController.h"
 #include "../../Input/Input.hpp"
 
 namespace Scene
 {
-	Game::Game(IOnSceneChangeCallback* sceneTitleChange, Parameter* parame, ECS::EntityManager* entityManager)
+	Game::Game(IOnSceneChangeCallback* sceneTitleChange, [[maybe_unused]] Parameter* parame, ECS::EntityManager* entityManager)
 		: AbstractScene(sceneTitleChange),
 		entityManager_(entityManager)
 	{
@@ -41,7 +40,7 @@ namespace Scene
 
 	Game::~Game()
 	{
-		entityManager_->allDestroy();
+		entityManager_->removeAll();
 	}
 	
 }

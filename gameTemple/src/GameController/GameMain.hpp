@@ -8,33 +8,38 @@
 #include "../System/System.hpp"
 #include "../GameController/GameController.h"
 #include "../Utility/FPS.hpp"
+#include "../Input/Input.hpp"
 #include <memory>
 
-//!アプリケーションを生成します
+ //!アプリケーションを生成します
 class GameMain final
 {
 private:
-	std::unique_ptr<System> system_;
-	std::unique_ptr<GameController> game_;
+	std::unique_ptr<System> system;
+	std::unique_ptr<GameController> game;
 	void update()
 	{
-		game_->update();
+		game->update();
 	}
 	void draw()
 	{
-		game_->draw();
+		game->draw();
 	}
-
+	const bool pushEscape() const
+	{
+		return Input::Get().getKeyFrame(KEY_INPUT_ESCAPE) == 1;
+	}
 public:
 	GameMain()
 	{
-		system_ = std::make_unique<System>();
-		game_ = std::make_unique<GameController>();
+		system = std::make_unique<System>();
+		game = std::make_unique<GameController>();
 	}
 	//!アプリケーションの更新を行います
 	void run()
 	{
-		while (system_->isOk())
+
+		while (system->isOk() && !pushEscape())
 		{
 			Fps::Get().update();
 			update();

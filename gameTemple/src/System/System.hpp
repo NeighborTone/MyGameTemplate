@@ -9,9 +9,9 @@
 #include <cassert>
 #include <Windows.h>
 
-/*!
-@brief DXlibの処理を隠蔽します
-*/
+ /*!
+ @brief DXlibの処理を隠蔽します
+ */
 class System final
 {
 private:
@@ -62,8 +62,8 @@ private:
 public:
 	//!画面サイズ
 	static constexpr int
-	SCREEN_WIDIH = 1280,
-	SCREEN_HEIGHT = 720;
+		SCREEN_WIDIH = 1280,
+		SCREEN_HEIGHT = 720;
 	System()
 	{
 		systemInit();

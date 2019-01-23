@@ -3,6 +3,9 @@
 * @brief 座標や速度などの基本的なコンポーネント群です。
 * @author tonarinohito
 * @date 2018/10/05
+* @par History
+- 2018/12/19 tonarinohito
+-# Canvas追加
 */
 #pragma once
 #include "../ECS/ECS.hpp"
@@ -11,7 +14,7 @@
 #include <functional>
 namespace ECS
 {
-	/*! 
+	/*!
 	@brief  座標です,データの型はVec2です
 	*/
 	struct Position final : public ComponentData
@@ -30,7 +33,7 @@ namespace ECS
 		float val;
 		Rotation() = default;
 		Rotation(const float& r) : val(r) {}
-		
+
 	};
 	/*!
 	@brief  x,y方向の拡大率です,データの型はVec2です
@@ -41,7 +44,7 @@ namespace ECS
 		Scale() = default;
 		explicit Scale(const Vec2& scale) : val(scale) {}
 		explicit Scale(const float& scale) : val(scale, scale) {}
-		explicit Scale(const float& scaleX, const float& scaleY ) : val(scaleX, scaleY) {}
+		explicit Scale(const float& scaleX, const float& scaleY) : val(scaleX, scaleY) {}
 	};
 	/*!
 	@brief  速度です,データの型はVec2です
@@ -52,7 +55,7 @@ namespace ECS
 		Velocity() = default;
 		explicit Velocity(const Vec2& v) :val(v) {}
 		explicit Velocity(const float& x, const float& y) : val(x, y) {}
-		
+
 	};
 	/*!
 	@brief  向きです,データの型はenum class Dirです
@@ -68,7 +71,7 @@ namespace ECS
 		};
 		Dir val;
 		explicit Direction() : val(Dir::R) {};
-		
+
 	};
 	/*!
 	@brief 重力です,データの型はfloatです
@@ -90,32 +93,32 @@ namespace ECS
 	class Physics final : public ComponentSystem
 	{
 	private:
-		
-		Gravity* gravity_;
-		Velocity* velocity_;
-		Position* pos_;
-		std::vector<Entity*> otherEntity_;
+
+		Gravity* gravity_ = nullptr;
+		Velocity* velocity_ = nullptr;
+		Position* pos_ = nullptr;
+		std::vector<Entity*> otherEntity_{};
 		std::function<bool(const Entity&, const Entity&)> hitFunc_;
 		void checkMove(Vec2& pos, Vec2& velocity)
 		{
-			Vec2 p(velocity);
+			Vec2 pointEntityMove(velocity);
 			//横軸に対する移動
-			while (p.x != 0.f)
+			while (pointEntityMove.x != 0.f)
 			{
 				float preX = pos.x;
 
-				if (p.x >= 1)
+				if (pointEntityMove.x >= 1)
 				{
-					pos.x += 1; p.x -= 1;
+					pos.x += 1; pointEntityMove.x -= 1;
 				}
-				else if (p.x <= -1)
+				else if (pointEntityMove.x <= -1)
 				{
-					pos.x -= 1; p.x += 1;
+					pos.x -= 1; pointEntityMove.x += 1;
 				}
 				else
 				{
-					pos.x += p.x;
-					p.x = 0;
+					pos.x += pointEntityMove.x;
+					pointEntityMove.x = 0;
 				}
 				for (const auto& it : otherEntity_)
 				{
@@ -126,24 +129,24 @@ namespace ECS
 						break;
 					}
 				}
-			
+
 			}
 			//縦軸に対する移動
-			while (p.y != 0.f)
+			while (pointEntityMove.y != 0.f)
 			{
 				float preY = pos.y;
-				if (p.y >= 1)
-				{ 
-					pos.y += 1; p.y -= 1; 
+				if (pointEntityMove.y >= 1)
+				{
+					pos.y += 1; pointEntityMove.y -= 1;
 				}
-				else if (p.y <= -1)
-				{ 
-					pos.y -= 1; p.y += 1; 
+				else if (pointEntityMove.y <= -1)
+				{
+					pos.y -= 1; pointEntityMove.y += 1;
 				}
 				else
 				{
-					pos.y += p.y;
-					p.y = 0; 
+					pos.y += pointEntityMove.y;
+					pointEntityMove.y = 0;
 				}
 				for (const auto& it : otherEntity_)
 				{
@@ -171,7 +174,7 @@ namespace ECS
 			gravity_ = &entity->getComponent<Gravity>();
 			pos_ = &entity->getComponent<Position>();
 		}
-		void update() override 
+		void update() override
 		{
 			velocity_->val.y += gravity_->val;
 			checkMove(pos_->val, velocity_->val);
@@ -186,7 +189,7 @@ namespace ECS
 			gravity_->val = g;
 		}
 		//!あたり判定の関数をセットする
-		void setCollisionFunction(std::function<bool(const Entity& , const Entity& )> func)
+		void setCollisionFunction(std::function<bool(const Entity&, const Entity&)> func)
 		{
 			hitFunc_ = func;
 		}
@@ -203,12 +206,11 @@ namespace ECS
 	class Transform final : public ComponentSystem
 	{
 	private:
-		Position* pos_;
-		Rotation* rota_;
-		Scale* scale_;
+		Position* pos_ = nullptr;
+		Rotation* rota_ = nullptr;
+		Scale* scale_ = nullptr;
 	public:
-	
-		Transform() :pos_(nullptr), rota_(nullptr) {}
+		Transform() = default;
 		void initialize() override
 		{
 			if (!entity->hasComponent<Position>())
@@ -227,7 +229,6 @@ namespace ECS
 			rota_ = &entity->getComponent<Rotation>();
 			scale_ = &entity->getComponent<Scale>();
 		}
-
 		void setPosition(const float& x, const float& y)
 		{
 			pos_->val.x = x;
@@ -242,7 +243,84 @@ namespace ECS
 			scale_->val.x = scaleX;
 			scale_->val.y = scaleY;
 		}
+	};
 
+	/*!
+	@brief UI等の配置に適したコンポーネントです
+	@details Transformが必要です。
+	- Canvasに追従する形で子のエンティティは動きます
+	- 子になっているエンティティ単体では動かせません
+	*/
+	class Canvas final : public ComponentSystem
+	{
+	private:
+		//ScaleとRotationは加算値でPositonは相対座標になる
+		std::vector<std::tuple<Entity*, Position, Scale, Rotation>> e_{};
+	public:
+		Canvas() = default;
+		//!Canvasに乗せるエンティティを指定します。
+		void addChild(Entity* e)
+		{
+			e_.emplace_back
+			(
+				std::make_tuple
+				(
+					e,
+					e->getComponent<Position>(),
+					e->getComponent<Scale>(),
+					e->getComponent<Rotation>()
+				)
+			);
+			auto& scale = std::get<2>(e_.back());
+			scale.val = 0;
+			auto& rota = std::get<3>(e_.back());
+			rota.val = 0;
+		}
+		/*
+		@brief 子のエンティティの座標を指定した分だけずらします
+		@param index 登録した番号
+		@param offsetVal オフセット値
+		*/
+		void offsetChildPosition(const size_t index, const Vec2& offsetVal)
+		{
+			auto& pos = std::get<1>(e_.at(index));
+			pos.val += offsetVal;
+		}
+
+		/*
+		@brief 子のエンティティのスケールを指定した分だけ加算します
+		@param index 登録した番号
+		@param offsetVal オフセット値
+		*/
+		void offsetChildScale(const size_t index, const Vec2& offsetVal)
+		{
+			auto& scale = std::get<2>(e_.at(index));
+			scale.val += offsetVal;
+		}
+		/*
+		@brief 子のエンティティの回転率(ラジアン)を指定した分だけ加算します
+		@param index 登録した番号
+		@param offsetVal オフセット値
+		*/
+		void offsetChildRotation(const size_t index, const float& offsetVal)
+		{
+			auto& rota = std::get<3>(e_.at(index));
+			rota.val += offsetVal;
+		}
+		void update() override
+		{
+			for (auto& it : e_)
+			{
+				auto child_entity = std::get<0>(it);
+				auto pos = std::get<1>(it);
+				auto scale = std::get<2>(it);
+				auto rota = std::get<3>(it);
+
+				child_entity->getComponent<Position>().val = pos.val + entity->getComponent<Position>().val;
+				child_entity->getComponent<Scale>().val = entity->getComponent<Scale>().val + scale.val;
+				child_entity->getComponent<Rotation>().val = entity->getComponent<Rotation>().val + rota.val;
+			}
+		}
 	};
 
 	/*!
@@ -271,5 +349,24 @@ namespace ECS
 		{
 			cnt_ = limit;
 		}
+	};
+
+	/*!
+	@brief このコンポーネントがついているEntityにイベント(関数)を追加し,マネージャーから呼び出せるようにします
+	* テンプレート引数   1戻り値,2タグとして扱う型(ただの識別子なので重複しなければなんでもよい、Defaultでvoid)
+	*/
+	template<class T, class Tag = void>
+	class EventFunctionSystem final : public ComponentSystem
+	{
+	private:
+		std::function<T(Entity*)> func_;
+	public:
+		EventFunctionSystem(std::function<T(Entity*)> addFunc) :func_(addFunc) {}
+
+		void update() override
+		{
+			func_(entity);
+		}
+
 	};
 }

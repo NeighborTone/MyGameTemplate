@@ -169,11 +169,6 @@ namespace Utility
 				return;
 			const auto end = std::chrono::system_clock::now();
 			const auto elapsed = std::chrono::duration_cast<T>(end - start_).count();
-			if (typeid(T) == typeid(std::chrono::milliseconds))
-			{
-				DOUT << elapsed << " [milliseconds]" << std::endl;
-				return;
-			}
 			if (typeid(T) == typeid(std::chrono::nanoseconds))
 			{
 				DOUT << elapsed << " [nanoseconds]" << std::endl;
@@ -182,6 +177,11 @@ namespace Utility
 			if (typeid(T) == typeid(std::chrono::microseconds))
 			{
 				DOUT << elapsed << " [microseconds]" << std::endl;
+				return;
+			}
+			if (typeid(T) == typeid(std::chrono::milliseconds))
+			{
+				DOUT << elapsed << " [milliseconds]" << std::endl;
 				return;
 			}
 			if (typeid(T) == typeid(std::chrono::seconds))
