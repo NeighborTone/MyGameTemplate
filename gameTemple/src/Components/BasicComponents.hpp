@@ -250,6 +250,11 @@ namespace ECS
 			pos_->val.x = x;
 			pos_->val.y = y;
 		}
+		void setPosition(const Vec2& setPos)
+		{
+			pos_->val.x = setPos.x;
+			pos_->val.y = setPos.y;
+		}
 		void setRotation(const float& r)
 		{
 			rota_->val = r;

@@ -8,7 +8,7 @@
 #include <DxLib.h>
 #include <cassert>
 #include <Windows.h>
-
+#include "../Input/Input.hpp"
  /*!
  @brief DXlibの処理を隠蔽します
  */
@@ -57,6 +57,7 @@ private:
 		if (ScreenFlip() != 0) return false;
 		if (ProcessMessage() != 0) return false;
 		if (ClearDrawScreen() != 0) return false;
+		Input::Get().updateKey();
 		return true;
 	}
 public:

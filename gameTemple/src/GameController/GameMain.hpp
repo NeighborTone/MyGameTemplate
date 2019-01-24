@@ -8,7 +8,6 @@
 #include "../System/System.hpp"
 #include "../GameController/GameController.h"
 #include "../Utility/FPS.hpp"
-#include "../Input/Input.hpp"
 #include <memory>
 
  //!アプリケーションを生成します

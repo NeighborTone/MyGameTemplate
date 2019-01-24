@@ -66,7 +66,6 @@ void GameController::stackClear()
 void GameController::update()
 {
 	MasterSound::Get().update();
-	Input::Get().updateKey();
 	entityManager_.refresh();
 	//シーン更新
 	sceneStack_.top()->update();

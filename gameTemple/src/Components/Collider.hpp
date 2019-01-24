@@ -182,13 +182,16 @@ namespace ECS
 	};
 
 	/*!
-   @brief 線分です.
-   @details LineDataが必要です
-   */
+	* @brief 線分です.
+	* @details Position,LineDataが必要です
+    * -線分の始点はPositionと同じ値になります
+    */
 	class LineCollider final : public ComponentSystem
 	{
 	private:
 		LineData* line_ = nullptr;
+		Vec2 offSetPos1_;
+		Vec2 offSetPos2_;
 		unsigned int color_ = 4294967295;
 		bool isDraw_ = true;
 	public:
@@ -204,14 +207,35 @@ namespace ECS
 		{
 			if (isDraw_)
 			{
-				DrawLineAA(line_->p1.x, line_->p1.y, line_->p2.x, line_->p2.y,color_,1);
+				auto convert_p1 = line_->p1.offSetCopy(offSetPos1_.x, offSetPos1_.y);
+				auto convert_p2 = line_->p2.offSetCopy(offSetPos2_.x, offSetPos2_.y);
+				DrawLineAA(convert_p1.x, convert_p1.y, convert_p2.x, convert_p2.y,color_,1);
 			}
 		}
+		/** @brief 線分の色を指定します*/
 		void setColor(const int r, const int g, const int b) 
 		{
 			color_ = GetColor(r, g, b);
 		}
+		/** @brief 始点座標をずらします*/
+		void setOffsetStartPosition(const float x, const float y)
+		{
+			offSetPos1_.x = x;
+			offSetPos1_.y = y;
+		}
+		/** @brief 終点座標をずらします*/
+		void setOffsetEndPosition(const float x, const float y)
+		{
+			offSetPos2_.x = x;
+			offSetPos2_.y = y;
+		}
+		/** @brief 線分の描画を有効にします*/
 		void drawEnable() { isDraw_ = true; }
+		/** @brief 線分の描画を無効にします*/
 		void drawDisable() { isDraw_ = false; }
+		/** @brief 始点座標を返します、この値はオフセットされた値です*/
+		const Vec2 getStartPosition() const  { return line_->p1 + offSetPos1_; }
+		/** @brief 終点座標を返します、この値はオフセットされた値です*/
+		const Vec2 getEndPosition() const { return line_->p2 + offSetPos2_; }
 	};
 }
