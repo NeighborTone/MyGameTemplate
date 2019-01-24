@@ -11,7 +11,8 @@
 
 /**
 * @brief Collisionの式をまとめたクラスです。
-* メソッドはすべてstaticです
+* -メソッドはすべてstaticです
+* -引数にEntity*を指定するものはデフォルトのテンプレート引数が指定されています
 */
 class Collision
 {
@@ -108,7 +109,7 @@ public:
 	* @brief 円と矩形のあたり判定
 	* @param e1 Entity
 	* @param e2 Entity
-	* @details テンプレート第一引数にはICircleColliderを継承したコンポーネントを指定してください
+	* @details テンプレート第一引数にはICircleColliderを、第二引数にはIBoxCollider継承したコンポーネントを指定してください
 	* テンプレート引数に指定したコンポーネント同士で衝突判定を行います
 	* @return bool
 	*/
@@ -198,7 +199,7 @@ public:
 	* @brief 線分と線分の当たり判定
 	* @param e1 Entity
 	* @param e2 Entity
-	* @details テンプレート第一引数にはICircleColliderを継承したコンポーネントを指定してください
+	* LineDataが必要です
 	* テンプレート引数に指定したコンポーネント同士で衝突判定を行います
 	* @return bool
 	*/
