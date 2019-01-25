@@ -190,10 +190,13 @@ namespace ECS
 	{
 	private:
 		LineData* line_ = nullptr;
+		Entity* start_ = nullptr;
+		Entity* end_ = nullptr;
 		Vec2 offSetPos1_;
 		Vec2 offSetPos2_;
 		unsigned int color_ = 4294967295;
 		bool isDraw_ = true;
+		bool isJoint = false;
 	public:
 		void initialize() override
 		{
@@ -202,6 +205,14 @@ namespace ECS
 				entity->addComponent<LineData>();
 			}
 			line_ = &entity->getComponent<LineData>();
+		}
+		void update() override
+		{
+			if (isJoint)
+			{
+				line_->p1 = start_->getComponent<Position>().val;
+				line_->p2 = end_->getComponent<Position>().val;
+			}
 		}
 		void draw2D() override
 		{
@@ -228,6 +239,13 @@ namespace ECS
 		{
 			offSetPos2_.x = x;
 			offSetPos2_.y = y;
+		}
+		//!引数に指定したエンティティ同士を線で結びます
+		void setJoint(Entity* start, Entity* end)
+		{
+			isJoint = true;
+			start_ = start;
+			end_ = end;
 		}
 		/** @brief 線分の描画を有効にします*/
 		void drawEnable() { isDraw_ = true; }

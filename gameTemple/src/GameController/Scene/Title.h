@@ -19,8 +19,9 @@ namespace Scene
 		ECS::Entity* p;
 		ECS::Entity* pp;
 		ECS::Entity* line;
+		ECS::Entity* hogeCircle;
 	public:
-		~Title() = default;
+		~Title();
 		Title(IOnSceneChangeCallback* sceneTitleChange, [[maybe_unused]] Parameter* parame, ECS::EntityManager* entityManager);
 		virtual void initialize() override;
 		virtual void update() override;
