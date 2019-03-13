@@ -15,7 +15,7 @@
 namespace ECS
 {
 	/*!
-	@brief  座標です,データの型はVec2です
+	@brief  座標です。データの型はVec2です
 	*/
 	struct Position final : public ComponentData
 	{
@@ -27,32 +27,17 @@ namespace ECS
 	};
 
 	/*!
-	@brief  線分です,データの型は始点、終点ともにVec2です
-	*/
-	struct LineData final : public ComponentData
-	{
-		Vec2 p1;
-		Vec2 p2;
-		LineData() = default;
-		explicit LineData(const Vec2& start, const Vec2& end) :
-			p1(start),
-			p2(end)
-		{}
-		
-	};
-
-	/*!
-	@brief  回転値です,データの型はfloatです
+	@brief  回転値です。データの型はfloatです
 	*/
 	struct Rotation final : public ComponentData
 	{
 		float val;
 		Rotation() = default;
-		Rotation(const float& r) : val(r) {}
+		explicit Rotation(const float& r) : val(r) {}
 
 	};
 	/*!
-	@brief  x,y方向の拡大率です,データの型はVec2です
+	@brief  x,y方向の拡大率です。データの型はVec2です
 	*/
 	struct Scale final : public ComponentData
 	{
@@ -63,7 +48,7 @@ namespace ECS
 		explicit Scale(const float& scaleX, const float& scaleY) : val(scaleX, scaleY) {}
 	};
 	/*!
-	@brief  速度です,データの型はVec2です
+	@brief  速度です。データの型はVec2です
 	*/
 	struct Velocity final : public ComponentData
 	{
@@ -74,37 +59,51 @@ namespace ECS
 
 	};
 	/*!
-	@brief  向きです,データの型はenum class Dirです
+	@brief  向きです。データの型はenum class Dirです
 	*/
 	struct Direction final : public ComponentData
 	{
 		enum class Dir : short
 		{
-			R,
-			L,
-			U,
-			D
+			RIGHT,
+			LEFT,
+			UP,
+			DOWN
 		};
 		Dir val;
-		explicit Direction() : val(Dir::R) {};
+		explicit Direction() : val(Dir::RIGHT) {};
 
 	};
 	/*!
-	@brief 重力です,データの型はfloatです
+	@brief 重力です。データの型はfloatです
 	*/
 	struct Gravity final : public ComponentData
 	{
-		static constexpr float DefaultGravity = 9.8f / 60 / 60 * 32 * 3;
+		static constexpr float DEFAULT = 9.8f / 60 / 60 * 32 * 3;
 		float val;
-		Gravity() :val(DefaultGravity) {};
+		Gravity() :val(DEFAULT) {};
 		explicit Gravity(const float g) :val(g) {}
+	};
+
+	/*!
+	@brief  線分です。データの型は始点、終点ともにVec2です
+	*/
+	struct LineData final : public ComponentData
+	{
+		Vec2 p1;
+		Vec2 p2;
+		LineData() = default;
+		explicit LineData(const Vec2& start, const Vec2& end) :
+			p1(start),
+			p2(end)
+		{}
 	};
 
 	/*
 	@brief Entityに重力を加えます。
 	また簡易的な衝突応答処理も含まれますが、これは明示的に呼び出してください
 	@details Gravity, Velocity, Positionが必要です。衝突応答を行う場合はColliderが必要です
-	現状だと1つのグループとの衝突応答しかできないのでこれを別のコンポーネントにするかもしれない
+	@TODO 現状だと1つのグループとの衝突応答しかできないのでこれを別のコンポーネントにするかもしれない
 	*/
 	class Physics final : public ComponentSystem
 	{
@@ -114,7 +113,7 @@ namespace ECS
 		Velocity* velocity_ = nullptr;
 		Position* pos_ = nullptr;
 		std::vector<Entity*> otherEntity_{};
-		std::function<bool(const Entity&, const Entity&)> hitFunc_;
+		std::function<bool(const Entity&, const Entity&)> collisionFunc_;
 		void checkMove(Vec2& pos, Vec2& velocity)
 		{
 			Vec2 pointEntityMove(velocity);
@@ -138,7 +137,7 @@ namespace ECS
 				}
 				for (const auto& it : otherEntity_)
 				{
-					if (hitFunc_(*entity, *it))
+					if (collisionFunc_(*entity, *it))
 					{
 						velocity_->val.x = 0;
 						pos.x = preX;		//移動をキャンセル
@@ -166,7 +165,7 @@ namespace ECS
 				}
 				for (const auto& it : otherEntity_)
 				{
-					if (hitFunc_(*entity, *it))
+					if (collisionFunc_(*entity, *it))
 					{
 						velocity_->val.y = 0;
 						pos.y = preY;		//移動をキャンセル
@@ -200,14 +199,14 @@ namespace ECS
 			velocity_->val.x = x;
 			velocity_->val.y = y;
 		}
-		void setGravity(const float& g = Gravity::DefaultGravity)
+		void setGravity(const float& g = Gravity::DEFAULT)
 		{
 			gravity_->val = g;
 		}
 		//!あたり判定の関数をセットする
 		void setCollisionFunction(std::function<bool(const Entity&, const Entity&)> func)
 		{
-			hitFunc_ = func;
+			collisionFunc_ = func;
 		}
 		//!引数に指定したEntityにめり込まないようにする
 		void pushOutEntity(std::vector<Entity*>&  e)
@@ -216,53 +215,143 @@ namespace ECS
 		}
 	};
 
+	//TODO 特定のパラメーターは親子関係を切る機能とかが必要なら実装する、というかもう少しちゃんと作りたい...
+	//というかこれやるならPositionとかgetComponentでアクセスできないほうがよくね?
 	/*!
-	@brief PositionとRotationとScaleをまとめます
-	*/
+	@brief PositionとRotationとScaleの親子をsetParent()で作ります
+	@detail 親子関係を作ると生のPosition等のデータを直接変更できなくなります
+	*/ 
 	class Transform final : public ComponentSystem
 	{
 	private:
+		Vec2 initPos_;
+		float initRota_ = 0;
+		Vec2 initScale_{1.f,1.f};
+		Vec2 offsetPos_;
+		float offsetRota_ = 0;
+		Vec2 offsetScale_;
 		Position* pos_ = nullptr;
 		Rotation* rota_ = nullptr;
 		Scale* scale_ = nullptr;
+		Entity* parent_ = nullptr;
+	
 	public:
 		Transform() = default;
+		Transform(const Vec2& pos):
+			initPos_(pos)
+		{}
+		Transform(const Vec2& pos, const Vec2& scale) :
+			initPos_(pos),
+			initRota_(0.f),
+			initScale_(scale)
+		{}
+		Transform(const Vec2& pos, const Vec2& scale, const float& rotation) :
+			initPos_(pos),
+			initRota_(rotation),
+			initScale_(scale)
+		{}
+
 		void initialize() override
 		{
 			if (!entity->hasComponent<Position>())
 			{
-				entity->addComponent<Position>(0.f, 0.f);
+				entity->addComponent<Position>(initPos_);
 			}
 			if (!entity->hasComponent<Rotation>())
 			{
-				entity->addComponent<Rotation>(0.f);
+				entity->addComponent<Rotation>(initRota_);
 			}
 			if (!entity->hasComponent<Scale>())
 			{
-				entity->addComponent<Scale>(1.f);
+				entity->addComponent<Scale>(initScale_);
 			}
 			pos_ = &entity->getComponent<Position>();
 			rota_ = &entity->getComponent<Rotation>();
 			scale_ = &entity->getComponent<Scale>();
 		}
-		void setPosition(const float& x, const float& y)
+
+		void update() override
 		{
-			pos_->val.x = x;
-			pos_->val.y = y;
+			if (parent_ != nullptr)
+			{
+				pos_->val = parent_->getComponent<Position>().val.offSetCopy(offsetPos_);
+				scale_->val = parent_->getComponent<Scale>().val.offSetCopy(offsetPos_);
+				rota_->val = parent_->getComponent<Rotation>().val + offsetRota_;
+			}
 		}
-		void setPosition(const Vec2& setPos)
+
+		/*このEntityに親を設定します
+		@ details 親のEntityにもTransformが必要です
+		- 親を設定するとこのEntityは生のPosition等のデータを直接変更できなくなります
+		- 設定後はsetRelative系のメソッドやtranslate()等で動かしてください
+		*/
+		void setParent(Entity* pEntity)
 		{
-			pos_->val.x = setPos.x;
-			pos_->val.y = setPos.y;
+			if (pEntity->hasComponent<Transform>())
+			{
+				parent_ = pEntity;
+			}
+			else
+			{
+				DOUT << "parent has not Transform" << std::endl;
+			}
 		}
-		void setRotation(const float& r)
+
+		/*親子関係が成立しているEntityをtranslation分移動します
+		@ param translation 移動量
+		@ details 親が設定されているときのみ有効です
+		*/
+		void translatePosition(const Vec2& translation)
 		{
-			rota_->val = r;
+			offsetPos_ += translation;
 		}
-		void setScale(const float& scaleX, const float& scaleY)
+
+		/*親子関係が成立しているEntityをtranslation分回転します
+		@ param translation 回転量
+		@ details 親が設定されているときのみ有効です
+		*/
+		void translateRotation(const float& translation)
 		{
-			scale_->val.x = scaleX;
-			scale_->val.y = scaleY;
+			offsetRota_ += translation;
+		}
+
+		/*親子関係が成立しているEntityをtranslation分拡大します
+		@ param translation 拡大量
+		@ details 親が設定されているときのみ有効です
+		*/
+		void translateScale(const Vec2& translation)
+		{
+			offsetScale_ += translation;
+		}
+
+		//!Entityの相対座標を設定します
+		void setRelativePosition(const float& x, const float& y)
+		{
+			offsetPos_.x = x;
+			offsetPos_.y = y;
+		}
+		//!Entityの相対座標を設定します
+		void setRelativePosition(const Vec2& setPos)
+		{
+			offsetPos_.x = setPos.x;
+			offsetPos_.y = setPos.y;
+		}
+		//!Entityの相対回転率を設定します
+		void setRelativeRotation(const float& r)
+		{
+			offsetRota_ = r;
+		}
+		//!Entityの相対拡大率を設定します
+		void setRelativeScale(const float& scaleX, const float& scaleY)
+		{
+			offsetScale_.x = scaleX;
+			offsetScale_.y = scaleY;
+		}
+		//!Entityの相対拡大率を設定します
+		void setRelativeScale(const Vec2& scale)
+		{
+			offsetScale_.x = scale.x;
+			offsetScale_.y = scale.y;
 		}
 	};
 
@@ -270,7 +359,6 @@ namespace ECS
 	@brief UI等の配置に適したコンポーネントです
 	@details Transformが必要です。
 	- Canvasに追従する形で子のエンティティは動きます
-	- 子になっているエンティティ単体では動かせません
 	*/
 	class Canvas final : public ComponentSystem
 	{

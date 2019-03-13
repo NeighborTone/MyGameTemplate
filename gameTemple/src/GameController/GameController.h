@@ -10,7 +10,7 @@
 #pragma once
 #include "../ECS/ECS.hpp"
 #include "Scene/SceneManager.hpp"
-#include "Scene/Parameter.hpp"
+#include "../Utility/Parameter.hpp"
 #include <stack>
 #define ENTITY_GROUP (ECS::Group)GameController::GameGroup
 
@@ -29,7 +29,7 @@ public:
 	*/
 	enum class GameGroup : ECS::Group
 	{
-		LAYER1,			//テスト用
+		DEFAULT,		//デフォルト
 		MAX,			//最大数
 	};
 	GameController();
@@ -40,7 +40,7 @@ public:
 	* @param scene 変更するシーンのenum
 	* @param stackClear 現在のシーンのスタックをクリアするか
 	*/
-	void onSceneChange(const Scene::SceneName& scene, Parameter* parame, const Scene::StackPopFlag stackClear, const bool isInitialize) override;
+	void onSceneChange(const Scene::SceneName& scene, const Scene::StackPopFlag stackClear, const bool isInitialize) override;
 	//!すべてのシーンスタックをクリアします
 	void stackClear() override;
 	//!Entityの更新処理を行います

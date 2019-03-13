@@ -104,7 +104,7 @@ namespace ECS
 		friend class EntityManager;
 		std::string tag_ = "";
 		EntityManager& manager_;
-		Group nowGroup_;
+		Group nowGroup_ = 0u;
 		bool isActive_ = true;
 		std::vector<std::unique_ptr<ComponentSystem>> components_;
 		ComponentArray  componentArray_;
@@ -194,9 +194,7 @@ namespace ECS
 		void changeGroup(const Group& setGroup) noexcept
 		{
 			removeGroup(nowGroup_);
-
 			addGroup(setGroup);
-			nowGroup_ = setGroup;
 		}
 		//!Entityに指定したComponentがあるか返します
 		template <typename T>[[nodiscard]] bool hasComponent() const
@@ -210,6 +208,7 @@ namespace ECS
 		* @return T 追加したコンポーネントのポインタ
 		* @details 追加されたらコンポーネントの初期化メソッドが呼ばれます
 		* - 重複はできません。重複した場合はそのコンポーネントが返ります
+		* - コンポーネントのインスタンス化の後にEntityがセットされるので、コンポーネントのコンストラクタではEntityのポインタを使用できません
 		*/
 		template <typename T, typename... TArgs> T& addComponent(TArgs&&... args)
 		{
@@ -244,12 +243,12 @@ namespace ECS
 			}
 		}
 		//!指定したコンポーネントの更新処理を止めます
-		template<typename T> void stopComponent() noexcept
+		template<typename T> void disable() noexcept
 		{
 			getComponent<T>().isStop_ = true;
 		}
 		//!指定したコンポーネントの更新処理を実行可能にします
-		template<typename T> void updateComponent() noexcept
+		template<typename T> void enable() noexcept
 		{
 			getComponent<T>().isStop_ = false;
 		}
@@ -392,7 +391,6 @@ namespace ECS
 			entityes_.back()->tag_ = tag;
 			return *e;
 		}
-
 		/**
 		* @brief Entityを生成しそのポインタを返します。
 		* @return Entity& Entityへの参照
@@ -404,6 +402,21 @@ namespace ECS
 			std::unique_ptr<Entity> uPtr(e);
 			entityes_.emplace_back(std::move(uPtr));
 			entityes_.back()->tag_ = "";
+			return *e;
+		}
+		/**
+		* @brief Entityを生成しそのポインタを返します。
+		* @param group 属するグループ(size_t)
+		* @return Entity& Entityへの参照
+		* @details 基本的にこちらを使います。作られたEntityはマネージャーが保持します
+		*/
+		[[nodiscard]] Entity& addEntity(const Group& group)
+		{
+			Entity* e = new Entity(*this);
+			std::unique_ptr<Entity> uPtr(e);
+			entityes_.emplace_back(std::move(uPtr));
+			entityes_.back()->tag_ = "";
+			entityes_.back()->addGroup(group);
 			return *e;
 		}
 	};

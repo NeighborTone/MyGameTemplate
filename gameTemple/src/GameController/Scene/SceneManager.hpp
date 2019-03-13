@@ -7,17 +7,16 @@
 #pragma once
 #include "../../ECS/ECS.hpp"
 #include "../../Utility/Utility.hpp"
-#include "../Scene/Parameter.hpp"
+#include "../../Utility/Parameter.hpp"
 /**
 * @brief
 * @param  SceneName	   切り替えたい次のシーン
-* @param  Param_ptr	   次のシーンに送りたい値、不要ならnullptrを指定してください
 * @param  StackFlag	   シーンを削除するか
 * @param  IsInitialize シーンの初期化を行うか
 * この処理を呼び出した後には何も記述しないように注意してください
-* enum class SceneName::NAME, Parameter::get(), enum class StackPopFlag::FLAG, bool
+* enum class SceneName::NAME, enum class StackPopFlag::FLAG, bool
 */
-#define ON_SCENE_CHANGE(SceneName,Param_ptr,StackFlag,IsInitialize) getCallBack().onSceneChange(SceneName, Param_ptr, StackFlag, IsInitialize); return;
+#define ON_SCENE_CHANGE(SceneName,StackFlag,IsInitialize) getCallBack().onSceneChange(SceneName, StackFlag, IsInitialize); return;
 namespace Scene
 {
 	/**
@@ -57,7 +56,7 @@ namespace Scene
 		* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
 		* @param stackClear 現在のシーンのスタックをクリアするか
 		*/
-		virtual void onSceneChange(const SceneName& scene, Parameter* parame, const StackPopFlag stackClear, const bool isInitialize) = 0;
+		virtual void onSceneChange(const SceneName& scene, const StackPopFlag stackClear, const bool isInitialize) = 0;
 		//!スタックオールクリア
 		virtual void stackClear() = 0;
 	};

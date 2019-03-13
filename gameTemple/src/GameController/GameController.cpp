@@ -8,7 +8,7 @@
 
 void GameController::resourceLoad()
 {
-
+	
 }
 
 GameController::GameController()
@@ -16,11 +16,11 @@ GameController::GameController()
 	//最初に必要なリソースやEntityの生成、ロードを行う
 	resourceLoad();
 	//初期シーンの設定
-	sceneStack_.push(std::make_unique<Scene::Title >(this, nullptr, &entityManager_));	//タイトルシーンを作成し、プッシュ
+	sceneStack_.push(std::make_unique<Scene::Title >(this, &entityManager_));	//タイトルシーンを作成し、プッシュ
 	sceneStack_.top()->initialize();
 }
 
-void GameController::onSceneChange(const Scene::SceneName& scene, Parameter* parame, const Scene::StackPopFlag stackClearFlag, const bool isInitialize)
+void GameController::onSceneChange(const Scene::SceneName& scene, const Scene::StackPopFlag stackClearFlag, const bool isInitialize)
 {
 	switch (stackClearFlag)
 	{
@@ -40,10 +40,10 @@ void GameController::onSceneChange(const Scene::SceneName& scene, Parameter* par
 	switch (scene)
 	{
 	case Scene::SceneName::TITLE:
-		sceneStack_.push(std::make_unique<Scene::Title>(this, parame, &entityManager_));
+		sceneStack_.push(std::make_unique<Scene::Title>(this, &entityManager_));
 		break;
 	case Scene::SceneName::GAME:
-		sceneStack_.push(std::make_unique<Scene::Game>(this, parame, &entityManager_));
+		sceneStack_.push(std::make_unique<Scene::Game>(this, &entityManager_));
 		break;
 	default:
 		break;

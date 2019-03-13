@@ -252,13 +252,13 @@ namespace ECS
 	* - アルファブレンドをしたい場合はAlphaBlendが必要です
 	* - setPivotで基準座標を変更できます
 	*/
-	class SpriteAnimationDraw final : public SpriteDraw
+	class MultiSpriteDraw final : public SpriteDraw
 	{
 	private:
 		int index_ = 0;
 	public:
 		//!登録した画像名を指定して初期化します
-		SpriteAnimationDraw(const char* name) :
+		MultiSpriteDraw(const char* name) :
 			SpriteDraw(name)
 		{}
 

@@ -13,6 +13,7 @@
 class Input final
 {
 private:
+	Input() = delete;
 	class Singleton final
 	{
 	private:

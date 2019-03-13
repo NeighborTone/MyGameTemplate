@@ -111,13 +111,13 @@
     <ClInclude Include="src\Class\Sound.hpp">
       <Filter>src\Class</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameController\Scene\Parameter.hpp">
-      <Filter>src\GameController\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\ArcheType\ArcheType.hpp">
       <Filter>src\ArcheType</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility\String.hpp">
+      <Filter>src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility\Parameter.hpp">
       <Filter>src\Utility</Filter>
     </ClInclude>
   </ItemGroup>

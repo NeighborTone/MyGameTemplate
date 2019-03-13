@@ -6,7 +6,6 @@
 */
 #pragma once
 #include "../../ECS/ECS.hpp"
-#include "Parameter.hpp"
 #include "../Scene/SceneManager.hpp"
 
 namespace Scene
@@ -16,7 +15,7 @@ namespace Scene
 	private:
 		ECS::EntityManager* entityManager_;
 	public:
-		Game(IOnSceneChangeCallback* sceneTitleChange, Parameter* parame, ECS::EntityManager* entityManager);
+		Game(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager);
 		~Game();
 		virtual void initialize() override;
 		virtual void update() override;

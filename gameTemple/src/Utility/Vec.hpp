@@ -54,6 +54,17 @@ public:
 		ret.y += setY;
 		return ret;
 	}
+	/*!
+	* @brief オフセット値を返します
+	* @return Vec2
+	*/
+	[[nodiscard]] const Vec2T offSetCopy(const Vec2T& vec2) const
+	{
+		Vec2T ret(*this);
+		ret.x += vec2.x;
+		ret.y += vec2.y;
+		return ret;
+	}
 	//! @brief すべてのパラメーターを0にします
 	void zero()
 	{

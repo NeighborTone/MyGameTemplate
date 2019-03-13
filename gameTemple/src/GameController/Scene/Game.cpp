@@ -4,11 +4,10 @@
 
 namespace Scene
 {
-	Game::Game(IOnSceneChangeCallback* sceneTitleChange, [[maybe_unused]] Parameter* parame, ECS::EntityManager* entityManager)
+	Game::Game(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager)
 		: AbstractScene(sceneTitleChange),
 		entityManager_(entityManager)
 	{
-		
 		
 	}
 
@@ -22,7 +21,7 @@ namespace Scene
 		entityManager_->update();
 		if (Input::Get().getKeyFrame(KEY_INPUT_A)== 1)
 		{
-			ON_SCENE_CHANGE(SceneName::TITLE, nullptr, StackPopFlag::POP,true);
+			ON_SCENE_CHANGE(SceneName::TITLE, StackPopFlag::POP,true);
 			return;
 		}
 		

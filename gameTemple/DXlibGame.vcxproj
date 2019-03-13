@@ -37,7 +37,6 @@
     <ClInclude Include="src\GameController\GameController.h" />
     <ClInclude Include="src\GameController\GameMain.hpp" />
     <ClInclude Include="src\GameController\Scene\Game.h" />
-    <ClInclude Include="src\GameController\Scene\Parameter.hpp" />
     <ClInclude Include="src\GameController\Scene\SceneManager.hpp" />
     <ClInclude Include="src\GameController\Scene\Title.h" />
     <ClInclude Include="src\Input\Input.hpp" />
@@ -45,6 +44,7 @@
     <ClInclude Include="src\Utility\Counter.hpp" />
     <ClInclude Include="src\Utility\Easing.hpp" />
     <ClInclude Include="src\Utility\FPS.hpp" />
+    <ClInclude Include="src\Utility\Parameter.hpp" />
     <ClInclude Include="src\Utility\Random.hpp" />
     <ClInclude Include="src\Utility\String.hpp" />
     <ClInclude Include="src\Utility\Utility.hpp" />

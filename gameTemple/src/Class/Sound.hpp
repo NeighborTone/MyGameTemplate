@@ -12,6 +12,7 @@
 class MasterSound final
 {
 private:
+	MasterSound() = delete;
 	class Singleton final
 	{
 	private:

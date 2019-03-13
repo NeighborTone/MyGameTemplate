@@ -125,7 +125,7 @@ namespace ECS
 	
 
 	/*!
-	@brief 円です.
+	@brief 円です
 	@details  Positionが必要です
 	*/
 	class CircleCollider final : public ComponentSystem, public ICircleCollider
