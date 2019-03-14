@@ -23,14 +23,6 @@ namespace Scene
 
 	void Title::initialize()
 	{
-		JsonWrite w;
-		w.insert<std::string>("Test","foo!");
-		w.insert<bool>("Flag", true);
-		w.insert<number>("Value", 100);
-		extension::std::String str("A|B|C");
-		w.insertArray<std::string>("StringArray",str.split('|'));
-		w.output("hoge.json");
-
 		auto createPlayer = [=]()->ECS::Entity*
 		{
 			JsonRead json;
@@ -97,16 +89,21 @@ namespace Scene
 
 	void Title::update()
 	{
-		entitytManager_->update();
+		
 		if (Input::Get().getKeyFrame(KEY_INPUT_Z) >= 1)
 		{
 			child01->getComponent<ECS::Transform>().translatePosition(Vec2{ 5.f,0.f });
 		}
+		if (Input::Get().getKeyFrame(KEY_INPUT_A) == 1)
+		{
+			child01->getComponent<ECS::Transform>().setParent(nullptr);
+		}
+
+		entitytManager_->update();
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
 		{
 			ON_SCENE_CHANGE(SceneName::GAME, StackPopFlag::POP, true);
-		}
-		
+		}		
 	}
 
 	void Title::draw()

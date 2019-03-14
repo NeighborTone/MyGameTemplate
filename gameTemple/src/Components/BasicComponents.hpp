@@ -215,11 +215,10 @@ namespace ECS
 		}
 	};
 
-	//TODO 特定のパラメーターは親子関係を切る機能とかが必要なら実装する、というかもう少しちゃんと作りたい...
-	//というかこれやるならPositionとかgetComponentでアクセスできないほうがよくね?
 	/*!
 	@brief PositionとRotationとScaleの親子をsetParent()で作ります
 	@detail 親子関係を作ると生のPosition等のデータを直接変更できなくなります
+	- このコンポーネントがある場合は、translate系メソッドで動かすことができます
 	*/ 
 	class Transform final : public ComponentSystem
 	{
@@ -281,15 +280,24 @@ namespace ECS
 		}
 
 		/*このEntityに親を設定します
-		@ details 親のEntityにもTransformが必要です
+		@details 親のEntityにもTransformが必要です
 		- 親を設定するとこのEntityは生のPosition等のデータを直接変更できなくなります
-		- 設定後はsetRelative系のメソッドやtranslate()等で動かしてください
+		- 親との縁を切る場合はnullptrを指定してください
+		- 設定後はsetRelative系のメソッドやtranslate系のメソッドで動かしてください
 		*/
 		void setParent(Entity* pEntity)
 		{
+			if (pEntity == nullptr)
+			{
+				parent_ = nullptr;
+				return;
+			}
 			if (pEntity->hasComponent<Transform>())
 			{
 				parent_ = pEntity;
+				offsetPos_ = pos_->val - parent_->getComponent<Position>().val;
+				offsetRota_ = rota_->val - parent_->getComponent<Rotation>().val;
+				offsetScale_ = scale_->val - parent_->getComponent<Scale>().val;
 			}
 			else
 			{
@@ -297,31 +305,49 @@ namespace ECS
 			}
 		}
 
-		/*親子関係が成立しているEntityをtranslation分移動します
-		@ param translation 移動量
-		@ details 親が設定されているときのみ有効です
+		/*Entityをtranslation分移動します
+		@param translation 移動量
 		*/
 		void translatePosition(const Vec2& translation)
 		{
-			offsetPos_ += translation;
+			if (parent_)
+			{
+				offsetPos_ += translation;
+			}
+			else
+			{
+				pos_->val += translation;
+			}
 		}
 
-		/*親子関係が成立しているEntityをtranslation分回転します
-		@ param translation 回転量
-		@ details 親が設定されているときのみ有効です
+		/*Entityをtranslation分回転します
+		@param translation 回転量
 		*/
 		void translateRotation(const float& translation)
 		{
-			offsetRota_ += translation;
+			if (parent_)
+			{
+				offsetRota_ += translation;
+			}
+			else
+			{
+				rota_->val += translation;
+			}
 		}
 
-		/*親子関係が成立しているEntityをtranslation分拡大します
-		@ param translation 拡大量
-		@ details 親が設定されているときのみ有効です
+		/*Entityをtranslation分拡大します
+		@param translation 拡大量
 		*/
 		void translateScale(const Vec2& translation)
 		{
-			offsetScale_ += translation;
+			if (parent_)
+			{
+				offsetScale_ += translation;
+			}
+			else
+			{
+				scale_->val += translation;
+			}
 		}
 
 		//!Entityの相対座標を設定します
