@@ -1,0 +1,8 @@
+{
+  "Player": {
+    "posX": 60,
+    "posY": 60,
+    "radius":20,
+    "speed":10
+  }
+}

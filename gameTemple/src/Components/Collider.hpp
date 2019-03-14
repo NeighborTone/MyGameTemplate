@@ -78,6 +78,11 @@ namespace ECS
 		bool isFill_ = false;
 		bool isDraw_ = true;
 	public:
+		explicit BoxCollider(const Vec2& size)
+		{
+			w_ = size.x;
+			h_ = size.y;
+		}
 		explicit BoxCollider(const float ww, const float hh)
 		{
 			w_ = ww;
@@ -89,7 +94,7 @@ namespace ECS
 		}
 		void initialize() override
 		{
-			pos_ = &entity->getComponent<Position>();
+			pos_ = &owner->getComponent<Position>();
 		}
 		void draw2D() override
 		{
@@ -148,7 +153,7 @@ namespace ECS
 		}
 		void initialize() override
 		{
-			pos_ = &entity->getComponent<Position>();
+			pos_ = &owner->getComponent<Position>();
 		}
 		void draw2D() override
 		{
@@ -200,11 +205,11 @@ namespace ECS
 	public:
 		void initialize() override
 		{
-			if (!entity->hasComponent<LineData>())
+			if (!owner->hasComponent<LineData>())
 			{
-				entity->addComponent<LineData>();
+				owner->addComponent<LineData>();
 			}
-			line_ = &entity->getComponent<LineData>();
+			line_ = &owner->getComponent<LineData>();
 		}
 		void update() override
 		{

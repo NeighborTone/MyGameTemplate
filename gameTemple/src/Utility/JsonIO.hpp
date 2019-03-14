@@ -1,0 +1,204 @@
+﻿/**
+* @file JsonIO.hpp
+* @brief picojsonの簡単なラッパーです
+* @author tonarinohito
+* @date 2019/03/14
+*/
+#pragma once
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <assert.h>
+#include <type_traits>
+#include "picojson.h"
+
+using number = double;
+using jsonArray =  picojson::array;
+
+class JsonRead final
+{
+private:
+	picojson::value v_;
+public:
+	JsonRead() = default;
+	JsonRead(const std::string& path)
+	{
+		// JSONデータの読み込み。
+		std::stringstream ss;
+		std::ifstream ifs(path, std::ios::in);
+		if (ifs.fail())
+		{
+			std::cerr << "failed to read json" << std::endl;
+		}
+		ss << ifs.rdbuf();
+		ifs.close();
+
+		//JSONデータを解析する。
+		const std::string err = picojson::parse(v_, ss); 
+		if (err.empty() == false)
+		{
+			std::cerr << err << std::endl;
+		}
+	}
+
+	//!jsonファイルを読み込みます
+	bool load(const std::string& path)
+	{
+		// JSONデータの読み込み。
+		std::stringstream ss;
+		std::ifstream ifs(path, std::ios::in);
+		if (ifs.fail())
+		{
+			return false;
+		}
+		ss << ifs.rdbuf();
+		ifs.close();
+
+		//JSONデータを解析する。
+		const std::string err = picojson::parse(v_, ss);
+		if (!err.empty())
+		{
+			return false;
+		}
+		return true;
+	}
+
+	/*
+	読み込んだjsonファイルから値を取得します
+	@param name パラメータ名
+	@retrun 指定したパラメータ
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template <class T>
+	const T getParameter(const std::string& name)
+	{
+		static_assert(!std::is_integral<T>::value, "please assignment number type");
+		picojson::object obj_ = v_.get<picojson::object>();
+		return obj_[name].get<T>();
+	}
+
+	/*
+	読み込んだjsonファイルから配列の値を取得します
+	@param name パラメータ名
+	@param index 配列の要素番号
+	@retrun 指定したパラメータ
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template <class T>
+	const T getParameter(const std::string& name, const size_t index)
+	{
+		picojson::object obj_ = v_.get<picojson::object>();
+		const auto& arr = obj_[name].get<jsonArray>().at(index);
+		return arr.get<T>();
+	}
+
+	/*
+	読み込んだjsonファイルから配列の値を取得します
+	@param[in] name パラメータ名
+	@param[out] data 配列のポインタ
+	@param[in] maxIndex 最大要素数
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template <class T>
+	const void getArrayParameter(const std::string& name, T* data, const size_t maxIndex)
+	{
+		picojson::object obj_ = v_.get<picojson::object>();
+		const auto& arr = obj_[name].get<jsonArray>();
+		assert(std::size(arr) == maxIndex);
+		size_t i = 0;
+		for (const auto& it_j : arr)
+		{
+			data[i] = it_j.get<T>();
+			++i;
+			if (i > maxIndex)
+			{
+				break;
+			}
+		}
+	}
+
+	/*
+	読み込んだjsonファイルから値を取得します
+	@param objectName 構造体名
+	@param name パラメータ名
+	@retrun 指定したパラメータ
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template <class T>
+	const T getParameter(const std::string& objectName, const std::string& name)
+	{
+		static_assert(!std::is_integral<T>::value, "please assignment number type");
+		picojson::object obj_ =  v_.get<picojson::object>()[objectName].get<picojson::object>();
+		return obj_[name].get<T>();
+	}
+
+	/*
+	読み込んだjsonファイルから配列の値を取得します
+	@param objectName 構造体名
+	@param name パラメータ名
+	@param index 配列の要素番号
+	@retrun 指定したパラメータ
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template <class T>
+	const T getParameter(const std::string& objectName, const std::string& name, const size_t index)
+	{
+		picojson::object obj_ = v_.get<picojson::object>()[objectName].get<picojson::object>();
+		const auto& arr = obj_[name].get<jsonArray>().at(index);
+		return arr.get<T>();
+	}
+
+	/*
+	読み込んだjsonファイルから配列の値を取得します
+	@param objectName 構造体名
+	@param[in] name パラメータ名
+	@param[out] data 配列のポインタ
+	@param[in] maxIndex 最大要素数
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template <class T>
+	const void getArrayParameter(const std::string& objectName, const std::string& name, T* data , const size_t maxIndex)
+	{
+		picojson::object obj_ = v_.get<picojson::object>()[objectName].get<picojson::object>();
+		const auto& arr = obj_[name].get<jsonArray>();
+		assert(std::size(arr) == maxIndex);
+		size_t i = 0;
+		for (const auto& it_j : arr)
+		{
+			data[i] = it_j.get<T>();
+			++i;
+			if (i > maxIndex)
+			{
+				break;
+			}
+		}
+	}
+};
+
+class JsonWrite final
+{
+private:
+	picojson::object obj;
+	
+public:
+
+	template<class T>
+	void insert(const std::string& name, const T& value)
+	{
+		//データの追加
+		obj.insert(std::make_pair(name, picojson::value(static_cast<T>(value))));
+		
+	}
+
+	void output(const std::string& path)
+	{
+		//文字列にするためにvalueを使用
+		picojson::value val(obj);
+		std::string out = val.serialize();
+		//書き出し
+		std::ofstream outputfile(path);
+		outputfile << out;
+		outputfile.close();
+	}
+};

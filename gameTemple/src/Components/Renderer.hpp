@@ -182,9 +182,9 @@ namespace ECS
 		}
 		void initialize() override
 		{
-			pos_ = &entity->getComponent<Position>();
-			rota_ = &entity->getComponent<Rotation>();
-			scale_ = &entity->getComponent<Scale>();
+			pos_ = &owner->getComponent<Position>();
+			rota_ = &owner->getComponent<Rotation>();
+			scale_ = &owner->getComponent<Scale>();
 			if (isDiv_)
 			{
 				GetGraphSize(ResourceManager::GetGraph().getDivHandle(name_, 0), &size_.x, &size_.y);
@@ -195,7 +195,7 @@ namespace ECS
 			}
 			pivot_.x = float(size_.x) / 2.f;
 			pivot_.y = float(size_.y) / 2.f;
-			RenderUtility::SetRenderDetail(entity, &color_, &blend_);
+			RenderUtility::SetRenderDetail(owner, &color_, &blend_);
 		}
 		void draw2D() override
 		{
@@ -313,11 +313,11 @@ namespace ECS
 		{}
 		void initialize() override
 		{
-			__super::pos_ = &entity->getComponent<Position>();
-			__super::rota_ = &entity->getComponent<Rotation>();
-			__super::scale_ = &entity->getComponent<Scale>();
-			rect_ = &entity->getComponent<Rectangle>();
-			RenderUtility::SetRenderDetail(entity, &color_, &blend_);
+			__super::pos_ = &owner->getComponent<Position>();
+			__super::rota_ = &owner->getComponent<Rotation>();
+			__super::scale_ = &owner->getComponent<Scale>();
+			rect_ = &owner->getComponent<Rectangle>();
+			RenderUtility::SetRenderDetail(owner, &color_, &blend_);
 		}
 		void draw2D() override
 		{

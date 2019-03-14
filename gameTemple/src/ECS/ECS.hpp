@@ -45,7 +45,7 @@ namespace ECS
 	}
 
 	//!最大コンポーネント数。必要に応じて限界値は変える
-	constexpr std::size_t MaxComponents = 64;
+	constexpr std::size_t MaxComponents = 32;
 	//!最大グループ数。必要に応じて限界値は変える
 	constexpr std::size_t MaxGroups = 32;
 
@@ -69,7 +69,7 @@ namespace ECS
 		void removeThis() { active_ = false; }
 		bool isStop_ = false;
 	public:
-		Entity* entity = nullptr;
+		Entity* owner = nullptr;
 		virtual void initialize() {};
 		virtual void update() {};
 		virtual void draw3D() {};
@@ -107,7 +107,7 @@ namespace ECS
 		Group nowGroup_ = 0u;
 		bool isActive_ = true;
 		std::vector<std::unique_ptr<ComponentSystem>> components_;
-		ComponentArray  componentArray_;
+		ComponentArray  componentArray_{};
 		ComponentBitSet componentBitSet_;
 		GroupBitSet groupBitSet_;
 		//!非アクティブなコンポーネントを消す
@@ -221,7 +221,7 @@ namespace ECS
 			//Tips: std::forward
 			//関数テンプレートの引数を転送する。
 			T* c(new T(std::forward<TArgs>(args)...));
-			c->entity = this;
+			c->owner = this;
 			std::unique_ptr<ComponentSystem> uPtr(c);
 			components_.emplace_back(std::move(uPtr));
 

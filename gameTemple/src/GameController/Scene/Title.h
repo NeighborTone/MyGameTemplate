@@ -8,7 +8,6 @@
 #include "../../ECS/ECS.hpp"
 #include "../Scene/SceneManager.hpp"
 
-
 namespace Scene
 {
 	class Title : public AbstractScene

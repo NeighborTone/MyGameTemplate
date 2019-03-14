@@ -137,7 +137,7 @@ namespace ECS
 				}
 				for (const auto& it : otherEntity_)
 				{
-					if (collisionFunc_(*entity, *it))
+					if (collisionFunc_(*owner, *it))
 					{
 						velocity_->val.x = 0;
 						pos.x = preX;		//移動をキャンセル
@@ -165,7 +165,7 @@ namespace ECS
 				}
 				for (const auto& it : otherEntity_)
 				{
-					if (collisionFunc_(*entity, *it))
+					if (collisionFunc_(*owner, *it))
 					{
 						velocity_->val.y = 0;
 						pos.y = preY;		//移動をキャンセル
@@ -177,17 +177,17 @@ namespace ECS
 	public:
 		void initialize() override
 		{
-			if (!entity->hasComponent<Gravity>())
+			if (!owner->hasComponent<Gravity>())
 			{
-				entity->addComponent<Gravity>();
+				owner->addComponent<Gravity>();
 			}
-			if (!entity->hasComponent<Velocity>())
+			if (!owner->hasComponent<Velocity>())
 			{
-				entity->addComponent<Velocity>();
+				owner->addComponent<Velocity>();
 			}
-			velocity_ = &entity->getComponent<Velocity>();
-			gravity_ = &entity->getComponent<Gravity>();
-			pos_ = &entity->getComponent<Position>();
+			velocity_ = &owner->getComponent<Velocity>();
+			gravity_ = &owner->getComponent<Gravity>();
+			pos_ = &owner->getComponent<Position>();
 		}
 		void update() override
 		{
@@ -253,21 +253,21 @@ namespace ECS
 
 		void initialize() override
 		{
-			if (!entity->hasComponent<Position>())
+			if (!owner->hasComponent<Position>())
 			{
-				entity->addComponent<Position>(initPos_);
+				owner->addComponent<Position>(initPos_);
 			}
-			if (!entity->hasComponent<Rotation>())
+			if (!owner->hasComponent<Rotation>())
 			{
-				entity->addComponent<Rotation>(initRota_);
+				owner->addComponent<Rotation>(initRota_);
 			}
-			if (!entity->hasComponent<Scale>())
+			if (!owner->hasComponent<Scale>())
 			{
-				entity->addComponent<Scale>(initScale_);
+				owner->addComponent<Scale>(initScale_);
 			}
-			pos_ = &entity->getComponent<Position>();
-			rota_ = &entity->getComponent<Rotation>();
-			scale_ = &entity->getComponent<Scale>();
+			pos_ = &owner->getComponent<Position>();
+			rota_ = &owner->getComponent<Rotation>();
+			scale_ = &owner->getComponent<Scale>();
 		}
 
 		void update() override
@@ -425,9 +425,9 @@ namespace ECS
 				auto scale = std::get<2>(it);
 				auto rota = std::get<3>(it);
 
-				child_entity->getComponent<Position>().val = pos.val + entity->getComponent<Position>().val;
-				child_entity->getComponent<Scale>().val = entity->getComponent<Scale>().val + scale.val;
-				child_entity->getComponent<Rotation>().val = entity->getComponent<Rotation>().val + rota.val;
+				child_entity->getComponent<Position>().val = pos.val + owner->getComponent<Position>().val;
+				child_entity->getComponent<Scale>().val = owner->getComponent<Scale>().val + scale.val;
+				child_entity->getComponent<Rotation>().val = owner->getComponent<Rotation>().val + rota.val;
 			}
 		}
 	};
@@ -447,7 +447,7 @@ namespace ECS
 			--cnt_;
 			if (cnt_ <= 0)
 			{
-				entity->destroy();
+				owner->destroy();
 			}
 		}
 		void kill()
@@ -474,7 +474,7 @@ namespace ECS
 
 		void update() override
 		{
-			func_(entity);
+			func_(owner);
 		}
 
 	};

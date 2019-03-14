@@ -37,6 +37,7 @@ private:
 
 			map.erase(key);
 		}
+		//!すべてのパラメーターを消去します
 		void clear()
 		{
 			map.clear();

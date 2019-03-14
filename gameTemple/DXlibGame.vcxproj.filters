@@ -120,5 +120,14 @@
     <ClInclude Include="src\Utility\Parameter.hpp">
       <Filter>src\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\ArcheType\Primitive2D.hpp">
+      <Filter>src\ArcheType</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility\picojson.h">
+      <Filter>src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility\JsonIO.hpp">
+      <Filter>src\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

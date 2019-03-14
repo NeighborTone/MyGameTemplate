@@ -1,10 +1,13 @@
-﻿#include "Title.h"
+﻿#include "../../Utility/JsonIO.hpp"
+#include "Title.h"
 #include "../../Input/Input.hpp"
 #include "SceneManager.hpp"
 #include "../GameController.h"
 #include "../../System/System.hpp"
-#include "../../Components/Collider.hpp"
+#include "../../ArcheType/Primitive2D.hpp"
 #include "../../Utility/Parameter.hpp"
+
+
 namespace Scene
 {
 	Title::~Title()
@@ -15,47 +18,62 @@ namespace Scene
 		: AbstractScene(sceneTitleChange)
 		, entitytManager_(entityManager)
 	{
-		Parameter::Get().add<float>("speed", 5.0f);
+
 	}
 
 	void Title::initialize()
 	{
-		p = (&entitytManager_->addEntity());
-		p->addComponent<ECS::Transform>(Vec2{ 20.f,20.f });
-		p->addComponent<ECS::CircleCollider>(20.f).setColor(255,0,0);	
-		class InputMove : public ECS::ComponentSystem
+		JsonWrite w;
+		w.insert<std::string>("Test","foo!");
+		w.insert<bool>("Flag", true);
+		w.insert<number>("Value", 100);
+		w.output("hoge.json");
+		auto createPlayer = [=]()->ECS::Entity*
 		{
-		private:
-			float speed;
-			ECS::Position* pos_ = nullptr;
-		public:
-			void initialize() override
+			JsonRead json;
+			json.load("Resource/entityData/test.json");
+			auto x = (float)json.getParameter<number>("Player", "posX");
+			auto y = (float)json.getParameter<number>("Player", "posY");
+			auto r = (float)json.getParameter<number>("Player", "radius");
+			auto speed = (float)json.getParameter<number>("Player", "speed");
+			auto entity = ECS::Primitive2D::CreateCircle(Vec2{ x, y }, r, *entitytManager_);
+			class InputMove final : public ECS::ComponentSystem
 			{
-				speed = Parameter::Get().get<float>("speed");
-				pos_ = &entity->getComponent<ECS::Position>();
-			}
-			void update() override
-			{
-				if (Input::Get().getKeyFrame(KEY_INPUT_RIGHT) >= 1)
+			private:
+				float speed_;
+				ECS::Position* pos_ = nullptr;
+			public:
+				InputMove(const float& setSpeed) :
+					speed_(setSpeed)
+				{}
+				void initialize() override
 				{
-					pos_->val.x += speed;
+					pos_ = &owner->getComponent<ECS::Position>();
 				}
-				if (Input::Get().getKeyFrame(KEY_INPUT_LEFT) >= 1)
+				void update() override
 				{
-					pos_->val.x -= speed;
+					if (Input::Get().getKeyFrame(KEY_INPUT_RIGHT) >= 1)
+					{
+						pos_->val.x += speed_;
+					}
+					if (Input::Get().getKeyFrame(KEY_INPUT_LEFT) >= 1)
+					{
+						pos_->val.x -= speed_;
+					}
+					if (Input::Get().getKeyFrame(KEY_INPUT_UP) >= 1)
+					{
+						pos_->val.y -= speed_;
+					}
+					if (Input::Get().getKeyFrame(KEY_INPUT_DOWN) >= 1)
+					{
+						pos_->val.y += speed_;
+					}
 				}
-				if (Input::Get().getKeyFrame(KEY_INPUT_UP) >= 1)
-				{
-					pos_->val.y -= speed;
-				}
-				if (Input::Get().getKeyFrame(KEY_INPUT_DOWN) >= 1)
-				{
-					pos_->val.y += speed;
-				}
-			}
+			};
+			entity->addComponent<InputMove>(speed);
+			return entity;
 		};
-		p->addComponent<InputMove>();
-		p->addGroup(ENTITY_GROUP::DEFAULT);
+		p = createPlayer();
 
 		pp = (&entitytManager_->addEntity(ENTITY_GROUP::DEFAULT));
 		pp->addComponent<ECS::Transform>().setParent(p);
