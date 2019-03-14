@@ -79,6 +79,30 @@ public:
 	}
 
 	/*
+	読み込んだjsonファイルから値を取得します
+	@param name パラメータ名
+	@retrun 指定したパラメータ(floatにキャスト済み)
+	*/
+	template <>
+	[[nodiscard]] const float getParameter(const std::string& name)
+	{
+		picojson::object obj_ = v_.get<picojson::object>();
+		return static_cast<float>(obj_[name].get<number>());
+	}
+
+	/*
+	読み込んだjsonファイルから値を取得します
+	@param name パラメータ名
+	@retrun 指定したパラメータ(intにキャスト済み)
+	*/
+	template <>
+	[[nodiscard]] const int getParameter(const std::string& name)
+	{
+		picojson::object obj_ = v_.get<picojson::object>();
+		return static_cast<int>(obj_[name].get<number>());
+	}
+
+	/*
 	読み込んだjsonファイルから配列の値を取得します
 	@param name パラメータ名
 	@param index 配列の要素番号
@@ -130,6 +154,32 @@ public:
 	{
 		picojson::object obj_ =  v_.get<picojson::object>()[objectName].get<picojson::object>();
 		return obj_[name].get<T>();
+	}
+
+	/*
+	読み込んだjsonファイルから値を取得します
+	@param objectName 構造体名
+	@param name パラメータ名
+	@retrun 指定したパラメータ(floatにキャスト済み)
+	*/
+	template <>
+	[[nodiscard]] const float getParameter (const std::string& objectName, const std::string& name)
+	{
+		picojson::object obj_ = v_.get<picojson::object>()[objectName].get<picojson::object>();
+		return static_cast<float>(obj_[name].get<number>());
+	}
+
+	/*
+	読み込んだjsonファイルから値を取得します
+	@param objectName 構造体名
+	@param name パラメータ名
+	@retrun 指定したパラメータ(intにキャスト済み)
+	*/
+	template <>
+	[[nodiscard]] const int getParameter(const std::string& objectName, const std::string& name)
+	{
+		picojson::object obj_ = v_.get<picojson::object>()[objectName].get<picojson::object>();
+		return static_cast<int>(obj_[name].get<number>());
 	}
 
 	/*

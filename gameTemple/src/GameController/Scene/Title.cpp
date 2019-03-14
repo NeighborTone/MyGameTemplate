@@ -21,17 +21,17 @@ namespace Scene
 	void Title::initialize()
 	{
 		json.load("Resource/entityData/easingTest.json");
-		auto x = (float)json.getParameter<number>("obj", "posX");
-		auto y = (float)json.getParameter<number>("obj", "posY");
-		auto r = (float)json.getParameter<number>("obj", "radius");
+		auto x = json.getParameter<float>("obj", "posX");
+		auto y = json.getParameter<float>("obj", "posY");
+		auto r = json.getParameter<float>("obj", "radius");
 		p = ECS::Primitive2D::CreateCircle(Vec2{ x, y }, r, *entityManager_);
 
 	}
 
 	void Title::update()
 	{
-		e.run(EasingFunctions::GetFunction(json.getParameter<std::string>("obj", "easing")), (float)json.getParameter<number>("obj", "durationTime"));
-		p->getComponent<ECS::Position>().val.x = e.getVolume((float)json.getParameter<number>("obj", "start"), (float)json.getParameter<number>("obj", "end"));
+		e.run(EasingFunctions::GetFunction(json.getParameter<std::string>("obj", "easing")), json.getParameter<float>("obj", "durationTime"));
+		p->getComponent<ECS::Position>().val.x = e.getVolume(json.getParameter<float>("obj", "start"), json.getParameter<float>("obj", "end"));
 
 		entityManager_->update();
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
