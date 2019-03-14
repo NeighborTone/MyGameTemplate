@@ -24,14 +24,19 @@ namespace Scene
 		auto x = json.getParameter<float>("obj", "posX");
 		auto y = json.getParameter<float>("obj", "posY");
 		auto r = json.getParameter<float>("obj", "radius");
+		e.init(
+			EasingFunctions::GetFunction(json.getParameter<std::string>("obj", "easing")), 
+			json.getParameter<float>("obj", "start"), 
+			json.getParameter<float>("obj", "end"),
+			json.getParameter<float>("obj", "durationTime"));
 		p = ECS::Primitive2D::CreateCircle(Vec2{ x, y }, r, *entityManager_);
 
 	}
 
 	void Title::update()
 	{
-		e.run(EasingFunctions::GetFunction(json.getParameter<std::string>("obj", "easing")), json.getParameter<float>("obj", "durationTime"));
-		p->getComponent<ECS::Position>().val.x = e.getVolume(json.getParameter<float>("obj", "start"), json.getParameter<float>("obj", "end"));
+		
+		p->getComponent<ECS::Position>().val.x = e.getVolume();
 
 		entityManager_->update();
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)

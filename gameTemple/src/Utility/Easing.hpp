@@ -258,17 +258,49 @@ class Easing final
 {
 private:
 	Counter_f time_;
-	float vol_;
+	float vol_ = 0.f;
+	Ease func_;
+	float startPoint_ = 0.f;
+	float endPoint_ = 0.f;
+	float durationTime_ = 0.f;
+	
+	
 
+	void run()
+	{
+		time_.setEndTime(durationTime_);
+		time_.add();
+		vol_ = func_(time_.getCurrentCount(), durationTime_);
+	}
 public:
 	//!コンストラクタ
 	Easing() :
+		time_(1, 1)
+	{}
+	//!コンストラクタ
+	Easing(const Ease func, const float& start, const float& end, const float& duration) :
 		time_(1, 1),
-		vol_(0)
+		func_(func),
+		startPoint_(start),
+		endPoint_(end),
+		durationTime_(duration)
+	{}
+
+	/**
+	* @brief イージングの初期化
+	* @param em イージング動作の関数ポインタ
+	* @param start 始点
+	* @param end 終点
+	* @param durationTime 継続時間(float)
+	*/
+	void init(const Ease func, const float& start, const float& end, const float& duration)
 	{
-
+		reset();
+		func_ = (func);
+		startPoint_ = (start);
+		endPoint_ = (end);
+		durationTime_ = (duration);
 	}
-
 	/**
 	* @brief イージングの実行
 	* @param em イージング動作の関数ポインタ
@@ -280,7 +312,7 @@ public:
 		time_.add();
 		vol_ = em(time_.getCurrentCount(), durationTime);
 	}
-
+	
 	/**
 	* @brief 実行中のイージングの現在値を取得
 	* @param startPoint 始点(float)
@@ -292,6 +324,14 @@ public:
 		return startPoint + (vol_ * (endPoint - startPoint));
 	}
 
+	/**
+	* @brief 実行中のイージングの現在値を取得、毎フレーム呼ぶ
+	*/
+	[[nodiscard]] const float getVolume()
+	{
+		run();
+		return startPoint_ + (vol_ * (endPoint_ - startPoint_));
+	}
 	//!イージングが終了したらtrueが返る
 	[[nodiscard]] const bool isEaseEnd()
 	{
