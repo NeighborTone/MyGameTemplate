@@ -5,59 +5,57 @@
 * @par History
 - 2018/08/20 tonarinohito
 -# 静的でないメソッド名をキャメルケースに変更
--# コメント文をDoxy形式に変更。[[nodiscard]]を追加 
+-# コメント文をDoxy形式に変更。[[nodiscard]]を追加
 */
 #pragma once
 #include <cmath>
+#include <unordered_map>
 #include "Counter.hpp"
 typedef float(*Ease)(float, float);
 
-class Easing final
+class EasingFunctions final
 {
 private:
-	Counter_f time_;
-	float vol_;
 	static constexpr float PI = 3.141592653589793f;
 public:
-	//!コンストラクタ
-	Easing() :
-		time_(1,1),
-		vol_(0)
-	{}
-
-	/**
-	* @brief イージングの実行
-	* @param em イージング動作の関数ポインタ
-	* @param durationTime 継続時間(float)
-	*/
-	void run(const Ease em, const float durationTime)
+	static Ease GetFunction(const std::string& name) noexcept
 	{
-		time_.setEndTime(durationTime);
-		time_.add();
-		vol_ = em(time_.getCurrentCount(), durationTime);
-	}
-
-	/**
-	* @brief 実行中のイージングの現在値を取得
-	* @param startPoint 始点(float)
-	* @param endPoint 終点(float)
-	* @details run()を呼び出さなければ機能しない
-	*/
-	[[nodiscard]] const float getVolume(const float startPoint, const float endPoint)
-	{
-		return startPoint + (vol_ * (endPoint - startPoint));
-	}
-
-	//!イージングが終了したらtrueが返る
-	[[nodiscard]] const bool isEaseEnd()
-	{
-		return time_.isMax();
-	}
-
-	//!イージングをリセットする
-	void reset()
-	{
-		time_.reset();
+		const static std::unordered_map<std::string, Ease> funcs =
+		{
+			{ "LinearIn", LinearIn },
+			{ "LinearOut", LinearOut },
+			{ "LinearInOut", LinearInOut },
+			{ "BackIn", BackIn },
+			{ "BackOut", BackOut },
+			{ "BackInOut", BackInOut },
+			{ "BounceIn", BounceIn },
+			{ "BounceOut", BounceOut },
+			{ "BounceInOut", BounceInOut },
+			{ "CircIn", CircIn },
+			{ "CircOut", CircOut },
+			{ "CircInOut", CircInOut },
+			{ "CubicIn", CubicIn },
+			{ "CubicOut", CubicOut },
+			{ "CubicInOut", CubicInOut },
+			{ "ElasticIn", ElasticIn },
+			{ "ElasticOut", ElasticOut },
+			{ "ElasticInOut", ElasticInOut },
+			{ "ExpoIn", ExpoIn },
+			{ "ExpoInOut", ExpoInOut },
+			{ "QuadIn", QuadIn },
+			{ "QuadOut", QuadOut },
+			{ "QuadInOut", QuadInOut },
+			{ "QuartIn", QuartIn },
+			{ "QuartOut", QuartOut },
+			{ "QuartInOut", QuartInOut },
+			{ "QuintIn", QuintIn },
+			{ "QuintOut", QuintOut },
+			{ "QuintInOut", QuintInOut },
+			{ "SineIn", SineIn },
+			{ "SineOut", SineOut },
+			{ "SineInOut", SineInOut },
+		};
+		return funcs.at(name);
 	}
 
 	static float LinearIn(float time, float duration)
@@ -256,3 +254,54 @@ public:
 	}
 };
 
+class Easing final
+{
+private:
+	Counter_f time_;
+	float vol_;
+
+public:
+	//!コンストラクタ
+	Easing() :
+		time_(1, 1),
+		vol_(0)
+	{
+
+	}
+
+	/**
+	* @brief イージングの実行
+	* @param em イージング動作の関数ポインタ
+	* @param durationTime 継続時間(float)
+	*/
+	void run(const Ease em, const float durationTime)
+	{
+		time_.setEndTime(durationTime);
+		time_.add();
+		vol_ = em(time_.getCurrentCount(), durationTime);
+	}
+
+	/**
+	* @brief 実行中のイージングの現在値を取得
+	* @param startPoint 始点(float)
+	* @param endPoint 終点(float)
+	* @details run()を呼び出さなければ機能しない
+	*/
+	[[nodiscard]] const float getVolume(const float startPoint, const float endPoint)
+	{
+		return startPoint + (vol_ * (endPoint - startPoint));
+	}
+
+	//!イージングが終了したらtrueが返る
+	[[nodiscard]] const bool isEaseEnd()
+	{
+		return time_.isMax();
+	}
+
+	//!イージングをリセットする
+	void reset()
+	{
+		time_.reset();
+	}
+
+};

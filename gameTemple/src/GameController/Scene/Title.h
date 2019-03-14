@@ -7,6 +7,13 @@
 #pragma once
 #include "../../ECS/ECS.hpp"
 #include "../Scene/SceneManager.hpp"
+#include "../../Utility//Easing.hpp"
+#include "../../System/System.hpp"
+#include "../../ArcheType/ArcheType.hpp"
+#include "../../ArcheType/Primitive2D.hpp"
+#include "../../Utility/Parameter.hpp"
+#include "../../Utility/String.hpp"
+#include "../../Utility/JsonIO.hpp"
 
 namespace Scene
 {
@@ -14,6 +21,9 @@ namespace Scene
 	{
 	private:
 		ECS::EntityManager* entityManager_;
+		JsonRead json;
+		Easing e;
+		ECS::Entity* p;
 	public:
 		~Title();
 		Title(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager);

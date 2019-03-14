@@ -1,9 +1,0 @@
-{
-  "player":
-  {
-    "posX": 32,
-    "posY": 32,
-    "image": "player",
-    "speed": 10
-  }
-}

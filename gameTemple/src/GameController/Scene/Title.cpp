@@ -1,12 +1,9 @@
-﻿#include "../../Utility/JsonIO.hpp"
+﻿
 #include "Title.h"
 #include "../../Input/Input.hpp"
 #include "SceneManager.hpp"
 #include "../GameController.h"
-#include "../../System/System.hpp"
-#include "../../ArcheType/ArcheType.hpp"
-#include "../../Utility/Parameter.hpp"
-#include "../../Utility/String.hpp"
+
 
 namespace Scene
 {
@@ -23,13 +20,18 @@ namespace Scene
 
 	void Title::initialize()
 	{
-		
+		json.load("Resource/entityData/easingTest.json");
+		auto x = (float)json.getParameter<number>("obj", "posX");
+		auto y = (float)json.getParameter<number>("obj", "posY");
+		auto r = (float)json.getParameter<number>("obj", "radius");
+		p = ECS::Primitive2D::CreateCircle(Vec2{ x, y }, r, *entityManager_);
 
 	}
 
 	void Title::update()
 	{
-		
+		e.run(EasingFunctions::GetFunction(json.getParameter<std::string>("obj", "easing")), (float)json.getParameter<number>("obj", "durationTime"));
+		p->getComponent<ECS::Position>().val.x = e.getVolume((float)json.getParameter<number>("obj", "start"), (float)json.getParameter<number>("obj", "end"));
 
 		entityManager_->update();
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
