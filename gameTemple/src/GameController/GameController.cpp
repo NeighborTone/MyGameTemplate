@@ -31,7 +31,7 @@ void GameController::onSceneChange(const Scene::SceneName& scene, const Scene::S
 		sceneStack_.pop();
 		break;
 	case Scene::StackPopFlag::ALL_CLEAR:
-		DOUT << "poped the scene stack all" << std::endl;
+		DOUT << "scene stack allclear" << std::endl;
 		stackClear();
 		break;
 	default:

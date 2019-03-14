@@ -14,6 +14,7 @@
 class Fps final
 {
 private:
+	Fps() = delete;
 	class Singleton final
 	{
 	private:

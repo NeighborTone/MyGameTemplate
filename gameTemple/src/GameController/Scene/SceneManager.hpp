@@ -53,7 +53,6 @@ namespace Scene
 		/*!
 		* @brief シーン変更(各シーンからコールバックされる)
 		* @param scene 変更するシーンのenum
-		* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
 		* @param stackClear 現在のシーンのスタックをクリアするか
 		*/
 		virtual void onSceneChange(const SceneName& scene, const StackPopFlag stackClear, const bool isInitialize) = 0;

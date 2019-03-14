@@ -30,12 +30,10 @@ namespace Scene
 			json.getParameter<float>("obj", "end"),
 			json.getParameter<float>("obj", "durationTime"));
 		p = ECS::Primitive2D::CreateCircle(Vec2{ x, y }, r, *entityManager_);
-
 	}
 
 	void Title::update()
 	{
-		
 		p->getComponent<ECS::Position>().val.x = e.getVolume();
 
 		entityManager_->update();
