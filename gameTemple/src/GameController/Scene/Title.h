@@ -13,10 +13,7 @@ namespace Scene
 	class Title : public AbstractScene
 	{
 	private:
-		ECS::EntityManager* entitytManager_;
-		ECS::Entity* player = nullptr;
-		ECS::Entity* child01 = nullptr;
-		ECS::Entity* child02 = nullptr;
+		ECS::EntityManager* entityManager_;
 	public:
 		~Title();
 		Title(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager);

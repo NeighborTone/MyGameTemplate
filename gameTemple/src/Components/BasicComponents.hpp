@@ -274,7 +274,7 @@ namespace ECS
 			if (parent_ != nullptr)
 			{
 				pos_->val = parent_->getComponent<Position>().val.offSetCopy(offsetPos_);
-				scale_->val = parent_->getComponent<Scale>().val.offSetCopy(offsetPos_);
+				scale_->val = parent_->getComponent<Scale>().val.offSetCopy(offsetScale_);
 				rota_->val = parent_->getComponent<Rotation>().val + offsetRota_;
 			}
 		}

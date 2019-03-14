@@ -72,7 +72,7 @@ public:
 	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
 	*/
 	template <class T>
-	const T getParameter(const std::string& name)
+	[[nodiscard]] const T getParameter(const std::string& name)
 	{
 		picojson::object obj_ = v_.get<picojson::object>();
 		return obj_[name].get<T>();
@@ -86,7 +86,7 @@ public:
 	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
 	*/
 	template <class T>
-	const T getParameter(const std::string& name, const size_t index)
+	[[nodiscard]] const T getParameter(const std::string& name, const size_t index)
 	{
 		picojson::object obj_ = v_.get<picojson::object>();
 		const auto& arr = obj_[name].get<jsonArray>().at(index);
@@ -126,7 +126,7 @@ public:
 	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
 	*/
 	template <class T>
-	const T getParameter(const std::string& objectName, const std::string& name)
+	[[nodiscard]] const T getParameter(const std::string& objectName, const std::string& name)
 	{
 		picojson::object obj_ =  v_.get<picojson::object>()[objectName].get<picojson::object>();
 		return obj_[name].get<T>();
@@ -141,7 +141,7 @@ public:
 	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
 	*/
 	template <class T>
-	const T getParameter(const std::string& objectName, const std::string& name, const size_t index)
+	[[nodiscard]] const T getParameter(const std::string& objectName, const std::string& name, const size_t index)
 	{
 		picojson::object obj_ = v_.get<picojson::object>()[objectName].get<picojson::object>();
 		const auto& arr = obj_[name].get<jsonArray>().at(index);

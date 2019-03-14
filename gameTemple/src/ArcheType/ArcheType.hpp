@@ -32,7 +32,7 @@ namespace ECS
 			entity->addComponent<Transform>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
-			entity->addComponent<SpriteDraw>(graphicName).setPivot(Vec2{ 0.f,0.f });
+			entity->addComponent<SpriteDraw>(graphicName);
 			entity->addGroup(group);
 			return entity;
 		}
@@ -44,7 +44,7 @@ namespace ECS
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
 			entity->addComponent<Rectangle>(rectangle);
-			entity->addComponent<SpriteRectDraw>(graphicName).setPivot(Vec2{ 0.f,0.f });
+			entity->addComponent<SpriteRectDraw>(graphicName);
 			entity->addGroup(group);
 			return entity;
 		}
@@ -55,7 +55,7 @@ namespace ECS
 			entity->addComponent<Transform>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
-			entity->addComponent<MultiSpriteDraw>(graphicName).setPivot(Vec2{0.f,0.f});
+			entity->addComponent<MultiSpriteDraw>(graphicName);
 			entity->addGroup(group);
 			return entity;
 		}

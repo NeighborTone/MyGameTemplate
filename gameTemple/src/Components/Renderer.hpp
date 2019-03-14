@@ -151,7 +151,6 @@ namespace ECS
 	* - Transfromが必要です。
 	* - 色を変えたい場合はColorが必要です
 	* - アルファブレンドをしたい場合はAlphaBlendが必要です
-	* - doCenterで基準座標を変更できます
 	*/
 	class SpriteDraw : public ComponentSystem
 	{
