@@ -6,7 +6,7 @@
 #include "../../System/System.hpp"
 #include "../../ArcheType/Primitive2D.hpp"
 #include "../../Utility/Parameter.hpp"
-
+#include "../../Utility/String.hpp"
 
 namespace Scene
 {
@@ -27,15 +27,18 @@ namespace Scene
 		w.insert<std::string>("Test","foo!");
 		w.insert<bool>("Flag", true);
 		w.insert<number>("Value", 100);
+		extension::std::String str("A|B|C");
+		w.insertArray<std::string>("StringArray",str.split('|'));
 		w.output("hoge.json");
+
 		auto createPlayer = [=]()->ECS::Entity*
 		{
 			JsonRead json;
-			json.load("Resource/entityData/test.json");
-			auto x = (float)json.getParameter<number>("Player", "posX");
-			auto y = (float)json.getParameter<number>("Player", "posY");
-			auto r = (float)json.getParameter<number>("Player", "radius");
-			auto speed = (float)json.getParameter<number>("Player", "speed");
+			json.load("Resource/entityData/player.json");
+			auto x = (float)json.getParameter<number>("player", "posX");
+			auto y = (float)json.getParameter<number>("player", "posY");
+			auto r = (float)json.getParameter<number>("player", "radius");
+			auto speed = (float)json.getParameter<number>("player", "speed");
 			auto entity = ECS::Primitive2D::CreateCircle(Vec2{ x, y }, r, *entitytManager_);
 			class InputMove final : public ECS::ComponentSystem
 			{
@@ -73,31 +76,31 @@ namespace Scene
 			entity->addComponent<InputMove>(speed);
 			return entity;
 		};
-		p = createPlayer();
+		player = createPlayer();
 
-		pp = (&entitytManager_->addEntity(ENTITY_GROUP::DEFAULT));
-		pp->addComponent<ECS::Transform>().setParent(p);
-		pp->getComponent<ECS::Transform>().setRelativePosition(50.f, 50.f);
-		pp->addComponent<ECS::CircleCollider>(20.f).setColor(255, 255, 0);
+		child01 = (&entitytManager_->addEntity(ENTITY_GROUP::DEFAULT));
+		child01->addComponent<ECS::Transform>().setParent(player);
+		child01->getComponent<ECS::Transform>().setRelativePosition(50.f, 50.f);
+		child01->addComponent<ECS::CircleCollider>(20.f).setColor(255, 255, 0);
 
-		ppp = (&entitytManager_->addEntity(ENTITY_GROUP::DEFAULT));
-		ppp->addComponent<ECS::Transform>().setParent(pp);
-		ppp->getComponent<ECS::Transform>().setRelativePosition(50.f, 50.f);
-		ppp->addComponent<ECS::CircleCollider>(20.f).setColor(0, 255, 0);
+		child02 = (&entitytManager_->addEntity(ENTITY_GROUP::DEFAULT));
+		child02->addComponent<ECS::Transform>().setParent(child01);
+		child02->getComponent<ECS::Transform>().setRelativePosition(50.f, 50.f);
+		child02->addComponent<ECS::CircleCollider>(20.f).setColor(0, 255, 0);
 
-		auto pppp = (&entitytManager_->addEntity(ENTITY_GROUP::DEFAULT));
-		pppp->addComponent<ECS::Transform>().setParent(pp);
-		pppp->getComponent<ECS::Transform>().setRelativePosition(-50.f, 50.f);
-		pppp->addComponent<ECS::CircleCollider>(20.f).setColor(0, 255, 255);
+		auto child03 = (&entitytManager_->addEntity(ENTITY_GROUP::DEFAULT));
+		child03->addComponent<ECS::Transform>().setParent(child01);
+		child03->getComponent<ECS::Transform>().setRelativePosition(-50.f, 50.f);
+		child03->addComponent<ECS::CircleCollider>(20.f).setColor(0, 255, 255);
 
 	}
 
 	void Title::update()
 	{
 		entitytManager_->update();
-		if (Input::Get().getKeyFrame(KEY_INPUT_Z) == 1)
+		if (Input::Get().getKeyFrame(KEY_INPUT_Z) >= 1)
 		{
-			pp->getComponent<ECS::Transform>().translatePosition(Vec2{ 5.f,0.f });
+			child01->getComponent<ECS::Transform>().translatePosition(Vec2{ 5.f,0.f });
 		}
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
 		{

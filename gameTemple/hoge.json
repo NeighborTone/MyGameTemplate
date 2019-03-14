@@ -1,1 +1,1 @@
-{"Flag":true,"Test":"foo!","Value":100}
+{"Flag":true,"StringArray":["A","B","C"],"Test":"foo!","Value":100}

@@ -16,6 +16,7 @@
 using number = double;
 using jsonArray =  picojson::array;
 
+//!Jsonをロードし、値を取得するためのクラスです
 class JsonRead final
 {
 private:
@@ -73,7 +74,6 @@ public:
 	template <class T>
 	const T getParameter(const std::string& name)
 	{
-		static_assert(!std::is_integral<T>::value, "please assignment number type");
 		picojson::object obj_ = v_.get<picojson::object>();
 		return obj_[name].get<T>();
 	}
@@ -128,7 +128,6 @@ public:
 	template <class T>
 	const T getParameter(const std::string& objectName, const std::string& name)
 	{
-		static_assert(!std::is_integral<T>::value, "please assignment number type");
 		picojson::object obj_ =  v_.get<picojson::object>()[objectName].get<picojson::object>();
 		return obj_[name].get<T>();
 	}
@@ -174,8 +173,10 @@ public:
 			}
 		}
 	}
+
 };
 
+//!Jsonを作って書き出すためのクラスです
 class JsonWrite final
 {
 private:
@@ -183,14 +184,61 @@ private:
 	
 public:
 
+	/*
+	書き込んだ文字列をそのままjsonファイルに出力します
+	@param str 書き出したいjsonの文字列
+	@param path 書き出し先
+	*/
+	void write(const std::string& str, const std::string& path)
+	{
+		picojson::value val;
+		std::string err;
+		picojson::parse(val, str.c_str(), str.c_str() + strlen(str.c_str()), &err);
+		if (!err.empty())
+		{
+			std::cerr << err << std::endl;
+		}
+		std::string out = val.serialize();
+		//書き出し
+		std::ofstream outputfile(path);
+		outputfile << out;
+		outputfile.close();
+
+	}
+
+	/*
+	jsonファイルに出力したいパラメータを挿入します。書き出しは行いません
+	@param name パラメータ名
+	@param value 値
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
 	template<class T>
 	void insert(const std::string& name, const T& value)
 	{
 		//データの追加
-		obj.insert(std::make_pair(name, picojson::value(static_cast<T>(value))));
-		
+		obj.emplace(std::make_pair(name, picojson::value(static_cast<T>(value))));
 	}
 
+	/*
+	jsonファイルに出力したい配列パラメータを挿入します。書き出しは行いません
+	@param name パラメータ名
+	@param value 指定した型のstd::vector
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template<class T>
+	void insertArray(const std::string& name, const std::vector<T>& value)
+	{
+		picojson::array arr;
+		for (const auto& it : value)
+		{
+			arr.emplace_back(it);
+		}
+		
+		//データの追加
+		obj.emplace(std::make_pair(name, arr));
+	}
+
+	//!設定したJsonファイルを書き出します
 	void output(const std::string& path)
 	{
 		//文字列にするためにvalueを使用
