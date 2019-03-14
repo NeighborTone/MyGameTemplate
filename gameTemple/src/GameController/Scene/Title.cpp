@@ -40,7 +40,16 @@ namespace Scene
 		if (Input::Get().getKeyFrame(KEY_INPUT_X) == 1)
 		{
 			ON_SCENE_CHANGE(SceneName::GAME, StackPopFlag::POP, true);
-		}		
+		}
+
+		if (Input::Get().getPadFrame(Input::PadButton::DOWN)	    )DOUT << "down" << std::endl;
+		if(Input::Get().getPadFrame(Input::PadButton::UP)			)DOUT << "up" << std::endl;
+		if(Input::Get().getPadFrame(Input::PadButton::LEFT)			)DOUT << "left" << std::endl;
+		if(Input::Get().getPadFrame(Input::PadButton::RIGHT)		)DOUT << "right" << std::endl;
+		if(Input::Get().getPadFrame(Input::PadButton::Y)			)DOUT << "y" << std::endl;
+		if(Input::Get().getPadFrame(Input::PadButton::B)			)DOUT << "b" << std::endl;
+		if(Input::Get().getPadFrame(Input::PadButton::A)			)DOUT << "a" << std::endl;
+		if(Input::Get().getPadFrame(Input::PadButton::X)			)DOUT << "x" << std::endl;
 	}
 
 	void Title::draw()
