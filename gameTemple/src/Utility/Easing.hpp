@@ -259,12 +259,10 @@ class Easing final
 private:
 	Counter_f time_;
 	float vol_ = 0.f;
-	Ease func_;
+	Ease func_{};
 	float startPoint_ = 0.f;
 	float endPoint_ = 0.f;
 	float durationTime_ = 0.f;
-	
-	
 
 	void run()
 	{

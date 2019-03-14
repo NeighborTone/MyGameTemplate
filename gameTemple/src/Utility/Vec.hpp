@@ -47,7 +47,7 @@ public:
 	* @brief オフセット値を返します
 	* @return Vec2
 	*/
-	[[nodiscard]] const Vec2T offSetCopy(const T setX, const T setY) const
+	[[nodiscard]] const Vec2T offsetCopy(const T setX, const T setY) const
 	{
 		Vec2T ret(*this);
 		ret.x += setX;
@@ -58,7 +58,7 @@ public:
 	* @brief オフセット値を返します
 	* @return Vec2
 	*/
-	[[nodiscard]] const Vec2T offSetCopy(const Vec2T& vec2) const
+	[[nodiscard]] const Vec2T offsetCopy(const Vec2T& vec2) const
 	{
 		Vec2T ret(*this);
 		ret.x += vec2.x;
@@ -343,7 +343,7 @@ public:
 	* @brief オフセット値を返します
 	* @return Vec3
 	*/
-	[[nodiscard]] const Vec3T offSetCopy(const T setX, const T setY, const T setZ) const
+	[[nodiscard]] const Vec3T offsetCopy(const T setX, const T setY, const T setZ) const
 	{
 		Vec3T ret(*this);
 		ret.x += setX;

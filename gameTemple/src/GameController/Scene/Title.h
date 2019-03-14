@@ -20,10 +20,10 @@ namespace Scene
 	class Title : public AbstractScene
 	{
 	private:
-		ECS::EntityManager* entityManager_;
-		JsonRead json;
-		Easing e;
-		ECS::Entity* p;
+		ECS::EntityManager* entityManager_{};
+		JsonRead json{};
+		Easing e{};
+		ECS::Entity* p{};
 	public:
 		~Title();
 		Title(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager);

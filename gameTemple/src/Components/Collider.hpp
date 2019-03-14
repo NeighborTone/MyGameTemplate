@@ -100,7 +100,7 @@ namespace ECS
 		{
 			if (isDraw_)
 			{
-				auto convert = pos_->val.offSetCopy(offSetPos_.x, offSetPos_.y);
+				auto convert = pos_->val.offsetCopy(offSetPos_.x, offSetPos_.y);
 				DrawBoxAA(
 					convert.x,
 					convert.y,
@@ -159,7 +159,7 @@ namespace ECS
 		{
 			if (isDraw_)
 			{
-				auto convert = pos_->val.offSetCopy(offSetPos_.x, offSetPos_.y);
+				auto convert = pos_->val.offsetCopy(offSetPos_.x, offSetPos_.y);
 				DrawCircleAA(
 					convert.x,
 					convert.y,
@@ -223,8 +223,8 @@ namespace ECS
 		{
 			if (isDraw_)
 			{
-				auto convert_p1 = line_->p1.offSetCopy(offSetPos1_.x, offSetPos1_.y);
-				auto convert_p2 = line_->p2.offSetCopy(offSetPos2_.x, offSetPos2_.y);
+				auto convert_p1 = line_->p1.offsetCopy(offSetPos1_.x, offSetPos1_.y);
+				auto convert_p2 = line_->p2.offsetCopy(offSetPos2_.x, offSetPos2_.y);
 				DrawLineAA(convert_p1.x, convert_p1.y, convert_p2.x, convert_p2.y,color_,1);
 			}
 		}
