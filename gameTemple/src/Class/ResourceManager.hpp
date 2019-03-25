@@ -27,6 +27,7 @@ enum class SoundType
 class ResourceManager final
 {
 private:
+	ResourceManager() = delete;
 	/*!
 	@brief Graphicハンドルを管理します
 	*/
