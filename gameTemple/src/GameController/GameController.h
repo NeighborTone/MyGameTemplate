@@ -36,7 +36,6 @@ public:
 	~GameController() = default;
 	/*!
 	* @brief シーン変更(各シーンからコールバックされる)
-	* @param parame 次のシーンに渡したい値。不要ならnullptrを指定します
 	* @param scene 変更するシーンのenum
 	* @param stackClear 現在のシーンのスタックをクリアするか
 	*/

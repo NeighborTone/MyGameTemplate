@@ -7,9 +7,6 @@
 */
 #pragma once
 #include <memory>
-#include <Windows.h>
-#include <chrono>
-#pragma comment(lib, "winmm.lib")
 //!フレームレート固定用クラスです
 class Fps final
 {
@@ -34,11 +31,11 @@ private:
 		{
 			if (count_ == 0)
 			{
-				startTime_ = timeGetTime();
+				startTime_ = GetNowCount();
 			}
 			if (count_ == AVE)
 			{
-				int t = timeGetTime();
+				int t = GetNowCount();
 				fps_ = 1000.f / ((t - startTime_) / (float)AVE);
 				count_ = 0;
 				startTime_ = t;
@@ -48,7 +45,7 @@ private:
 		//!指定したfpsになるまで待つ
 		void wait()
 		{
-			int tookTime = timeGetTime() - startTime_;	//かかった時間
+			int tookTime = GetNowCount() - startTime_;	//かかった時間
 			int waitTime = count_ * 1000 / FPS - tookTime;	//待つべき時間
 			if (waitTime > 0)
 			{

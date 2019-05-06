@@ -31,6 +31,8 @@ namespace Scene
 		GAME,
 		PAUSE,
 		RESULT,
+		//必要に応じて追加
+
 		BACK_TO_SCENE	//前のスタック(シーン)が残っていれば戻る
 	};
 
@@ -54,6 +56,7 @@ namespace Scene
 		* @brief シーン変更(各シーンからコールバックされる)
 		* @param scene 変更するシーンのenum
 		* @param stackClear 現在のシーンのスタックをクリアするか
+		* @param isInitialize シーンを初期化を呼ぶかどうか
 		*/
 		virtual void onSceneChange(const SceneName& scene, const StackPopFlag stackClear, const bool isInitialize) = 0;
 		//!スタックオールクリア
