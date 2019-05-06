@@ -21,11 +21,7 @@ namespace Scene
 	{
 	private:
 		ECS::EntityManager* entityManager_{};
-		Easing easing;
 		ECS::Entity* entity;
-
-		ECS::Entity* box;
-		ECS::Entity* redBox;
 	public:
 		~Title();
 		Title(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager);

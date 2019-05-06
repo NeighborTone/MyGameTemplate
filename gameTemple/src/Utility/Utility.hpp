@@ -169,32 +169,32 @@ namespace Utility
 				return;
 			const auto end = std::chrono::system_clock::now();
 			const auto elapsed = std::chrono::duration_cast<T>(end - start_).count();
-			if (typeid(T) == typeid(std::chrono::nanoseconds))
+			if (std::is_same<T, std::chrono::nanoseconds>::value)
 			{
 				DOUT << elapsed << " [nanoseconds]" << std::endl;
 				return;
 			}
-			if (typeid(T) == typeid(std::chrono::microseconds))
+			if (std::is_same<T, std::chrono::microseconds>::value)
 			{
 				DOUT << elapsed << " [microseconds]" << std::endl;
 				return;
 			}
-			if (typeid(T) == typeid(std::chrono::milliseconds))
+			if (std::is_same<T, std::chrono::milliseconds>::value)
 			{
 				DOUT << elapsed << " [milliseconds]" << std::endl;
 				return;
 			}
-			if (typeid(T) == typeid(std::chrono::seconds))
+			if (std::is_same<T, std::chrono::seconds>::value)
 			{
 				DOUT << elapsed << " [seconds]" << std::endl;
 				return;
 			}
-			if (typeid(T) == typeid(std::chrono::minutes))
+			if (std::is_same<T, std::chrono::minutes>::value)
 			{
 				DOUT << elapsed << " [minutes]" << std::endl;
 				return;
 			}
-			if (typeid(T) == typeid(std::chrono::hours))
+			if (std::is_same<T, std::chrono::hours>::value)
 			{
 				DOUT << elapsed << " [hours]" << std::endl;
 				return;

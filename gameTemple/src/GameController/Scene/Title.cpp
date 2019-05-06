@@ -15,7 +15,7 @@ namespace Scene
 		: AbstractScene(sceneTitleChange)
 		, entityManager_(entityManager)
 	{
-	
+
 	}
 
 	void Title::initialize()
