@@ -280,12 +280,15 @@ namespace ECS
 			{
 				globalPos_->val = parent_->getComponent<Position>().val.offsetCopy(localPos_);
 				globalRota_->val = parent_->getComponent<Rotation>().val + localRota_;
-				//auto angle = atan2(parent_->getComponent<Position>().val.y - globalPos_->val.y, parent_->getComponent<Position>().val.x - globalPos_->val.x);
-				//DOUT << angle * (180.0f / M_PI) << std::endl;
-				//pos_->val.x = parent_->getComponent<Position>().val.x + cosf(Utility::Math::toRadian(parent_->getComponent<Rotation>().val) + angle) * offsetPos_.x;
-				//pos_->val.y = parent_->getComponent<Position>().val.y + sinf(Utility::Math::toRadian(parent_->getComponent<Rotation>().val) + angle) * offsetPos_.y;
+				{
+					const float angle = atan2(
+						parent_->getComponent<Position>().val.y - globalPos_->val.y,
+						parent_->getComponent<Position>().val.x - globalPos_->val.x);
+					const float global_angle = parent_->getComponent<Rotation>().val + (Utility::Math::toDegree(angle));
+					globalPos_->val.x = parent_->getComponent<Position>().val.x + cosf(Utility::Math::toRadian(global_angle)) * localPos_.x;
+					globalPos_->val.y = parent_->getComponent<Position>().val.y + sinf(Utility::Math::toRadian(global_angle)) * localPos_.y;
+				}
 				globalScale_->val = parent_->getComponent<Scale>().val.offsetCopy(localScale_);
-			
 			}
 		}
 
@@ -293,7 +296,7 @@ namespace ECS
 		@details 親のEntityにもTransformが必要です
 		- 親を設定するとこのEntityは生のPosition等のデータを直接変更できなくなります
 		- 親との縁を切る場合はnullptrを指定してください
-		- 設定後はsetRelative系のメソッドやtranslate系のメソッドで動かしてください
+		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
 		void setParent(Entity* pEntity)
 		{	
@@ -363,30 +366,30 @@ namespace ECS
 		}
 
 		//!Entityの相対座標を設定します
-		void setRelativePosition(const float& x, const float& y)
+		void setLocalPosition(const float& x, const float& y)
 		{
 			localPos_.x = x;
 			localPos_.y = y;
 		}
 		//!Entityの相対座標を設定します
-		void setRelativePosition(const Vec2& setPos)
+		void setLocalPosition(const Vec2& setPos)
 		{
 			localPos_.x = setPos.x;
 			localPos_.y = setPos.y;
 		}
 		//!Entityの相対回転率を設定します
-		void setRelativeRotation(const float& r)
+		void setLocalRotation(const float& r)
 		{
 			localRota_ = r;
 		}
 		//!Entityの相対拡大率を設定します
-		void setRelativeScale(const float& scaleX, const float& scaleY)
+		void setLocalScale(const float& scaleX, const float& scaleY)
 		{
 			localScale_.x = scaleX;
 			localScale_.y = scaleY;
 		}
 		//!Entityの相対拡大率を設定します
-		void setRelativeScale(const Vec2& scale)
+		void setLocalScale(const Vec2& scale)
 		{
 			localScale_.x = scale.x;
 			localScale_.y = scale.y;
@@ -397,6 +400,7 @@ namespace ECS
 	@brief UI等の配置に適したコンポーネントです
 	@details Transformが必要です。
 	- Canvasに追従する形で子のエンティティは動きます
+	- Transformが強化されたのでそれを使ったほうがいい
 	*/
 	class Canvas final : public ComponentSystem
 	{
