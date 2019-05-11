@@ -5,7 +5,7 @@
 * @date 2018/10/05
 * @par History
 - 2018/10/14 tonarinohito
--# すべてのエンティティを削除するallDestory()追加
+-# すべてのエンティティを削除するremoveAll()追加
 - 2018/10/16 tonarinohito
 -# コンポーネントをEntity::stopComponent<>()で停止できるようにした
 * @note  参考元 https://github.com/SuperV1234/Tutorials

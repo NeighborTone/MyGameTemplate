@@ -8,10 +8,13 @@
 -# Canvas追加
 */
 #pragma once
+
 #include "../ECS/ECS.hpp"
 #include "../Utility/Vec.hpp"
+#include "../Utility/Utility.hpp"
 #include <DxLib.h>
 #include <functional>
+
 namespace ECS
 {
 	/*!
@@ -226,12 +229,12 @@ namespace ECS
 		Vec2 initPos_;
 		float initRota_ = 0;
 		Vec2 initScale_{1.f,1.f};
-		Vec2 offsetPos_;
-		float offsetRota_ = 0;
-		Vec2 offsetScale_;
-		Position* pos_ = nullptr;
-		Rotation* rota_ = nullptr;
-		Scale* scale_ = nullptr;
+		Vec2 localPos_;
+		float localRota_ = 0;
+		Vec2 localScale_;
+		Position* globalPos_ = nullptr;
+		Rotation* globalRota_ = nullptr;
+		Scale* globalScale_ = nullptr;
 		Entity* parent_ = nullptr;
 	
 	public:
@@ -264,18 +267,25 @@ namespace ECS
 			{
 				owner->addComponent<Scale>(initScale_);
 			}
-			pos_ = &owner->getComponent<Position>();
-			rota_ = &owner->getComponent<Rotation>();
-			scale_ = &owner->getComponent<Scale>();
+			
+			globalPos_ = &owner->getComponent<Position>();
+			globalRota_ = &owner->getComponent<Rotation>();
+			globalScale_ = &owner->getComponent<Scale>();
+
 		}
 
 		void update() override
 		{
 			if (parent_ != nullptr)
 			{
-				pos_->val = parent_->getComponent<Position>().val.offsetCopy(offsetPos_);
-				scale_->val = parent_->getComponent<Scale>().val.offsetCopy(offsetScale_);
-				rota_->val = parent_->getComponent<Rotation>().val + offsetRota_;
+				globalPos_->val = parent_->getComponent<Position>().val.offsetCopy(localPos_);
+				globalRota_->val = parent_->getComponent<Rotation>().val + localRota_;
+				//auto angle = atan2(parent_->getComponent<Position>().val.y - globalPos_->val.y, parent_->getComponent<Position>().val.x - globalPos_->val.x);
+				//DOUT << angle * (180.0f / M_PI) << std::endl;
+				//pos_->val.x = parent_->getComponent<Position>().val.x + cosf(Utility::Math::toRadian(parent_->getComponent<Rotation>().val) + angle) * offsetPos_.x;
+				//pos_->val.y = parent_->getComponent<Position>().val.y + sinf(Utility::Math::toRadian(parent_->getComponent<Rotation>().val) + angle) * offsetPos_.y;
+				globalScale_->val = parent_->getComponent<Scale>().val.offsetCopy(localScale_);
+			
 			}
 		}
 
@@ -286,18 +296,20 @@ namespace ECS
 		- 設定後はsetRelative系のメソッドやtranslate系のメソッドで動かしてください
 		*/
 		void setParent(Entity* pEntity)
-		{
+		{	
 			if (pEntity == nullptr)
 			{
 				parent_ = nullptr;
 				return;
 			}
+
 			if (pEntity->hasComponent<Transform>())
 			{
 				parent_ = pEntity;
-				offsetPos_ = pos_->val - parent_->getComponent<Position>().val;
-				offsetRota_ = rota_->val - parent_->getComponent<Rotation>().val;
-				offsetScale_ = scale_->val - parent_->getComponent<Scale>().val;
+				localPos_ = globalPos_->val - parent_->getComponent<Position>().val;
+				localRota_ = globalRota_->val - parent_->getComponent<Rotation>().val;
+				localScale_ = globalScale_->val - parent_->getComponent<Scale>().val;
+				update();
 			}
 			else
 			{
@@ -312,11 +324,11 @@ namespace ECS
 		{
 			if (parent_)
 			{
-				offsetPos_ += translation;
+				localPos_ += translation;
 			}
 			else
 			{
-				pos_->val += translation;
+				globalPos_->val += translation;
 			}
 		}
 
@@ -327,11 +339,11 @@ namespace ECS
 		{
 			if (parent_)
 			{
-				offsetRota_ += translation;
+				localRota_ += translation;
 			}
 			else
 			{
-				rota_->val += translation;
+				globalRota_->val += translation;
 			}
 		}
 
@@ -342,42 +354,42 @@ namespace ECS
 		{
 			if (parent_)
 			{
-				offsetScale_ += translation;
+				localScale_ += translation;
 			}
 			else
 			{
-				scale_->val += translation;
+				globalScale_->val += translation;
 			}
 		}
 
 		//!Entityの相対座標を設定します
 		void setRelativePosition(const float& x, const float& y)
 		{
-			offsetPos_.x = x;
-			offsetPos_.y = y;
+			localPos_.x = x;
+			localPos_.y = y;
 		}
 		//!Entityの相対座標を設定します
 		void setRelativePosition(const Vec2& setPos)
 		{
-			offsetPos_.x = setPos.x;
-			offsetPos_.y = setPos.y;
+			localPos_.x = setPos.x;
+			localPos_.y = setPos.y;
 		}
 		//!Entityの相対回転率を設定します
 		void setRelativeRotation(const float& r)
 		{
-			offsetRota_ = r;
+			localRota_ = r;
 		}
 		//!Entityの相対拡大率を設定します
 		void setRelativeScale(const float& scaleX, const float& scaleY)
 		{
-			offsetScale_.x = scaleX;
-			offsetScale_.y = scaleY;
+			localScale_.x = scaleX;
+			localScale_.y = scaleY;
 		}
 		//!Entityの相対拡大率を設定します
 		void setRelativeScale(const Vec2& scale)
 		{
-			offsetScale_.x = scale.x;
-			offsetScale_.y = scale.y;
+			localScale_.x = scale.x;
+			localScale_.y = scale.y;
 		}
 	};
 

@@ -16,7 +16,7 @@ GameController::GameController()
 	//最初に必要なリソースやEntityの生成、ロードを行う
 	resourceLoad();
 	//初期シーンの設定
-	sceneStack_.push(std::make_unique<Scene::Title>(this, &entityManager_));	//タイトルシーンを作成し、プッシュ
+	sceneStack_.push(std::make_unique<Scene::Title>(this, &entityManager_));
 	sceneStack_.top()->initialize();
 }
 

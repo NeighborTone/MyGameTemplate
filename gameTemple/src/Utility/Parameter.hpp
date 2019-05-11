@@ -1,6 +1,7 @@
 ﻿/**
 * @file Parameter.hpp
-* @brief Scene間で渡すことのできるコンテナクラスです
+* @brief あらゆる型を自由に扱えるコンテナクラスです
+* -UnityのPlayerPrefsに相当するものです
 * @author tonarinohito
 * @date 2018/10/14
 */

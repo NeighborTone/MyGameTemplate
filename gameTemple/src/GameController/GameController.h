@@ -38,6 +38,7 @@ public:
 	* @brief シーン変更(各シーンからコールバックされる)
 	* @param scene 変更するシーンのenum
 	* @param stackClear 現在のシーンのスタックをクリアするか
+	* @param isInitialize 次のシーンの初期化処理を呼び出すか
 	*/
 	void onSceneChange(const Scene::SceneName& scene, const Scene::StackPopFlag stackClear, const bool isInitialize) override;
 	//!すべてのシーンスタックをクリアします

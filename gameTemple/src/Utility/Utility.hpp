@@ -5,6 +5,8 @@
  * @date 2018/10/04
  */
 #pragma once
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <iostream>
 #include <chrono>
 #include <cstdio>
@@ -37,6 +39,15 @@
 #endif
 namespace Utility
 {
+	class Math
+	{
+	public:
+		static const float toRadian(const float& degree)
+		{
+			return degree * (static_cast<float>(M_PI)) / 180.f;
+		}
+	};
+	
 	/*!
 	* @class Console
 	* @brief Win32アプリでcin、coutを許可するクラスです
