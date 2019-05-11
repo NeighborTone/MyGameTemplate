@@ -3,9 +3,6 @@
 * @brief 座標や速度などの基本的なコンポーネント群です。
 * @author tonarinohito
 * @date 2018/10/05
-* @par History
-- 2018/12/19 tonarinohito
--# Canvas追加
 */
 #pragma once
 
@@ -26,9 +23,7 @@ namespace ECS
 		Position() = default;
 		explicit Position(const Vec2& v) :val(v) {}
 		explicit Position(const float& x, const float& y) :val(x, y) {}
-
 	};
-
 	/*!
 	@brief  回転値です。データの型はfloatです
 	*/
@@ -37,7 +32,6 @@ namespace ECS
 		float val;
 		Rotation() = default;
 		explicit Rotation(const float& r) : val(r) {}
-
 	};
 	/*!
 	@brief  x,y方向の拡大率です。データの型はVec2です
@@ -59,7 +53,6 @@ namespace ECS
 		Velocity() = default;
 		explicit Velocity(const Vec2& v) :val(v) {}
 		explicit Velocity(const float& x, const float& y) : val(x, y) {}
-
 	};
 	/*!
 	@brief  向きです。データの型はenum class Dirです
@@ -75,7 +68,6 @@ namespace ECS
 		};
 		Dir val;
 		explicit Direction() : val(Dir::RIGHT) {};
-
 	};
 	/*!
 	@brief 重力です。データの型はfloatです
@@ -87,7 +79,6 @@ namespace ECS
 		Gravity() :val(DEFAULT) {};
 		explicit Gravity(const float g) :val(g) {}
 	};
-
 	/*!
 	@brief  線分です。データの型は始点、終点ともにVec2です
 	*/
@@ -219,24 +210,26 @@ namespace ECS
 	};
 
 	/*!
-	@brief PositionとRotationとScaleの親子をsetParent()で作ります
+	@brief PositionとRotationとScaleの親子を作ります
 	@detail 親子関係を作ると生のPosition等のデータを直接変更できなくなります
 	- このコンポーネントがある場合は、translate系メソッドで動かすことができます
 	*/ 
 	class Transform final : public ComponentSystem
 	{
 	private:
+		std::string name_ = "";
 		Vec2 initPos_;
-		float initRota_ = 0;
 		Vec2 initScale_{1.f,1.f};
 		Vec2 localPos_;
-		float localRota_ = 0;
 		Vec2 localScale_;
+		float initRota_ = 0;
+		float localRota_ = 0;
 		Position* globalPos_ = nullptr;
 		Rotation* globalRota_ = nullptr;
 		Scale* globalScale_ = nullptr;
-		Entity* parent_ = nullptr;
-	
+		Transform* parent_ = nullptr;
+		std::vector<Transform*> childs_{};
+
 	public:
 		Transform() = default;
 		Transform(const Vec2& pos):
@@ -278,17 +271,17 @@ namespace ECS
 		{
 			if (parent_ != nullptr)
 			{
-				globalPos_->val = parent_->getComponent<Position>().val.offsetCopy(localPos_);
-				globalRota_->val = parent_->getComponent<Rotation>().val + localRota_;
+				globalPos_->val = parent_->globalPos_->val.offsetCopy(localPos_);
+				globalRota_->val = parent_->globalRota_->val + localRota_;
 				{
 					const float angle = atan2(
-						parent_->getComponent<Position>().val.y - globalPos_->val.y,
-						parent_->getComponent<Position>().val.x - globalPos_->val.x);
-					const float global_angle = parent_->getComponent<Rotation>().val + (Utility::Math::toDegree(angle));
-					globalPos_->val.x = parent_->getComponent<Position>().val.x + cosf(Utility::Math::toRadian(global_angle)) * localPos_.x;
-					globalPos_->val.y = parent_->getComponent<Position>().val.y + sinf(Utility::Math::toRadian(global_angle)) * localPos_.y;
+						parent_->globalPos_->val.y - globalPos_->val.y,
+						parent_->globalPos_->val.x - globalPos_->val.x);
+					const float global_angle = parent_->globalRota_->val + (Utility::Math::toDegree(angle));
+					globalPos_->val.x = parent_->globalPos_->val.x + cosf(Utility::Math::toRadian(global_angle)) * localPos_.x;
+					globalPos_->val.y = parent_->globalPos_->val.y + sinf(Utility::Math::toRadian(global_angle)) * localPos_.y;
 				}
-				globalScale_->val = parent_->getComponent<Scale>().val.offsetCopy(localScale_);
+				globalScale_->val = parent_->globalScale_->val.offsetCopy(localScale_);
 			}
 		}
 
@@ -298,7 +291,7 @@ namespace ECS
 		- 親との縁を切る場合はnullptrを指定してください
 		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
-		void setParent(Entity* pEntity)
+		void setParent(Entity* const pEntity)
 		{	
 			if (pEntity == nullptr)
 			{
@@ -308,18 +301,32 @@ namespace ECS
 
 			if (pEntity->hasComponent<Transform>())
 			{
-				parent_ = pEntity;
-				localPos_ = globalPos_->val - parent_->getComponent<Position>().val;
-				localRota_ = globalRota_->val - parent_->getComponent<Rotation>().val;
-				localScale_ = globalScale_->val - parent_->getComponent<Scale>().val;
-				update();
+				parent_ = &pEntity->getComponent<Transform>();
+				localPos_ = globalPos_->val - parent_->globalPos_->val;
+				localRota_ = globalRota_->val - parent_->globalRota_->val;
+				localScale_ = globalScale_->val - parent_->globalScale_->val;
+				parent_->childs_.emplace_back(this);
 			}
 			else
 			{
 				DOUT << "parent has not Transform" << std::endl;
 			}
 		}
-
+		/*このEntityに子を設定します
+		@details 子のEntityにもTransformが必要です
+		- 子を設定すると子のEntityは生のPosition等のデータを直接変更できなくなります
+		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
+		*/
+		void addChild(Entity* const child)
+		{
+			assert(child != nullptr);
+			child->getComponent<Transform>().setParent(owner);
+		}
+		//!指定した子を取得します
+		Transform* getChild(const size_t& id)
+		{
+			return childs_.at(id);
+		}
 		/*Entityをtranslation分移動します
 		@param translation 移動量
 		*/
@@ -397,84 +404,6 @@ namespace ECS
 	};
 
 	/*!
-	@brief UI等の配置に適したコンポーネントです
-	@details Transformが必要です。
-	- Canvasに追従する形で子のエンティティは動きます
-	- Transformが強化されたのでそれを使ったほうがいい
-	*/
-	class Canvas final : public ComponentSystem
-	{
-	private:
-		//ScaleとRotationは加算値でPositonは相対座標になる
-		std::vector<std::tuple<Entity*, Position, Scale, Rotation>> e_{};
-	public:
-		Canvas() = default;
-		//!Canvasに乗せるエンティティを指定します。
-		void addChild(Entity* e)
-		{
-			e_.emplace_back
-			(
-				std::make_tuple
-				(
-					e,
-					e->getComponent<Position>(),
-					e->getComponent<Scale>(),
-					e->getComponent<Rotation>()
-				)
-			);
-			auto& scale = std::get<2>(e_.back());
-			scale.val = 0;
-			auto& rota = std::get<3>(e_.back());
-			rota.val = 0;
-		}
-		/*
-		@brief 子のエンティティの座標を指定した分だけずらします
-		@param index 登録した番号
-		@param offsetVal オフセット値
-		*/
-		void offsetChildPosition(const size_t index, const Vec2& offsetVal)
-		{
-			auto& pos = std::get<1>(e_.at(index));
-			pos.val += offsetVal;
-		}
-
-		/*
-		@brief 子のエンティティのスケールを指定した分だけ加算します
-		@param index 登録した番号
-		@param offsetVal オフセット値
-		*/
-		void offsetChildScale(const size_t index, const Vec2& offsetVal)
-		{
-			auto& scale = std::get<2>(e_.at(index));
-			scale.val += offsetVal;
-		}
-		/*
-		@brief 子のエンティティの回転率(ラジアン)を指定した分だけ加算します
-		@param index 登録した番号
-		@param offsetVal オフセット値
-		*/
-		void offsetChildRotation(const size_t index, const float& offsetVal)
-		{
-			auto& rota = std::get<3>(e_.at(index));
-			rota.val += offsetVal;
-		}
-		void update() override
-		{
-			for (auto& it : e_)
-			{
-				auto child_entity = std::get<0>(it);
-				auto pos = std::get<1>(it);
-				auto scale = std::get<2>(it);
-				auto rota = std::get<3>(it);
-
-				child_entity->getComponent<Position>().val = pos.val + owner->getComponent<Position>().val;
-				child_entity->getComponent<Scale>().val = owner->getComponent<Scale>().val + scale.val;
-				child_entity->getComponent<Rotation>().val = owner->getComponent<Rotation>().val + rota.val;
-			}
-		}
-	};
-
-	/*!
 	@brief コンストラクタで指定したフレーム後にEntityを殺します
 	*/
 	class KillEntity final : public ComponentSystem
@@ -518,6 +447,5 @@ namespace ECS
 		{
 			func_(owner);
 		}
-
 	};
 }

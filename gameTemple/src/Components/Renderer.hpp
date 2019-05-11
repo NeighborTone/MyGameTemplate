@@ -45,7 +45,6 @@ namespace ECS
 			w(setW),
 			h(setH)
 		{}
-
 	};
 
 	/*!
@@ -145,7 +144,6 @@ namespace ECS
 		}
 	};
 
-
 	/*!
 	@brief 多機能な描画機能です。画像の中心が基準です
 	* - Transfromが必要です。
@@ -210,7 +208,7 @@ namespace ECS
 					pivot_.y,
 					scale_->val.x,
 					scale_->val.y,
-					DirectX::XMConvertToRadians(rota_->val),
+					Utility::Math::toRadian(rota_->val),
 					ResourceManager::GetGraph().getHandle(name_), true, isTurn);
 				RenderUtility::ResetRenderState();
 			}
@@ -241,7 +239,6 @@ namespace ECS
 		{
 			isTurn = !isTurn;
 		}
-
 	};
 
 	/*!
@@ -275,11 +272,10 @@ namespace ECS
 					__super::pivot_.y,
 					__super::scale_->val.x,
 					__super::scale_->val.y,
-					DirectX::XMConvertToRadians(__super::rota_->val),
+					Utility::Math::toRadian(__super::rota_->val),
 					ResourceManager::GetGraph().getDivHandle(__super::name_, index_), true, __super::isTurn);
 				RenderUtility::ResetRenderState();
 			}
-
 		}
 		//!描画したい分割画像の要素番号を指定します
 		void setIndex(const int index)
@@ -336,7 +332,7 @@ namespace ECS
 					__super::pivot_.y,
 					__super::scale_->val.x,
 					__super::scale_->val.y,
-					DirectX::XMConvertToRadians(rota_->val),
+					Utility::Math::toRadian(rota_->val),
 					ResourceManager::GetGraph().getHandle(name_),
 					true,
 					__super::isTurn);

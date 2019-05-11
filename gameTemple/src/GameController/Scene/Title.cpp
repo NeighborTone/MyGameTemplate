@@ -21,17 +21,20 @@ namespace Scene
 	void Title::initialize()
 	{
 		parent = ECS::ArcheType::CreateEntity("p", Vec2{ 200.f,200.f }, *entityManager_, ENTITY_GROUP::DEFAULT);
-		entity = ECS::ArcheType::CreateEntity("p",Vec2{100.f,100.f},*entityManager_,ENTITY_GROUP::DEFAULT);
-		auto c2 = ECS::ArcheType::CreateEntity("p", Vec2{ 0.f,0.f }, *entityManager_, ENTITY_GROUP::DEFAULT);
-		c2->getComponent<ECS::Transform>().setParent(entity);
-		entity->getComponent<ECS::Transform>().setParent(parent);
+		child1 = ECS::ArcheType::CreateEntity("p",Vec2{100.f,100.f},*entityManager_,ENTITY_GROUP::DEFAULT);
+		auto child2 = ECS::ArcheType::CreateEntity("p", Vec2{ 0.f,0.f }, *entityManager_, ENTITY_GROUP::DEFAULT);
+		auto child3 = ECS::ArcheType::CreateEntity("p", Vec2{ -100.f,-100.f }, *entityManager_, ENTITY_GROUP::DEFAULT);
+		parent->getComponent<ECS::Transform>().addChild(child1);
+		parent->getComponent<ECS::Transform>().addChild(child2);
+		parent->getComponent<ECS::Transform>().addChild(child3);
+		child1->getComponent<ECS::Transform>().addChild(child2);
 		
 	}
 
 	void Title::update()
 	{
 		parent->getComponent<ECS::Transform>().translatePosition(Vec2{ 1.f,1.f });
-		entity->getComponent<ECS::Transform>().translateRotation(1.f);
+		child1->getComponent<ECS::Transform>().translateRotation(1.f);
 		entityManager_->update();
 	}
 

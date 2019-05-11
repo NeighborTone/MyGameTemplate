@@ -102,7 +102,6 @@ namespace ECS
 	{
 	private:
 		friend class EntityManager;
-		std::string tag_ = "";
 		EntityManager& manager_;
 		Group nowGroup_ = 0u;
 		bool isActive_ = true;
@@ -268,11 +267,6 @@ namespace ECS
 			auto ptr(componentArray_[GetComponentTypeID<T>()]);
 			return *static_cast<T*>(ptr);
 		}
-		//!タグを返します
-		[[nodiscard]] const std::string& getTag() const
-		{
-			return tag_;
-		}
 	};
 
 	/**
@@ -377,31 +371,15 @@ namespace ECS
 		}
 
 		/**
-		* @brief Entityを生成しそのポインタを返します
-		* @param tag 名前の文字列
-		* @return Entity& Entityへの参照
-		* @details タグを設定しておくとデバッグするときに追いかけやすいため用意してあります
-		* 作られたEntityはマネージャーが保持します
-		*/
-		[[nodiscard]] Entity& addEntityAddTag(const std::string& tag)
-		{
-			Entity* e = new Entity(*this);
-			std::unique_ptr<Entity> uPtr(e);
-			entityes_.emplace_back(std::move(uPtr));
-			entityes_.back()->tag_ = tag;
-			return *e;
-		}
-		/**
 		* @brief Entityを生成しそのポインタを返します。
 		* @return Entity& Entityへの参照
-		* @details 基本的にこちらを使います。作られたEntityはマネージャーが保持します
+		* @details 作られたEntityはマネージャーが保持します
 		*/
 		[[nodiscard]] Entity& addEntity()
 		{
 			Entity* e = new Entity(*this);
 			std::unique_ptr<Entity> uPtr(e);
 			entityes_.emplace_back(std::move(uPtr));
-			entityes_.back()->tag_ = "";
 			return *e;
 		}
 		/**
@@ -415,7 +393,6 @@ namespace ECS
 			Entity* e = new Entity(*this);
 			std::unique_ptr<Entity> uPtr(e);
 			entityes_.emplace_back(std::move(uPtr));
-			entityes_.back()->tag_ = "";
 			entityes_.back()->addGroup(group);
 			return *e;
 		}
