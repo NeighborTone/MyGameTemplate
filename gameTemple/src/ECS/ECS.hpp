@@ -66,8 +66,8 @@ namespace ECS
 		//Entityによって殺されたいのでこうなった
 		friend class Entity;
 		bool active_ = true;
-		void removeThis() { active_ = false; }
 		bool isStop_ = false;
+		void removeThis() { active_ = false; }
 	public:
 		Entity* owner = nullptr;
 		virtual void initialize() {};
@@ -79,7 +79,6 @@ namespace ECS
 		[[nodiscard]] virtual bool isActive() const final { return active_; }
 		//!このコンポーネントが更新しているか返します
 		[[nodiscard]] virtual bool isStop() const final { return isStop_; }
-
 	};
 
 	/**

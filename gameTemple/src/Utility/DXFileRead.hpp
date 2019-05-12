@@ -1,5 +1,5 @@
 ﻿/**
-* @file MapLoader.hpp
+* @file DXFileRead.hpp
 * @brief アンドロイドプログラミングでアクセスできるパスを取得します。
 * @author tonarinohito
 * @date 2018/9/18
@@ -59,7 +59,7 @@ public:
 #endif
 
 
-class FileSystem final
+class FileSystemTest final
 {
 public:
 	const bool Save(const std::string& fileName, int* saveData) noexcept

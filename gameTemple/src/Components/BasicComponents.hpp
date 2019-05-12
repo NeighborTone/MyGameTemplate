@@ -260,11 +260,9 @@ namespace ECS
 			{
 				owner->addComponent<Scale>(initScale_);
 			}
-			
 			globalPos_ = &owner->getComponent<Position>();
 			globalRota_ = &owner->getComponent<Rotation>();
 			globalScale_ = &owner->getComponent<Scale>();
-
 		}
 
 		void update() override
@@ -291,7 +289,7 @@ namespace ECS
 		- 親との縁を切る場合はnullptrを指定してください
 		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
-		void setParent(Entity* const pEntity)
+		void setParent(const Entity* const pEntity)
 		{	
 			if (pEntity == nullptr)
 			{
@@ -317,7 +315,7 @@ namespace ECS
 		- 子を設定すると子のEntityは生のPosition等のデータを直接変更できなくなります
 		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
-		void addChild(Entity* const child)
+		void addChild(const Entity* const child)
 		{
 			assert(child != nullptr);
 			child->getComponent<Transform>().setParent(owner);
