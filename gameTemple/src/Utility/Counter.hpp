@@ -135,7 +135,6 @@ public:
 	//!加算値分増やし、上限値になったら下限値まで加算値分減らす...ということを繰り返します
 	void roundTrip()
 	{
-
 		now_ += add_ * sign_;
 		if (isMax())
 		{
@@ -147,7 +146,6 @@ public:
 			sign_ *= -1;
 			isMin_ = false;
 		}
-		
 	}
 	//!経過時間を0にし、フラグを再セットします
 	void reset(const T& resetNow = 0) 

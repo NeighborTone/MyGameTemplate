@@ -102,7 +102,6 @@ namespace ECS
 	class Physics final : public ComponentSystem
 	{
 	private:
-
 		Gravity* gravity_ = nullptr;
 		Velocity* velocity_ = nullptr;
 		Position* pos_ = nullptr;
@@ -110,7 +109,7 @@ namespace ECS
 		std::function<bool(const Entity&, const Entity&)> collisionFunc_;
 		void checkMove(Vec2& pos, Vec2& velocity)
 		{
-			Vec2 pointEntityMove(velocity);
+			Vec2 pointEntityMove{ velocity };
 			//横軸に対する移動
 			while (pointEntityMove.x != 0.f)
 			{
@@ -217,7 +216,6 @@ namespace ECS
 	class Transform final : public ComponentSystem
 	{
 	private:
-		std::string name_ = "";
 		Vec2 initPos_;
 		Vec2 initScale_{1.f,1.f};
 		Vec2 localPos_;
