@@ -94,7 +94,7 @@ public:
 	* @brief 内積を返します
 	* @return 内積
 	*/
-	[[nodiscard]] static T Dot(const Vec2T& v1, const Vec2T& v2)
+	[[nodiscard]] static const T Dot(const Vec2T& v1, const Vec2T& v2)
 	{
 		return v1.x * v2.x + v1.y * v2.y;
 	}
@@ -103,10 +103,18 @@ public:
 	* @brief 外積を返します
 	* @return 外積
 	*/
-	[[nodiscard]] static T Cross(const Vec2T& v1, const Vec2T& v2)
+	[[nodiscard]] static const T Cross(const Vec2T& v1, const Vec2T& v2)
 	{
 		return v1.x * v2.y - v2.x * v1.y;
 	}
+	/*
+	* @brief 直線上にある２つのベクトル間を補間します
+	*/
+	[[nodiscard]] static const Vec2T Lerp(Vec2T& start,  Vec2T& end, const T& percent)
+	{
+		return (start * (1.f - percent)) + (end * percent);
+	}
+
 	/*!
 	* @brief 2点間の距離を返します
 	* @return 距離
@@ -376,7 +384,7 @@ public:
 	* @brief 内積を返します
 	* @return 内積
 	*/
-	[[nodiscard]] static T Dot(const Vec3T& v1, const Vec3T& v2)
+	[[nodiscard]] static const T Dot(const Vec3T& v1, const Vec3T& v2)
 	{
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
@@ -385,7 +393,7 @@ public:
 	* @brief 外積を返します
 	* @return 外積
 	*/
-	[[nodiscard]] static Vec3T Cross(const Vec3T& v1, const Vec3T& v2)
+	[[nodiscard]] static const Vec3T Cross(const Vec3T& v1, const Vec3T& v2)
 	{
 		Vec3T result;
 		result.x = v1.y * v2.z - v1.z * v2.y;
@@ -431,9 +439,28 @@ public:
 		result.normalize();
 		return result;
 	}
+
+	/*
+	* @brief 直線上にある２つのベクトル間を補間します
+	*/
+	[[nodiscard]] static const Vec3T Lerp(Vec3T& start, Vec3T& end, const T& percent)
+	{
+		return start * (1.f - percent) + end * percent;
+	}
+
+	//!別のVecotr(publicなメンバとしてx,y,zがある型)に変換します
+	template<class TypeVec>
+	TypeVec getVector() const
+	{
+		TypeVec vec;
+		vec.x = x;
+		vec.y = y;
+		vec.z = z;
+		return vec;
+	}
 	/*!
 	* @brief 2点間の距離を返します
-	* @note C++17でないとエラー
+	* @note C++17でないとエラー?
 	* @return 距離
 	*/
 	[[nodiscard]] const T getDistance(const Vec3T& v) const

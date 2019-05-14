@@ -51,6 +51,10 @@ private:
 		assert(DxLib_IsInit());
 		//裏画面設定
 		SetDrawScreen(DX_SCREEN_BACK);
+		//Ｚバッファを有効にする
+		SetUseZBuffer3D(TRUE);
+		//Ｚバッファへの書き込みを有効にする
+		SetWriteZBuffer3D(TRUE);
 	}
 	const bool processLoop() const
 	{

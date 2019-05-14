@@ -23,6 +23,8 @@ namespace Scene
 		ECS::EntityManager* entityManager_{};
 		ECS::Entity* parent = nullptr;
 		ECS::Entity* child1 = nullptr;
+		ECS::Entity* entity = nullptr;
+		float t = 0;
 	public:
 		~Title();
 		Title(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager);
