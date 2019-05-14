@@ -21,16 +21,12 @@ namespace Scene
 	{
 	private:
 		ECS::EntityManager* entityManager_{};
-		ECS::Entity* parent = nullptr;
-		ECS::Entity* child1 = nullptr;
-		ECS::Entity* entity = nullptr;
-		float t = 0;
 	public:
 		~Title();
 		Title(IOnSceneChangeCallback* sceneTitleChange, ECS::EntityManager* entityManager);
-		virtual void initialize() override;
-		virtual void update() override;
-		virtual void draw() override;
+		void initialize() override;
+		void update() override;
+		void draw() override;
 	};
 
 }

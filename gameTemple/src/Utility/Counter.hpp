@@ -28,6 +28,7 @@ private:
 	T add_;
 	T min_;
 	T max_;
+	int sign_ = 1;
 public:
 	
 	TCounter() :
@@ -114,6 +115,8 @@ public:
 	{
 		if (now_ >= max_)
 		{
+			//誤差丸め
+			now_ = max_;
 			return;
 		}
 		now_ += add_;
@@ -123,9 +126,28 @@ public:
 	{
 		if (now_ <= min_)
 		{
+			//誤差丸め
+			now_ = min_;
 			return;
 		}
 		now_ -= add_;
+	}
+	//!加算値分増やし、上限値になったら下限値まで加算値分減らす...ということを繰り返します
+	void roundTrip()
+	{
+
+		now_ += add_ * sign_;
+		if (isMax())
+		{
+			sign_ *= -1;
+			isMax_ = false;
+		}
+		else if (isMin())
+		{
+			sign_ *= -1;
+			isMin_ = false;
+		}
+		
 	}
 	//!経過時間を0にし、フラグを再セットします
 	void reset(const T& resetNow = 0) 

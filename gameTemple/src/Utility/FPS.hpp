@@ -7,6 +7,8 @@
 */
 #pragma once
 #include <memory>
+#include <DxLib.h>
+#include "../Utility/Utility.hpp"
 //!フレームレート固定用クラスです
 class Fps final
 {
@@ -51,6 +53,10 @@ private:
 			{
 				Sleep(waitTime);	//待機
 			}
+		}
+		void debugOut()
+		{
+			DOUT << fps_ << std::endl;
 		}
 	};
 

@@ -278,6 +278,10 @@ namespace ECS
 		std::vector<std::unique_ptr<Entity>> entityes_;
 		std::array<std::vector<Entity*>, MaxGroups> groupedEntities_;
 	public:
+		EntityManager()
+		{
+			
+		}
 		//!登録されているEntityの初期化を行います
 		void initialize()
 		{

@@ -28,5 +28,14 @@ namespace ECS
 			entity->addGroup(ENTITY_GROUP::DEFAULT);
 			return entity;
 		}
+
+		static Entity* CreateLine(Entity* p1, Entity* p2,EntityManager& entityManager)
+		{
+			auto* entity = &entityManager.addEntity();
+			entity->addComponent<Transform>();
+			entity->addComponent<LineCollider>().setJoint(p1,p2);
+			entity->addGroup(ENTITY_GROUP::DEFAULT);
+			return entity;
+		}
 	};
 }
