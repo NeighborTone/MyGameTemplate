@@ -47,6 +47,7 @@
     <ClInclude Include="src\Utility\Easing.hpp" />
     <ClInclude Include="src\Utility\FPS.hpp" />
     <ClInclude Include="src\Utility\JsonIO.hpp" />
+    <ClInclude Include="src\Utility\Math.hpp" />
     <ClInclude Include="src\Utility\Parameter.hpp" />
     <ClInclude Include="src\Utility\picojson.h" />
     <ClInclude Include="src\Utility\Random.hpp" />

@@ -132,5 +132,8 @@
     <ClInclude Include="src\Utility\DXFileRead.hpp">
       <Filter>src\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utility\Math.hpp">
+      <Filter>src\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -208,7 +208,7 @@ namespace ECS
 					pivot_.y,
 					scale_->val.x,
 					scale_->val.y,
-					Utility::Math::toRadian(rota_->val),
+					Math::ToRadian(rota_->val),
 					ResourceManager::GetGraph().getHandle(name_), true, isTurn);
 				RenderUtility::ResetRenderState();
 			}
@@ -272,7 +272,7 @@ namespace ECS
 					__super::pivot_.y,
 					__super::scale_->val.x,
 					__super::scale_->val.y,
-					Utility::Math::toRadian(__super::rota_->val),
+					Math::ToRadian(__super::rota_->val),
 					ResourceManager::GetGraph().getDivHandle(__super::name_, index_), true, __super::isTurn);
 				RenderUtility::ResetRenderState();
 			}
@@ -332,7 +332,7 @@ namespace ECS
 					__super::pivot_.y,
 					__super::scale_->val.x,
 					__super::scale_->val.y,
-					Utility::Math::toRadian(rota_->val),
+					Math::ToRadian(rota_->val),
 					ResourceManager::GetGraph().getHandle(name_),
 					true,
 					__super::isTurn);

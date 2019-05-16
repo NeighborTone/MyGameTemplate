@@ -8,7 +8,7 @@
 
 #include "../ECS/ECS.hpp"
 #include "../Utility/Vec.hpp"
-#include "../Utility/Utility.hpp"
+#include "../Utility/Math.hpp"
 #include <DxLib.h>
 #include <functional>
 
@@ -273,9 +273,9 @@ namespace ECS
 					const float angle = atan2(
 						parent_->globalPos_->val.y - globalPos_->val.y,
 						parent_->globalPos_->val.x - globalPos_->val.x);
-					const float global_angle = parent_->globalRota_->val + (Utility::Math::toDegree(angle));
-					globalPos_->val.x = parent_->globalPos_->val.x + cosf(Utility::Math::toRadian(global_angle)) * localPos_.x;
-					globalPos_->val.y = parent_->globalPos_->val.y + sinf(Utility::Math::toRadian(global_angle)) * localPos_.y;
+					const float global_angle = parent_->globalRota_->val + (Math::ToDegree(angle));
+					globalPos_->val.x = parent_->globalPos_->val.x + cosf(Math::ToRadian(global_angle)) * localPos_.x;
+					globalPos_->val.y = parent_->globalPos_->val.y + sinf(Math::ToRadian(global_angle)) * localPos_.y;
 				}
 				globalScale_->val = parent_->globalScale_->val.offsetCopy(localScale_);
 			}

@@ -4,78 +4,25 @@
 #include "SceneManager.hpp"
 #include "../GameController.h"
 #include "../src/Utility/Parameter.hpp"
-
+#include "../../Utility/Math.hpp"
 namespace Scene
 {
+	using namespace ECS;
+
 	namespace
 	{
-		Vec2 left_down{ 100.f, 500.f };
-		Vec2 left_top{ 100.f, 100.f };
-		Vec2 right_top{ 900.f, 100.f };
-		Vec2 right_down{ 900.f, 700.f };
-		Vec2 center_down{ 520.f, 290.f };
-		std::vector<Vec2> points{ left_down, left_top ,right_top ,right_down ,center_down};
-		//movepoints
+		Entity* circle;
+		Entity* line1;
+		Entity* line2;
+		Entity* line3;
+		Entity* line4;
 
-		ECS::Entity* pointOnCurve = nullptr;
-
-		//lines
-
-		//points
-		ECS::Entity* p1 = nullptr;
-		ECS::Entity* p2 = nullptr;
-		ECS::Entity* p3 = nullptr;
-		ECS::Entity* p4 = nullptr;
-		ECS::Entity* p5 = nullptr;
-		ECS::Position* curvePos = nullptr;
-
-		Counter_f t;
-
-		const Vec2 GetPointOnBezierCurve(Vec2& p0, Vec2& p1, Vec2& p2, Vec2& p3, const float& t)
-		{
-			float u = 1.f - t;
-			float t2 = t * t;
-			float u2 = u * u;
-			float u3 = u2 * u;
-			float t3 = t2 * t;
-
-			const Vec2 result =
-				p0 * (u3) +
-				p1 * (3.f * u2 * t) +
-				p2 * (3.f * u * t2) +
-				p3 * (t3);
-
-			return result;
-		}
-
-		//2次
-		const Vec2 GetBezier2(float b, std::vector<Vec2> points)
-		{
-			auto a = 1 - b;
-			auto x = b * b * points[2].x + 2 * b * a * points[1].x + a * a * points[0].x;
-			auto y = b * b * points[2].y + 2 * b * a * points[1].y + a * a * points[0].y;
-			Vec2 res{ x, y };
-			return res;
-		}
-		//3次
-		const Vec2 GetBezier3(float t, std::vector<Vec2> points)
-		{
-			auto tp = 1 - t;
-			auto x = t * t * t * points[3].x + 3 * t * t * tp * points[2].x + 3 * t * tp * tp * points[1].x + tp * tp * tp * points[0].x;
-			auto y = t * t * t * points[3].y + 3 * t * t * tp * points[2].y + 3 * t * tp * tp * points[1].y + tp * tp * tp * points[0].y;
-			Vec2 res{ x, y };
-			return res;
-		}
-		//4次
-		const Vec2 GetBezier4(float t, std::vector<Vec2> points)
-		{
-			auto tp = 1 - t;
-			auto x = t * t * t * t * points[4].x + 4 * t * t * t * tp * points[3].x + 4 * t * t * tp * tp *points[2].x + 3 * t * tp * tp * tp * points[1].x + tp * tp * tp * tp * points[0].x;
-			auto y = t * t * t * t * points[4].y + 4 * t * t * t * tp * points[3].y + 4 * t * t * tp * tp * points[2].y + 3 * t * tp * tp * tp * points[1].y + tp * tp * tp * tp * points[0].y;
-			Vec2 res{ x, y };
-			return res;
-		}
+		Entity* circle2;
+		Position* c;
+		float speed = 16.2f;
+		Easing ease;
 	}
+
 	Title::~Title()
 	{
 
@@ -89,29 +36,74 @@ namespace Scene
 
 	void Title::initialize()
 	{
-		//movepoints
+		circle = Primitive2D::CreateCircle(Vec2{ 100.f,50.f }, 30.f, *entityManager_);
+		circle2 = Primitive2D::CreateCircle(Vec2{ 15.f,50.f }, 30.f, *entityManager_);
+		ease.init(EasingFunctions::GetFunction("SineIn"),0.f,705.f,60.f);
+		ease.loopEnable(true);
+		auto nom = Vec2(2.f, 2.f).normalize();
 
-		pointOnCurve = ECS::Primitive2D::CreateCircle(Vec2{ left_top }, 20.f, *entityManager_);
-		pointOnCurve->getComponent<ECS::CircleCollider>().fillEnable();
-		//points
-		p1 = ECS::Primitive2D::CreateCircle(Vec2{ left_down }, 12.f, *entityManager_);//left_down
-		p1->getComponent<ECS::CircleCollider>().setColor(0, 128, 255);
-		p2 = ECS::Primitive2D::CreateCircle(Vec2{ left_top }, 12.f, *entityManager_);//left_top
-		p2->getComponent<ECS::CircleCollider>().setColor(255, 32, 0);
-		p3 = ECS::Primitive2D::CreateCircle(Vec2{ right_top }, 12.f, *entityManager_);//right_top
-		p3->getComponent<ECS::CircleCollider>().setColor(200, 128, 0);
-		p4 = ECS::Primitive2D::CreateCircle(Vec2{ right_down }, 12.f, *entityManager_);//right_down
-		p4->getComponent<ECS::CircleCollider>().setColor(0, 255, 64);
-		p5 = ECS::Primitive2D::CreateCircle(Vec2{ center_down }, 12.f, *entityManager_);
-		p5->getComponent<ECS::CircleCollider>().setColor(32, 255, 255);
-		
-		t.setCounter(0, 0.005f, 0.f, 1.f);
+		circle->addComponent<Velocity>(nom);
+		c = &circle->getComponent<Position>();
+		line1 = Primitive2D::CreateLine(Vec2{ 0.f,200.f }, Vec2{ 800.f,700.f }, *entityManager_);
+		line2 = Primitive2D::CreateLine(Vec2{ 700.f,700.f }, Vec2{ 1280.f,0.f }, *entityManager_);
+		line3 = Primitive2D::CreateLine(Vec2{ 0.f,2.f }, Vec2{ 1280.f,2.f }, *entityManager_);
+		line4 = Primitive2D::CreateLine(Vec2{ 2.f,0.f }, Vec2{ 2.f,720.f }, *entityManager_);
 	}
 
 	void Title::update()
 	{
-		t.roundTrip();
-		pointOnCurve->getComponent<ECS::Position>().val = GetBezier4(t.getCurrentCount(), points);
+		circle2->getComponent<Position>().val.y = ease.getVolume();
+		c->val += circle->getComponent<Velocity>().val * speed;
+		if (Collision::CirecleAndLine(circle, line1))
+		{
+			circle->getComponent<Velocity>().val = 
+				Math::GetReflect
+				(
+					circle->getComponent<Velocity>().val, Math::GetLineNormal
+					(
+						line1->getComponent<LineData>().p1, 
+						line1->getComponent<LineData>().p2
+					)
+				);
+		}
+		if (Collision::CirecleAndLine(circle, line2))
+		{
+			circle->getComponent<Velocity>().val = 
+				Math::GetReflect
+				(
+					circle->getComponent<Velocity>().val,
+					Math::GetLineNormal
+					(
+						line2->getComponent<LineData>().p1, 
+						line2->getComponent<LineData>().p2
+					)
+				);
+		}
+		if (Collision::CirecleAndLine(circle, line3))
+		{
+			circle->getComponent<Velocity>().val = 
+				Math::GetReflect(
+					circle->getComponent<Velocity>().val,
+					Math::GetLineNormal(
+						line3->getComponent<LineData>().p1,
+						line3->getComponent<LineData>().p2
+					)
+				);
+		}
+		if (Collision::CirecleAndLine(circle, line4))
+		{
+			circle->getComponent<Velocity>().val = 
+				Math::GetReflect
+				(
+					circle->getComponent<Velocity>().val, 
+					Math::GetLineNormal
+					(
+						line4->getComponent<LineData>().p1, 
+						line4->getComponent<LineData>().p2
+					)
+				);
+		}
+
 		entityManager_->update();
 	}
 

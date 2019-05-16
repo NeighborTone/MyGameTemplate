@@ -37,5 +37,15 @@ namespace ECS
 			entity->addGroup(ENTITY_GROUP::DEFAULT);
 			return entity;
 		}
+
+		static Entity* CreateLine(const Vec2& pos1, const Vec2& pos2, EntityManager& entityManager)
+		{
+			auto* entity = &entityManager.addEntity();
+			entity->addComponent<Transform>();
+			entity->addComponent<LineData>(pos1, pos2);
+			entity->addComponent<LineCollider>();
+			entity->addGroup(ENTITY_GROUP::DEFAULT);
+			return entity;
+		}
 	};
 }

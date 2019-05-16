@@ -139,7 +139,7 @@ public:
 	* @brief 自分自身を正規化した値を返します
 	* @return Vec2
 	*/
-	[[nodiscard]] const Vec2T&  normalize()
+	const Vec2T&  normalize()
 	{
 		T tmp = length();
 		x /= tmp;
@@ -156,14 +156,23 @@ public:
 		return result.normalize();
 	}
 
+	/*!
+	* @brief 正規化しします
+	* @return Vec2
+	*/
+	[[nodiscard]] static void Normalize(Vec2T& normal)
+	{
+		normal.normalize();
+	}
+
 	Vec2T operator+() const
 	{
-		return Vec2T(*this);
+		return { *this };
 	}
 
 	Vec2T operator-() const
 	{
-		return Vec2T(-x, -y);
+		return { -x, -y };
 	}
 
 	Vec2T operator+(const Vec2T& v) const
@@ -187,7 +196,7 @@ public:
 		return ret;
 	}
 
-	Vec2T operator-(const T& t)
+	Vec2T operator-(const T& t) const
 	{
 		Vec2T ret(*this);
 		ret -= t;
@@ -489,12 +498,12 @@ public:
 
 	Vec3T operator+() const
 	{
-		return Vec3T(*this);
+		return { *this };
 	}
 
 	Vec3T operator-() const
 	{
-		return Vec3T(-this->x, -this->y, -this->z);
+		return { -x, -y, -z };
 	}
 
 	Vec3T operator+(const Vec3T& v) const

@@ -258,16 +258,24 @@ class Easing final
 {
 private:
 	Counter_f time_;
+	bool isLoop_ = false;
 	float vol_ = 0.f;
-	Ease func_{};
 	float startPoint_ = 0.f;
 	float endPoint_ = 0.f;
 	float durationTime_ = 0.f;
-
+	Ease func_{};
+	
 	void run()
 	{
 		time_.setEndTime(durationTime_);
-		time_.add();
+		if (isLoop_)
+		{
+			time_.roundTrip();
+		}
+		else
+		{
+			time_.add();
+		}
 		vol_ = func_(time_.getCurrentCount(), durationTime_);
 	}
 public:
@@ -276,12 +284,13 @@ public:
 		time_(1, 1)
 	{}
 	//!コンストラクタ
-	Easing(const Ease func, const float& start, const float& end, const float& duration) :
+	Easing(const Ease func, const float& start, const float& end, const float& duration, const bool isLoop) :
 		time_(1, 1),
-		func_(func),
+		isLoop_(isLoop),
 		startPoint_(start),
 		endPoint_(end),
-		durationTime_(duration)
+		durationTime_(duration),
+		func_(func)
 	{}
 
 	/**
@@ -307,7 +316,14 @@ public:
 	void run(const Ease em, const float durationTime)
 	{
 		time_.setEndTime(durationTime);
-		time_.add();
+		if (isLoop_)
+		{
+			time_.roundTrip();
+		}
+		else
+		{
+			time_.add();
+		}
 		vol_ = em(time_.getCurrentCount(), durationTime);
 	}
 	
@@ -322,6 +338,11 @@ public:
 		return startPoint + (vol_ * (endPoint - startPoint));
 	}
 
+	//!ループ再生するか否か
+	void loopEnable(const bool& isLoop)
+	{
+		isLoop_ = isLoop;
+	}
 	/**
 	* @brief 実行中のイージングの現在値を取得、毎フレーム呼ぶ
 	*/
