@@ -5,22 +5,129 @@
 #include "../GameController.h"
 #include "../src/Utility/Parameter.hpp"
 #include "../../Utility/Math.hpp"
+#include <filesystem>
 namespace Scene
 {
 	using namespace ECS;
 
 	namespace
 	{
-		Entity* circle;
-		Entity* line1;
-		Entity* line2;
-		Entity* line3;
-		Entity* line4;
+		struct Sphere
+		{
+			JsonRead json;
 
-		Entity* circle2;
-		Position* c;
-		float speed = 16.2f;
-		Easing ease;
+			Vec3 pos;
+			float r = 0;
+			Sphere()
+			{
+
+			}
+			void draw()
+			{
+				json.load("mat.json");
+				MATERIALPARAM MatParam;
+				auto d_r = json.getParameter<float>("mat", "Diffuse", 0);
+				auto d_g = json.getParameter<float>("mat", "Diffuse", 1);
+				auto d_b = json.getParameter<float>("mat", "Diffuse", 2);
+				auto d_a = json.getParameter<float>("mat", "Diffuse", 3);
+
+				auto a_r = json.getParameter<float>("mat", "Ambient", 0);
+				auto a_g = json.getParameter<float>("mat", "Ambient", 1);
+				auto a_b = json.getParameter<float>("mat", "Ambient", 2);
+				auto a_a = json.getParameter<float>("mat", "Ambient", 3);
+
+				auto s_r = json.getParameter<float>("mat", "Specular", 0);
+				auto s_g = json.getParameter<float>("mat", "Specular", 1);
+				auto s_b = json.getParameter<float>("mat", "Specular", 2);
+				auto s_a = json.getParameter<float>("mat", "Specular", 3);
+
+				auto e_r = json.getParameter<float>("mat", "Emissive", 0);
+				auto e_g = json.getParameter<float>("mat", "Emissive", 1);
+				auto e_b = json.getParameter<float>("mat", "Emissive", 2);
+				auto e_a = json.getParameter<float>("mat", "Emissive", 3);
+
+				MatParam.Diffuse = GetColorF(d_r, d_g, d_b, d_a);	// デフューズカラー
+				MatParam.Ambient = GetColorF(a_r, a_g, a_b, a_a);	// アンビエントカラー
+				MatParam.Specular = GetColorF(s_r,s_g, s_b, s_a);	// スペキュラカラー
+				MatParam.Emissive = GetColorF(e_r, e_g, e_b, e_a);	// エミッシブカラー( 自己発光 )
+				MatParam.Power = json.getParameter<float>("mat", "Power");						// スペキュラの強さ
+
+				// マテリアルのパラメータをセット
+				SetMaterialParam(MatParam);
+				DrawSphere3D(
+					pos.getVector<VECTOR>(),
+					r,
+					32, 
+					GetColor(int(d_r * 255),(int(d_g * 255)), (int(d_b * 255))),
+					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
+					true);
+			}
+		};
+		Vec3 velocity;
+		Vec3 planeNormal{ 0,1,0 };//床
+		Sphere s;
+
+		struct Cube
+		{
+			JsonRead json;
+			Vec3 pos;
+			Vec3 scale;
+			Cube() 
+			{
+				json.load("mat.json"); 
+			}
+			void draw()
+			{
+				//posをキューブの中心として描画する
+				auto radius = scale / 2;
+				auto start = pos - radius;
+				auto end = pos + radius;
+
+				MATERIALPARAM MatParam;
+				auto d_r = json.getParameter<float>("mat", "Diffuse", 0);
+				auto d_g = json.getParameter<float>("mat", "Diffuse", 1);
+				auto d_b = json.getParameter<float>("mat", "Diffuse", 2);
+				auto d_a = json.getParameter<float>("mat", "Diffuse", 3);
+
+				auto a_r = json.getParameter<float>("mat", "Ambient", 0);
+				auto a_g = json.getParameter<float>("mat", "Ambient", 1);
+				auto a_b = json.getParameter<float>("mat", "Ambient", 2);
+				auto a_a = json.getParameter<float>("mat", "Ambient", 3);
+
+				auto s_r = json.getParameter<float>("mat", "Specular", 0);
+				auto s_g = json.getParameter<float>("mat", "Specular", 1);
+				auto s_b = json.getParameter<float>("mat", "Specular", 2);
+				auto s_a = json.getParameter<float>("mat", "Specular", 3);
+
+				auto e_r = json.getParameter<float>("mat", "Emissive", 0);
+				auto e_g = json.getParameter<float>("mat", "Emissive", 1);
+				auto e_b = json.getParameter<float>("mat", "Emissive", 2);
+				auto e_a = json.getParameter<float>("mat", "Emissive", 3);
+
+				MatParam.Diffuse = GetColorF(d_r, d_g, d_b, d_a);	// デフューズカラー
+				MatParam.Ambient = GetColorF(a_r, a_g, a_b, a_a);	// アンビエントカラー
+				MatParam.Specular = GetColorF(s_r, s_g, s_b, s_a);	// スペキュラカラー
+				MatParam.Emissive = GetColorF(e_r, e_g, e_b, e_a);	// エミッシブカラー( 自己発光 )
+				MatParam.Power = json.getParameter<float>("mat", "Power");						// スペキュラの強さ
+
+				// マテリアルのパラメータをセット
+				SetMaterialParam(MatParam);
+				DrawCube3D(
+					start.getVector<VECTOR>(), 
+					end.getVector<VECTOR>(),
+					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
+					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
+					true);
+				
+			}
+		};
+		Cube c[5];
+
+
+		const float GetDistance()
+		{
+			return 0;
+		}
 	}
 
 	Title::~Title()
@@ -31,79 +138,147 @@ namespace Scene
 		: AbstractScene(sceneTitleChange)
 		, entityManager_(entityManager)
 	{
-		//ResourceManager::GetGraph().load("Resource/image/bb.png","p");
+		
 	}
 
 	void Title::initialize()
 	{
-		circle = Primitive2D::CreateCircle(Vec2{ 100.f,50.f }, 30.f, *entityManager_);
-		circle2 = Primitive2D::CreateCircle(Vec2{ 15.f,50.f }, 30.f, *entityManager_);
-		ease.init(EasingFunctions::GetFunction("SineIn"),0.f,705.f,60.f);
-		ease.loopEnable(true);
-		auto nom = Vec2(2.f, 2.f).normalize();
+		namespace sys = std::filesystem;
+		
+		sys::path p("Resource/image/"); // 列挙の起点
+		
+		std::for_each(sys::directory_iterator(p), sys::directory_iterator(),
+			[=](const sys::path & p) mutable
+			{
+				if (sys::is_regular_file(p)) 
+				{ 
+				;
+				
+					ResourceManager::GetGraph().load("Resource/image/"+p.filename().string(), p.filename().string() +"p");
+				}
+				//else if (sys::is_directory(p)) { // ディレクトリなら...
+				//	std::cout << "dir.: " << p.string() << std::endl;
+				//}
+			});
 
-		circle->addComponent<Velocity>(nom);
-		c = &circle->getComponent<Position>();
-		line1 = Primitive2D::CreateLine(Vec2{ 0.f,200.f }, Vec2{ 800.f,700.f }, *entityManager_);
-		line2 = Primitive2D::CreateLine(Vec2{ 700.f,700.f }, Vec2{ 1280.f,0.f }, *entityManager_);
-		line3 = Primitive2D::CreateLine(Vec2{ 0.f,2.f }, Vec2{ 1280.f,2.f }, *entityManager_);
-		line4 = Primitive2D::CreateLine(Vec2{ 2.f,0.f }, Vec2{ 2.f,720.f }, *entityManager_);
+		//ディレクショナルライトの設定
+		CreateDirLightHandle(VGet(0.0f, 1.0f, 0.0f));
+		CreateDirLightHandle(VGet(0.0f, -1.0f, 0.0f));
+		CreateDirLightHandle(VGet(1.0f, 0.0f, 0.0f));
+		CreateDirLightHandle(VGet(-1.0f, 0.0f, 0.0f));
+		CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+		CreateDirLightHandle(VGet(0.0f, 0.0f, -1.0f));
+
+		//カメラ設定
+		SetCameraNearFar(0.1f, 10000.0f);
+
+		s.pos = Vec3{ 0.f,0.f,0.f };
+		s.r = 5;
+		c[0].pos = Vec3{0,-50,0};
+		c[0].scale = Vec3{ 100,5,100 };
+
+		c[1].pos = Vec3{ 0,60,0 };
+		c[1].scale = Vec3{ 100,5,100 };
+
+		c[2].pos = Vec3{ 56,0,0 };
+		c[2].scale = Vec3{ 5,100,100 };
+
+		c[3].pos = Vec3{ -70,0,0 };
+		c[3].scale = Vec3{ 5,100,100 };
+
+		c[4].pos = Vec3{ 0,0,70 };
+		c[4].scale = Vec3{ 100,100,5 };
+
+		velocity.z = 1;
+		velocity.y = -1;
+		velocity.x = -1;
 	}
 
 	void Title::update()
 	{
-		circle2->getComponent<Position>().val.y = ease.getVolume();
-		c->val += circle->getComponent<Velocity>().val * speed;
-		if (Collision::CirecleAndLine(circle, line1))
+		//床
 		{
-			circle->getComponent<Velocity>().val = 
-				Math::GetReflect
-				(
-					circle->getComponent<Velocity>().val, Math::GetLineNormal
-					(
-						line1->getComponent<LineData>().p1, 
-						line1->getComponent<LineData>().p2
-					)
-				);
+			// ボールと平面の距離
+			// 当たり判定
+			if (s.pos.getDistanceToPlain(c[0].pos, Vec3{ 0,1,0 }) <= 5)
+			{
+				// 反射ベクトルを計算する
+				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 0,1,0 }));
+				Vec3 r = velocity + Vec3{ 0,1,0 } * 2 * h2;
+				velocity = r;
+			}
 		}
-		if (Collision::CirecleAndLine(circle, line2))
+		//右壁
 		{
-			circle->getComponent<Velocity>().val = 
-				Math::GetReflect
-				(
-					circle->getComponent<Velocity>().val,
-					Math::GetLineNormal
-					(
-						line2->getComponent<LineData>().p1, 
-						line2->getComponent<LineData>().p2
-					)
-				);
+			// ボールと平面の距離
+			// 当たり判定
+			if (s.pos.getDistanceToPlain(c[2].pos, Vec3{ -1,0,0 }) <= 5)
+			{
+				// 反射ベクトルを計算する
+				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ -1,0,0 }));
+				Vec3 r = velocity + Vec3{ -1,0,0 } *2 * h2;
+				velocity = r;
+			}
 		}
-		if (Collision::CirecleAndLine(circle, line3))
+		//左壁
 		{
-			circle->getComponent<Velocity>().val = 
-				Math::GetReflect(
-					circle->getComponent<Velocity>().val,
-					Math::GetLineNormal(
-						line3->getComponent<LineData>().p1,
-						line3->getComponent<LineData>().p2
-					)
-				);
+			// ボールと平面の距離
+			// 当たり判定
+			if (s.pos.getDistanceToPlain(c[3].pos, Vec3{ 1,0,0 }) <= 5)
+			{
+				// 反射ベクトルを計算する
+				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 1,0,0 }));
+				Vec3 r = velocity + Vec3{ 1,0,0 } *2 * h2;
+				velocity = r;
+			}
 		}
-		if (Collision::CirecleAndLine(circle, line4))
+		//天井
 		{
-			circle->getComponent<Velocity>().val = 
-				Math::GetReflect
-				(
-					circle->getComponent<Velocity>().val, 
-					Math::GetLineNormal
-					(
-						line4->getComponent<LineData>().p1, 
-						line4->getComponent<LineData>().p2
-					)
-				);
+			// ボールと平面の距離
+			// 当たり判定
+			if (s.pos.getDistanceToPlain(c[1].pos, Vec3{ 0,-1,0 }) <= 5)
+			{
+				// 反射ベクトルを計算する
+				float h2 = std::abs(Vec3::Dot(velocity, Vec3{0,-1,0}));
+				Vec3 r = velocity + Vec3{ 0,-1,0 } * 2 * h2;
+				velocity = r;
+			}
 		}
 
+		//奥
+		{
+			// ボールと平面の距離
+			// 当たり判定
+			if (s.pos.getDistanceToPlain(c[4].pos, Vec3{ 0,0,-1 }) <= 5)
+			{
+				// 反射ベクトルを計算する
+				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 0,0,-1 }));
+				Vec3 r = velocity + Vec3{ 0,0,-1 } *2 * h2;
+				velocity = r;
+			}
+		}
+
+		//手前(透明な壁)
+		{
+			// ボールと平面の距離
+			// 当たり判定
+			if (s.pos.getDistanceToPlain(Vec3{ 0,0,-80 }, Vec3{ 0,0,1 }) <= 5)
+			{
+				// 反射ベクトルを計算する
+				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 0,0,1 }));
+				Vec3 r = velocity + Vec3{ 0,0, 1 } * 2 * h2;
+				velocity = r;
+			}
+		}
+		s.pos += velocity * 1;
+		static float x = 0, y = 0, z = -90;
+		if (Input::Get().getKeyFrame(KEY_INPUT_UP) > 0) { ++z; }
+		if (Input::Get().getKeyFrame(KEY_INPUT_DOWN) > 0) { --z; }
+		if (Input::Get().getKeyFrame(KEY_INPUT_LEFT) > 0) { --x; }
+		if (Input::Get().getKeyFrame(KEY_INPUT_RIGHT) > 0) { ++x; }
+		if (Input::Get().getKeyFrame(KEY_INPUT_Q) > 0) { ++y; }
+		if (Input::Get().getKeyFrame(KEY_INPUT_E) > 0) { --y; }
+		SetCameraPositionAndAngle(VGet(x,y,z), Math::ToRadian(0.f), 0.0f, 0.0f);
 		entityManager_->update();
 	}
 
@@ -112,6 +287,11 @@ namespace Scene
 		SetDrawMode(DX_DRAWMODE_BILINEAR);
 		//グループ順に描画
 		entityManager_->orderByDraw(ENTITY_GROUP::MAX);
+		
+		s.draw();
+		for (auto& it : c) { it.draw(); }
+		
+		entityManager_->draw3D();
 		SetDrawMode(DX_DRAWMODE_NEAREST);
 	}
 

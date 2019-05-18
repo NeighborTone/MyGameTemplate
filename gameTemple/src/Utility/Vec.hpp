@@ -445,8 +445,7 @@ public:
 	[[nodiscard]] const Vec3T& getNormalize() const
 	{
 		Vec3T result = *this;
-		result.normalize();
-		return result;
+		return result.normalize();
 	}
 
 	/*
@@ -457,6 +456,17 @@ public:
 		return start * (1.f - percent) + end * percent;
 	}
 
+	/*!
+	* @brief 平面との距離を返します
+	* @note C++17でないとエラー?
+	* @return 距離
+	*/
+	[[nodiscard]] const T getDistanceToPlain(const Vec3T& plainPos, const Vec3T& normal) const
+	{
+		Vec3T sub = *this - plainPos;
+		T dist = Vec3T::Dot(sub, normal);
+		return dist;
+	}
 	//!別のVecotr(publicなメンバとしてx,y,zがある型)に変換します
 	template<class TypeVec>
 	TypeVec getVector() const

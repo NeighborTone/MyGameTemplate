@@ -197,7 +197,20 @@ public:
 		const auto& arr = obj_[name].get<jsonArray>().at(index);
 		return arr.get<T>();
 	}
-
+	/*
+	読み込んだjsonファイルから配列の値を取得します
+	@param objectName 構造体名
+	@param name パラメータ名
+	@param index 配列の要素番号
+	@retrun 指定したパラメータ(floatにキャスト済み)
+	*/
+	template <>
+	[[nodiscard]] const float getParameter(const std::string& objectName, const std::string& name, const size_t index)
+	{
+		picojson::object obj_ = v_.get<picojson::object>()[objectName].get<picojson::object>();
+		const auto& arr = obj_[name].get<jsonArray>().at(index);
+		return static_cast<float>(arr.get<number>());
+	}
 	/*
 	読み込んだjsonファイルから配列の値を取得します
 	@param objectName 構造体名
