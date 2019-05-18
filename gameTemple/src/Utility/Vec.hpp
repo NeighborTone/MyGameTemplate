@@ -458,7 +458,8 @@ public:
 
 	/*!
 	* @brief 平面との距離を返します
-	* @note C++17でないとエラー?
+	* @param[in] plainPos 平面座標
+	* @param[in] normal   平面の法線
 	* @return 距離
 	*/
 	[[nodiscard]] const T getDistanceToPlain(const Vec3T& plainPos, const Vec3T& normal) const
@@ -467,6 +468,32 @@ public:
 		T dist = Vec3T::Dot(sub, normal);
 		return dist;
 	}
+
+	/*!
+	* @brief 反射ベクトルを返します
+	* @param[in] velocity 速度
+	* @param[in] normal   法線
+	* @return 反射ベクトル
+	*/
+	[[nodiscard]] static const Vec3T GetReflection(const Vec3T& velocity, const Vec3T& normal)
+	{
+		T h = std::abs((velocity.dot(normal)));
+		Vec3T reflect = velocity + normal *2 * h;
+		return reflect;
+	}
+
+	/*!
+	* @brief 反射ベクトルを求めます
+	* @param[in,out] velocity 速度
+	* @param[in] normal  法線
+	*/
+	[[nodiscard]] const void calcReflection(const Vec3T& normal)
+	{
+		T h = std::abs(Vec3T::Dot(*this, normal));
+		Vec3T reflect = *this + normal * 2 * h;
+		*this = reflect;
+	}
+
 	//!別のVecotr(publicなメンバとしてx,y,zがある型)に変換します
 	template<class TypeVec>
 	TypeVec getVector() const

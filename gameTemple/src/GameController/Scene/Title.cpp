@@ -14,17 +14,17 @@ namespace Scene
 	{
 		struct Sphere
 		{
-			JsonRead json;
+			JsonRead json{};
 
 			Vec3 pos;
 			float r = 0;
 			Sphere()
 			{
-
+				json.load("mat.json");
 			}
 			void draw()
 			{
-				json.load("mat.json");
+				
 				MATERIALPARAM MatParam;
 				auto d_r = json.getParameter<float>("mat", "Diffuse", 0);
 				auto d_g = json.getParameter<float>("mat", "Diffuse", 1);
@@ -48,7 +48,7 @@ namespace Scene
 
 				MatParam.Diffuse = GetColorF(d_r, d_g, d_b, d_a);	// デフューズカラー
 				MatParam.Ambient = GetColorF(a_r, a_g, a_b, a_a);	// アンビエントカラー
-				MatParam.Specular = GetColorF(s_r,s_g, s_b, s_a);	// スペキュラカラー
+				MatParam.Specular = GetColorF(s_r, s_g, s_b, s_a);	// スペキュラカラー
 				MatParam.Emissive = GetColorF(e_r, e_g, e_b, e_a);	// エミッシブカラー( 自己発光 )
 				MatParam.Power = json.getParameter<float>("mat", "Power");						// スペキュラの強さ
 
@@ -57,8 +57,8 @@ namespace Scene
 				DrawSphere3D(
 					pos.getVector<VECTOR>(),
 					r,
-					32, 
-					GetColor(int(d_r * 255),(int(d_g * 255)), (int(d_b * 255))),
+					32,
+					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
 					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
 					true);
 			}
@@ -69,12 +69,12 @@ namespace Scene
 
 		struct Cube
 		{
-			JsonRead json;
+			JsonRead json{};
 			Vec3 pos;
 			Vec3 scale;
-			Cube() 
+			Cube()
 			{
-				json.load("mat.json"); 
+				json.load("mat.json");
 			}
 			void draw()
 			{
@@ -113,21 +113,25 @@ namespace Scene
 				// マテリアルのパラメータをセット
 				SetMaterialParam(MatParam);
 				DrawCube3D(
-					start.getVector<VECTOR>(), 
+					start.getVector<VECTOR>(),
 					end.getVector<VECTOR>(),
 					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
 					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
 					true);
-				
+
 			}
 		};
 		Cube c[5];
 
-
-		const float GetDistance()
+		const Vec3 NORMALS[6] =
 		{
-			return 0;
-		}
+			Vec3{0,1,0},
+			Vec3{0,-1,0},
+			Vec3{-1,0,0},
+			Vec3{1,0,0},
+			Vec3{0,0,-1},
+			Vec3{0,0,1}
+		};
 	}
 
 	Title::~Title()
@@ -138,29 +142,27 @@ namespace Scene
 		: AbstractScene(sceneTitleChange)
 		, entityManager_(entityManager)
 	{
-		
-	}
-
-	void Title::initialize()
-	{
 		namespace sys = std::filesystem;
-		
+
 		sys::path p("Resource/image/"); // 列挙の起点
-		
+
 		std::for_each(sys::directory_iterator(p), sys::directory_iterator(),
 			[=](const sys::path & p) mutable
 			{
-				if (sys::is_regular_file(p)) 
-				{ 
-				;
-				
-					ResourceManager::GetGraph().load("Resource/image/"+p.filename().string(), p.filename().string() +"p");
+				if (sys::is_regular_file(p))
+				{
+					;
+
+					ResourceManager::GetGraph().load("Resource/image/" + p.filename().string(), p.filename().string() + "p");
 				}
 				//else if (sys::is_directory(p)) { // ディレクトリなら...
 				//	std::cout << "dir.: " << p.string() << std::endl;
 				//}
 			});
+	}
 
+	void Title::initialize()
+	{
 		//ディレクショナルライトの設定
 		CreateDirLightHandle(VGet(0.0f, 1.0f, 0.0f));
 		CreateDirLightHandle(VGet(0.0f, -1.0f, 0.0f));
@@ -174,7 +176,7 @@ namespace Scene
 
 		s.pos = Vec3{ 0.f,0.f,0.f };
 		s.r = 5;
-		c[0].pos = Vec3{0,-50,0};
+		c[0].pos = Vec3{ 0,-50,0 };
 		c[0].scale = Vec3{ 100,5,100 };
 
 		c[1].pos = Vec3{ 0,60,0 };
@@ -196,80 +198,19 @@ namespace Scene
 
 	void Title::update()
 	{
-		//床
+		for (size_t i = 0; i < std::size(c); ++i)
 		{
-			// ボールと平面の距離
-			// 当たり判定
-			if (s.pos.getDistanceToPlain(c[0].pos, Vec3{ 0,1,0 }) <= 5)
+			if (s.pos.getDistanceToPlain(c[i].pos, NORMALS[i]) <= 5)
 			{
-				// 反射ベクトルを計算する
-				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 0,1,0 }));
-				Vec3 r = velocity + Vec3{ 0,1,0 } * 2 * h2;
-				velocity = r;
+				velocity.calcReflection(NORMALS[i]);
 			}
 		}
-		//右壁
-		{
-			// ボールと平面の距離
-			// 当たり判定
-			if (s.pos.getDistanceToPlain(c[2].pos, Vec3{ -1,0,0 }) <= 5)
-			{
-				// 反射ベクトルを計算する
-				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ -1,0,0 }));
-				Vec3 r = velocity + Vec3{ -1,0,0 } *2 * h2;
-				velocity = r;
-			}
-		}
-		//左壁
-		{
-			// ボールと平面の距離
-			// 当たり判定
-			if (s.pos.getDistanceToPlain(c[3].pos, Vec3{ 1,0,0 }) <= 5)
-			{
-				// 反射ベクトルを計算する
-				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 1,0,0 }));
-				Vec3 r = velocity + Vec3{ 1,0,0 } *2 * h2;
-				velocity = r;
-			}
-		}
-		//天井
-		{
-			// ボールと平面の距離
-			// 当たり判定
-			if (s.pos.getDistanceToPlain(c[1].pos, Vec3{ 0,-1,0 }) <= 5)
-			{
-				// 反射ベクトルを計算する
-				float h2 = std::abs(Vec3::Dot(velocity, Vec3{0,-1,0}));
-				Vec3 r = velocity + Vec3{ 0,-1,0 } * 2 * h2;
-				velocity = r;
-			}
-		}
-
-		//奥
-		{
-			// ボールと平面の距離
-			// 当たり判定
-			if (s.pos.getDistanceToPlain(c[4].pos, Vec3{ 0,0,-1 }) <= 5)
-			{
-				// 反射ベクトルを計算する
-				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 0,0,-1 }));
-				Vec3 r = velocity + Vec3{ 0,0,-1 } *2 * h2;
-				velocity = r;
-			}
-		}
-
 		//手前(透明な壁)
+		if (s.pos.getDistanceToPlain(Vec3{ 0,0,-80 }, NORMALS[5]) <= 5)
 		{
-			// ボールと平面の距離
-			// 当たり判定
-			if (s.pos.getDistanceToPlain(Vec3{ 0,0,-80 }, Vec3{ 0,0,1 }) <= 5)
-			{
-				// 反射ベクトルを計算する
-				float h2 = std::abs(Vec3::Dot(velocity, Vec3{ 0,0,1 }));
-				Vec3 r = velocity + Vec3{ 0,0, 1 } * 2 * h2;
-				velocity = r;
-			}
+			velocity.calcReflection(NORMALS[5]);
 		}
+
 		s.pos += velocity * 1;
 		static float x = 0, y = 0, z = -90;
 		if (Input::Get().getKeyFrame(KEY_INPUT_UP) > 0) { ++z; }
@@ -278,7 +219,7 @@ namespace Scene
 		if (Input::Get().getKeyFrame(KEY_INPUT_RIGHT) > 0) { ++x; }
 		if (Input::Get().getKeyFrame(KEY_INPUT_Q) > 0) { ++y; }
 		if (Input::Get().getKeyFrame(KEY_INPUT_E) > 0) { --y; }
-		SetCameraPositionAndAngle(VGet(x,y,z), Math::ToRadian(0.f), 0.0f, 0.0f);
+		SetCameraPositionAndAngle(VGet(x, y, z), Math::ToRadian(0.f), 0.0f, 0.0f);
 		entityManager_->update();
 	}
 
@@ -287,10 +228,10 @@ namespace Scene
 		SetDrawMode(DX_DRAWMODE_BILINEAR);
 		//グループ順に描画
 		entityManager_->orderByDraw(ENTITY_GROUP::MAX);
-		
+
 		s.draw();
 		for (auto& it : c) { it.draw(); }
-		
+
 		entityManager_->draw3D();
 		SetDrawMode(DX_DRAWMODE_NEAREST);
 	}
