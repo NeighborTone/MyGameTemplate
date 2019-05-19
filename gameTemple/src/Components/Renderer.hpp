@@ -17,7 +17,6 @@
 #include "../Class/ResourceManager.hpp"
 #include "../System/System.hpp"
 #include <DxLib.h>
-#include <DirectXMath.h>
 
 namespace ECS
 {
@@ -260,20 +259,20 @@ namespace ECS
 
 		void draw2D() override
 		{
-			if (ResourceManager::GetGraph().hasDivHandle(__super::name_) &&
-				__super::isDraw_)
+			if (ResourceManager::GetGraph().hasDivHandle(SpriteDraw::name_) &&
+				SpriteDraw::isDraw_)
 			{
-				RenderUtility::SetColor(__super::color_);
-				RenderUtility::SetBlend(__super::blend_);
+				RenderUtility::SetColor(SpriteDraw::color_);
+				RenderUtility::SetBlend(SpriteDraw::blend_);
 				DrawRotaGraph3F(
-					__super::pos_->val.x,
-					__super::pos_->val.y,
-					__super::pivot_.x,
-					__super::pivot_.y,
-					__super::scale_->val.x,
-					__super::scale_->val.y,
-					Math::ToRadian(__super::rota_->val),
-					ResourceManager::GetGraph().getDivHandle(__super::name_, index_), true, __super::isTurn);
+					SpriteDraw::pos_->val.x,
+					SpriteDraw::pos_->val.y,
+					SpriteDraw::pivot_.x,
+					SpriteDraw::pivot_.y,
+					SpriteDraw::scale_->val.x,
+					SpriteDraw::scale_->val.y,
+					Math::ToRadian(SpriteDraw::rota_->val),
+					ResourceManager::GetGraph().getDivHandle(SpriteDraw::name_, index_), true, SpriteDraw::isTurn);
 				RenderUtility::ResetRenderState();
 			}
 		}
@@ -308,9 +307,9 @@ namespace ECS
 		{}
 		void initialize() override
 		{
-			__super::pos_ = &owner->getComponent<Position2D>();
-			__super::rota_ = &owner->getComponent<Rotation>();
-			__super::scale_ = &owner->getComponent<Scale2D>();
+			SpriteDraw::pos_ = &owner->getComponent<Position2D>();
+			SpriteDraw::rota_ = &owner->getComponent<Rotation>();
+			SpriteDraw::scale_ = &owner->getComponent<Scale2D>();
 			rect_ = &owner->getComponent<Rectangle>();
 			RenderUtility::SetRenderDetail(owner, &color_, &blend_);
 		}
@@ -322,20 +321,20 @@ namespace ECS
 				RenderUtility::SetColor(color_);
 				RenderUtility::SetBlend(blend_);
 				DrawRectRotaGraph3F(
-					__super::pos_->val.x,
-					__super::pos_->val.y,
+					SpriteDraw::pos_->val.x,
+					SpriteDraw::pos_->val.y,
 					rect_->x,
 					rect_->y,
 					rect_->w,
 					rect_->h,
-					__super::pivot_.x,
-					__super::pivot_.y,
-					__super::scale_->val.x,
-					__super::scale_->val.y,
+					SpriteDraw::pivot_.x,
+					SpriteDraw::pivot_.y,
+					SpriteDraw::scale_->val.x,
+					SpriteDraw::scale_->val.y,
 					Math::ToRadian(rota_->val),
 					ResourceManager::GetGraph().getHandle(name_),
 					true,
-					__super::isTurn);
+					SpriteDraw::isTurn);
 				RenderUtility::ResetRenderState();
 			}
 		}

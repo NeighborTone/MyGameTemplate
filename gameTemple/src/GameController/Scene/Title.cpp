@@ -172,6 +172,7 @@ namespace Scene
 		c[4].pos = Vec3{ 0,0,70 };
 		c[4].scale = Vec3{ 100,100,5 };
 
+		//速度ベクトル
 		velocity.z = 1;
 		velocity.y = -1;
 		velocity.x = -1;
