@@ -34,9 +34,7 @@ private:
 		//!引数に指定したキーのパラメータを削除します
 		void remove(const std::string& key)
 		{
-			auto it = map.find(key);
-			assert(map.end() != it && "キーのパラメータが存在しません");
-
+			assert(map_.count(key) != 0 && "キーのパラメータが存在しません");
 			map.erase(key);
 		}
 		//!すべてのパラメーターを消去します
@@ -48,10 +46,8 @@ private:
 		template<typename ValueType>
 		[[nodiscard]] const ValueType get(const std::string& key) const
 		{
-			auto it = map.find(key);
-			assert(map.end() != it && "キーのパラメータが存在しません");
-
-			return std::any_cast<ValueType>(it->second);
+			assert(map_.count(key) != 0 && "キーのパラメータが存在しません");
+			return std::any_cast<ValueType>(map_.at(key));
 		}
 	};
 public:
@@ -65,7 +61,7 @@ public:
 class Any
 {
 private:
-	// 非テンプレート基本クラス
+	//非テンプレート基本クラス
 	struct AnyBase
 	{
 		virtual ~AnyBase() {}
@@ -73,7 +69,7 @@ private:
 		virtual AnyBase* clone() const = 0;
 	};
 
-	// テンプレート派生クラス
+	//テンプレート派生クラス
 	template<class T>
 	struct any : public AnyBase
 	{
@@ -178,9 +174,7 @@ private:
 		//!引数に指定したキーのパラメータを削除します
 		void remove(const std::string& key)
 		{
-			auto it = map_.find(key);
-			assert(map_.end() != it && "キーのパラメータが存在しません");
-
+			assert(map_.count(key) != 0 "キーのパラメータが存在しません");
 			map_.erase(key);
 		}
 		//!すべてのパラメーターを消去します
@@ -192,10 +186,8 @@ private:
 		template<typename ValueType>
 		[[nodiscard]] const ValueType& get(const std::string& key) const
 		{
-			auto it = map_.find(key);
-			assert(map_.end() != it && "キーのパラメータが存在しません");
-
-			return it->second.cast<ValueType>();
+			assert(map_.count(key) != 0 && "キーのパラメータが存在しません");
+			return map_.at(key).cast<ValueType>();
 		}
 	};
 public:

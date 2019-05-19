@@ -505,7 +505,6 @@ public:
 	}
 	/*!
 	* @brief 2点間の距離を返します
-	* @note C++17でないとエラー?
 	* @return 距離
 	*/
 	[[nodiscard]] const T getDistance(const Vec3T& v) const
@@ -513,7 +512,9 @@ public:
 		const T dx = x - v.x;
 		const T dy = y - v.y;
 		const T dz = z - v.z;
-		return std::hypot(dx, dy, dz);
+		return sqrt((v.x - x) * (v.x - x) + 
+			        (v.y - y) * (v.y - y) + 
+			        (v.z - z) * (v.z - z));
 	}
 
 	Vec3T& operator=(const  Vec3T& v)

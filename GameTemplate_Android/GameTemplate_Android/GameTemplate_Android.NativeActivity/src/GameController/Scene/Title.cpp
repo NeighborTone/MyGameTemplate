@@ -119,7 +119,7 @@ namespace Scene
 		velocity.z = 1;
 		velocity.y = -1;
 		velocity.x = -1;
-	
+
 	}
 
 	void Title::update()
