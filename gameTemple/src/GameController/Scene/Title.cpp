@@ -130,6 +130,20 @@ namespace Scene
 			Vec3{0,0,-1},
 			Vec3{0,0,1}
 		};
+
+		// 壁ずりベクトル
+		//
+		// out : 正規化壁ずりベクトル（戻り値）
+		// front : 進行ベクトル
+		// normal: 衝突点での法線ベクトル
+		//
+		Vec3* calcWallScratchVector(Vec3* out, const Vec3& front, const Vec3& normal) {
+			Vec3 normal_n;
+			normal_n = normal.Normalize();
+			auto nom = front - normal_n * Vec3::Dot(front, normal_n);
+			*out = nom.Normalize();
+			return out;
+		}
 	}
 
 	Title::~Title()
@@ -176,16 +190,23 @@ namespace Scene
 		velocity.z = 1;
 		velocity.y = -1;
 		velocity.x = -1;
+		ResourceManager::GetGraph().load("Resource/image/bb.png","p");
 	}
 
 	void Title::update()
 	{
 		for (size_t i = 0; i < std::size(c); ++i)
 		{
-			if (s.pos.getDistanceToPlain(c[i].pos, NORMALS[i]) <= 5)
+			//if (s.pos.getDistanceToPlain(c[i].pos, NORMALS[i]) <= 5)
 			{
-				velocity.calcReflection(NORMALS[i]);
+			//	velocity.calcWallScratchVector(NORMALS[i]);
+				//velocity.calcReflection(NORMALS[i]);
 			}
+		}
+		if (s.pos.getDistanceToPlain(c[0].pos, NORMALS[0]) <= 5)
+		{
+			velocity.calcWallScratchVector(NORMALS[0]);
+			
 		}
 		//手前(透明な壁)
 		if (s.pos.getDistanceToPlain(Vec3{ 0,0,-80 }, NORMALS[5]) <= 5)
@@ -213,7 +234,8 @@ namespace Scene
 
 		s.draw();
 		for (auto& it : c) { it.draw(); }
-
+	//	DrawBillboard3D(VGet(0,0,0), 0.5f, 0.5f, 1, 0, ResourceManager::GetGraph().getHandle("p"), true,false,false);
+		DrawExtendGraph3D(0, 0, 0, 0.1f, 0.1f,ResourceManager::GetGraph().getHandle("p"), true);
 		entityManager_->draw3D();
 		SetDrawMode(DX_DRAWMODE_NEAREST);
 	}

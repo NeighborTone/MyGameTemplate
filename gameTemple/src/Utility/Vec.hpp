@@ -442,7 +442,7 @@ public:
 	* @brief 自分自身を正規化した値のコピーを返します。自身の値は変わりません
 	* @return Vec3
 	*/
-	[[nodiscard]] const Vec3T& Normalize() const
+	[[nodiscard]] const Vec3T Normalize() const
 	{
 		Vec3T result = *this;
 		return result.normalize();
@@ -462,7 +462,7 @@ public:
 	* @param[in] normal   平面の法線
 	* @return 距離
 	*/
-	[[nodiscard]] const T getDistanceToPlain(const Vec3T & plainPos, const Vec3T & normal) const
+	[[nodiscard]] const T getDistanceToPlain(const Vec3T& plainPos, const Vec3T& normal) const
 	{
 		Vec3T sub = *this - plainPos;
 		T dist = Vec3T::Dot(sub, normal);
@@ -472,10 +472,10 @@ public:
 	/*!
 	* @brief 反射ベクトルを返します
 	* @param[in] velocity 速度
-	* @param[in] normal   法線
+	* @param[in] normal   接触点の法線
 	* @return 反射ベクトル
 	*/
-	[[nodiscard]] static const Vec3T GetReflection(const Vec3T & velocity, const Vec3T & normal)
+	[[nodiscard]] static const Vec3T GetReflection(const Vec3T& velocity, const Vec3T& normal)
 	{
 		T h = std::abs((velocity.dot(normal)));
 		Vec3T reflect = velocity + normal * 2 * h;
@@ -484,13 +484,34 @@ public:
 
 	/*!
 	* @brief 反射ベクトルを求めます。thisが反射ベクトル化します
-	* @param[in] normal  法線
+	* @param[in] normal  接触点の法線
 	*/
-	const void calcReflection(const Vec3T & normal)
+	const void calcReflection(const Vec3T& normal)
 	{
 		T h = std::abs(Vec3T::Dot(*this, normal));
 		Vec3T reflect = *this + normal * 2 * h;
 		*this = reflect;
+	}
+	/*!
+	* @brief 壁ずりベクトルを求めます。velocityが壁ずりベクトル化します
+	* @param[in,out] normal  速度ベクトル
+	* @param[in] normal  接触点の法線
+	*/
+	static const Vec3T& GetWallScratchVector(Vec3T& velocity, const Vec3T& normal)
+	{
+		Vec3T nom = velocity - normal * Vec3T::Dot(velocity, normal);
+		velocity = nom.normalize();
+		return velocity;
+	}
+
+	/*!
+	* @brief 壁ずりベクトルを求めます。thisが壁ずりベクトル化します
+	* @param[in] normal  接触点の法線
+	*/
+	void calcWallScratchVector(const Vec3T& normal)
+	{
+		Vec3T nom = *this - normal * Vec3T::Dot(*this, normal);
+		*this = nom.normalize();
 	}
 
 	//!別のVecotr(publicなメンバとしてx,y,zがある型)に変換します
@@ -505,15 +526,13 @@ public:
 	}
 	/*!
 	* @brief 2点間の距離を返します
-	* @note C++17でないとエラー?
 	* @return 距離
 	*/
 	[[nodiscard]] const T getDistance(const Vec3T & v) const
 	{
-		const T dx = x - v.x;
-		const T dy = y - v.y;
-		const T dz = z - v.z;
-		return std::hypot(dx, dy, dz);
+		return sqrt((v.x - x) * (v.x - x) +
+				    (v.y - y) * (v.y - y) +
+				    (v.z - z) * (v.z - z));
 	}
 
 	Vec3T& operator=(const  Vec3T & v)
