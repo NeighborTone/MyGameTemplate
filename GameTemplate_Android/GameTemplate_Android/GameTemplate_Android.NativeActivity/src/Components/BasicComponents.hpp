@@ -17,12 +17,12 @@ namespace ECS
 	/*!
 	@brief  座標です。データの型はVec2です
 	*/
-	struct Position final : public ComponentData
+	struct Position2D final : public ComponentData
 	{
 		Vec2 val;
-		Position() = default;
-		explicit Position(const Vec2& v) :val(v) {}
-		explicit Position(const float& x, const float& y) :val(x, y) {}
+		Position2D() = default;
+		explicit Position2D(const Vec2& v) :val(v) {}
+		explicit Position2D(const float& x, const float& y) :val(x, y) {}
 	};
 	/*!
 	@brief  回転値です。データの型はfloatです
@@ -36,39 +36,25 @@ namespace ECS
 	/*!
 	@brief  x,y方向の拡大率です。データの型はVec2です
 	*/
-	struct Scale final : public ComponentData
+	struct Scale2D final : public ComponentData
 	{
 		Vec2 val;
-		Scale() = default;
-		explicit Scale(const Vec2& scale) : val(scale) {}
-		explicit Scale(const float& scale) : val(scale, scale) {}
-		explicit Scale(const float& scaleX, const float& scaleY) : val(scaleX, scaleY) {}
+		Scale2D() = default;
+		explicit Scale2D(const Vec2& scale) : val(scale) {}
+		explicit Scale2D(const float& scale) : val(scale, scale) {}
+		explicit Scale2D(const float& scaleX, const float& scaleY) : val(scaleX, scaleY) {}
 	};
 	/*!
 	@brief  速度です。データの型はVec2です
 	*/
-	struct Velocity final : public ComponentData
+	struct Velocity2D final : public ComponentData
 	{
 		Vec2 val;
-		Velocity() = default;
-		explicit Velocity(const Vec2& v) :val(v) {}
-		explicit Velocity(const float& x, const float& y) : val(x, y) {}
+		Velocity2D() = default;
+		explicit Velocity2D(const Vec2& v) :val(v) {}
+		explicit Velocity2D(const float& x, const float& y) : val(x, y) {}
 	};
-	/*!
-	@brief  向きです。データの型はenum class Dirです
-	*/
-	struct Direction final : public ComponentData
-	{
-		enum class Dir : short
-		{
-			RIGHT,
-			LEFT,
-			UP,
-			DOWN
-		};
-		Dir val;
-		explicit Direction() : val(Dir::RIGHT) {};
-	};
+	
 	/*!
 	@brief 重力です。データの型はfloatです
 	*/
@@ -82,12 +68,12 @@ namespace ECS
 	/*!
 	@brief  線分です。データの型は始点、終点ともにVec2です
 	*/
-	struct LineData final : public ComponentData
+	struct LineData2D final : public ComponentData
 	{
 		Vec2 p1;
 		Vec2 p2;
-		LineData() = default;
-		explicit LineData(const Vec2& start, const Vec2& end) :
+		LineData2D() = default;
+		explicit LineData2D(const Vec2& start, const Vec2& end) :
 			p1(start),
 			p2(end)
 		{}
@@ -96,15 +82,15 @@ namespace ECS
 	/*
 	@brief Entityに重力を加えます。
 	また簡易的な衝突応答処理も含まれますが、これは明示的に呼び出してください
-	@details Gravity, Velocity, Positionが必要です。衝突応答を行う場合はColliderが必要です
+	@details Gravity, Velocity2D, Position2Dが必要です。衝突応答を行う場合はColliderが必要です
 	@TODO 現状だと1つのグループとの衝突応答しかできないのでこれを別のコンポーネントにするかもしれない
 	*/
-	class Physics final : public ComponentSystem
+	class Physics2D final : public ComponentSystem
 	{
 	private:
 		Gravity* gravity_ = nullptr;
-		Velocity* velocity_ = nullptr;
-		Position* pos_ = nullptr;
+		Velocity2D* velocity_ = nullptr;
+		Position2D* pos_ = nullptr;
 		std::vector<Entity*> otherEntity_{};
 		std::function<bool(const Entity&, const Entity&)> collisionFunc_;
 		void checkMove(Vec2& pos, Vec2& velocity)
@@ -174,13 +160,13 @@ namespace ECS
 			{
 				owner->addComponent<Gravity>();
 			}
-			if (!owner->hasComponent<Velocity>())
+			if (!owner->hasComponent<Velocity2D>())
 			{
-				owner->addComponent<Velocity>();
+				owner->addComponent<Velocity2D>();
 			}
-			velocity_ = &owner->getComponent<Velocity>();
+			velocity_ = &owner->getComponent<Velocity2D>();
 			gravity_ = &owner->getComponent<Gravity>();
-			pos_ = &owner->getComponent<Position>();
+			pos_ = &owner->getComponent<Position2D>();
 		}
 		void update() override
 		{
@@ -202,7 +188,7 @@ namespace ECS
 			collisionFunc_ = func;
 		}
 		//!引数に指定したEntityにめり込まないようにする
-		void pushOutEntity(std::vector<Entity*>&  e)
+		void pushOutEntity(std::vector<Entity*>& e)
 		{
 			otherEntity_ = e;
 		}
@@ -212,33 +198,33 @@ namespace ECS
 	@brief PositionとRotationとScaleの親子を作ります
 	@detail 親子関係を作ると生のPosition等のデータを直接変更できなくなります
 	- このコンポーネントがある場合は、translate系メソッドで動かすことができます
-	*/ 
-	class Transform final : public ComponentSystem
+	*/
+	class Transform2D final : public ComponentSystem
 	{
 	private:
 		Vec2 initPos_;
-		Vec2 initScale_{1.f,1.f};
+		Vec2 initScale_{ 1.f,1.f };
 		Vec2 localPos_;
 		Vec2 localScale_;
 		float initRota_ = 0;
 		float localRota_ = 0;
-		Position* globalPos_ = nullptr;
+		Position2D* globalPos_ = nullptr;
 		Rotation* globalRota_ = nullptr;
-		Scale* globalScale_ = nullptr;
-		Transform* parent_ = nullptr;
-		std::vector<Transform*> childs_{};
+		Scale2D* globalScale_ = nullptr;
+		Transform2D* parent_ = nullptr;
+		std::vector<Transform2D*> childs_{};
 
 	public:
-		Transform() = default;
-		Transform(const Vec2& pos):
+		Transform2D() = default;
+		Transform2D(const Vec2& pos) :
 			initPos_(pos)
 		{}
-		Transform(const Vec2& pos, const Vec2& scale) :
+		Transform2D(const Vec2& pos, const Vec2& scale) :
 			initPos_(pos),
 			initScale_(scale),
 			initRota_(0.f)
 		{}
-		Transform(const Vec2& pos, const Vec2& scale, const float& rotation) :
+		Transform2D(const Vec2& pos, const Vec2& scale, const float& rotation) :
 			initPos_(pos),
 			initScale_(scale),
 			initRota_(rotation)
@@ -246,21 +232,21 @@ namespace ECS
 
 		void initialize() override
 		{
-			if (!owner->hasComponent<Position>())
+			if (!owner->hasComponent<Position2D>())
 			{
-				owner->addComponent<Position>(initPos_);
+				owner->addComponent<Position2D>(initPos_);
 			}
 			if (!owner->hasComponent<Rotation>())
 			{
 				owner->addComponent<Rotation>(initRota_);
 			}
-			if (!owner->hasComponent<Scale>())
+			if (!owner->hasComponent<Scale2D>())
 			{
-				owner->addComponent<Scale>(initScale_);
+				owner->addComponent<Scale2D>(initScale_);
 			}
-			globalPos_ = &owner->getComponent<Position>();
+			globalPos_ = &owner->getComponent<Position2D>();
 			globalRota_ = &owner->getComponent<Rotation>();
-			globalScale_ = &owner->getComponent<Scale>();
+			globalScale_ = &owner->getComponent<Scale2D>();
 		}
 
 		void update() override
@@ -282,22 +268,22 @@ namespace ECS
 		}
 
 		/*このEntityに親を設定します
-		@details 親のEntityにもTransformが必要です
+		@details 親のEntityにもTransform2Dが必要です
 		- 親を設定するとこのEntityは生のPosition等のデータを直接変更できなくなります
 		- 親との縁を切る場合はnullptrを指定してください
 		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
-		void setParent(const Entity* const pEntity)
-		{	
+		void setParent(const Entity * const pEntity)
+		{
 			if (pEntity == nullptr)
 			{
 				parent_ = nullptr;
 				return;
 			}
 
-			if (pEntity->hasComponent<Transform>())
+			if (pEntity->hasComponent<Transform2D>())
 			{
-				parent_ = &pEntity->getComponent<Transform>();
+				parent_ = &pEntity->getComponent<Transform2D>();
 				localPos_ = globalPos_->val - parent_->globalPos_->val;
 				localRota_ = globalRota_->val - parent_->globalRota_->val;
 				localScale_ = globalScale_->val - parent_->globalScale_->val;
@@ -305,28 +291,28 @@ namespace ECS
 			}
 			else
 			{
-				DOUT << "parent has not Transform" << std::endl;
+				DOUT << "parent has not Transform2D" << std::endl;
 			}
 		}
 		/*このEntityに子を設定します
-		@details 子のEntityにもTransformが必要です
+		@details 子のEntityにもTransform2Dが必要です
 		- 子を設定すると子のEntityは生のPosition等のデータを直接変更できなくなります
 		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
-		void addChild(const Entity* const child)
+		void addChild(const Entity * const child)
 		{
 			assert(child != nullptr);
-			child->getComponent<Transform>().setParent(owner);
+			child->getComponent<Transform2D>().setParent(owner);
 		}
 		//!指定した子を取得します
-		Transform* getChild(const size_t& id)
+		Transform2D* getChild(const size_t & id)
 		{
 			return childs_.at(id);
 		}
 		/*Entityをtranslation分移動します
 		@param translation 移動量
 		*/
-		void translatePosition(const Vec2& translation)
+		void translatePosition(const Vec2 & translation)
 		{
 			if (parent_)
 			{
@@ -356,7 +342,7 @@ namespace ECS
 		/*Entityをtranslation分拡大します
 		@param translation 拡大量
 		*/
-		void translateScale(const Vec2& translation)
+		void translateScale(const Vec2 & translation)
 		{
 			if (parent_)
 			{
@@ -375,7 +361,7 @@ namespace ECS
 			localPos_.y = y;
 		}
 		//!Entityの相対座標を設定します
-		void setLocalPosition(const Vec2& setPos)
+		void setLocalPosition(const Vec2 & setPos)
 		{
 			localPos_.x = setPos.x;
 			localPos_.y = setPos.y;
@@ -392,7 +378,7 @@ namespace ECS
 			localScale_.y = scaleY;
 		}
 		//!Entityの相対拡大率を設定します
-		void setLocalScale(const Vec2& scale)
+		void setLocalScale(const Vec2 & scale)
 		{
 			localScale_.x = scale.x;
 			localScale_.y = scale.y;

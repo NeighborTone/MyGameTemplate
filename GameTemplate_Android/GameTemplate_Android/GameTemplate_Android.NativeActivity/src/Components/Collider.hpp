@@ -64,13 +64,13 @@ namespace ECS
 	};
 
 	/*!
-	@brief 矩形です.
+	@brief 2D矩形です.
 	@details  Positionが必要です
 	*/
 	class BoxCollider final : public ComponentSystem, public IBoxCollider
 	{
 	private:
-		Position* pos_ = nullptr;
+		Position2D* pos_ = nullptr;
 		Vec2 offSetPos_;
 		float w_, h_;
 		unsigned int color_ = 4294967295;
@@ -93,7 +93,7 @@ namespace ECS
 		}
 		void initialize() override
 		{
-			pos_ = &owner->getComponent<Position>();
+			pos_ = &owner->getComponent<Position2D>();
 		}
 		void draw2D() override
 		{
@@ -135,7 +135,7 @@ namespace ECS
 	class CircleCollider final : public ComponentSystem, public ICircleCollider
 	{
 	private:
-		Position* pos_ = nullptr;
+		Position2D* pos_ = nullptr;
 		Vec2 offSetPos_;
 		float r_;
 		unsigned int color_ = 4294967295;
@@ -152,7 +152,7 @@ namespace ECS
 		}
 		void initialize() override
 		{
-			pos_ = &owner->getComponent<Position>();
+			pos_ = &owner->getComponent<Position2D>();
 		}
 		void draw2D() override
 		{
@@ -186,14 +186,14 @@ namespace ECS
 	};
 
 	/*!
-	* @brief 線分です.
-	* @details Position,LineDataが必要です
+	* @brief 2D線分です.
+	* @details Position,LineData2Dが必要です
     * -線分の始点はPositionと同じ値になります
     */
 	class LineCollider final : public ComponentSystem
 	{
 	private:
-		LineData* line_ = nullptr;
+		LineData2D* line_ = nullptr;
 		Entity* start_ = nullptr;
 		Entity* end_ = nullptr;
 		Vec2 offSetPos1_;
@@ -204,18 +204,18 @@ namespace ECS
 	public:
 		void initialize() override
 		{
-			if (!owner->hasComponent<LineData>())
+			if (!owner->hasComponent<LineData2D>())
 			{
-				owner->addComponent<LineData>();
+				owner->addComponent<LineData2D>();
 			}
-			line_ = &owner->getComponent<LineData>();
+			line_ = &owner->getComponent<LineData2D>();
 		}
 		void update() override
 		{
 			if (isJoint)
 			{
-				line_->p1 = start_->getComponent<Position>().val;
-				line_->p2 = end_->getComponent<Position>().val;
+				line_->p1 = start_->getComponent<Position2D>().val;
+				line_->p2 = end_->getComponent<Position2D>().val;
 			}
 		}
 		void draw2D() override
@@ -259,5 +259,13 @@ namespace ECS
 		const Vec2 getStartPosition() const  { return line_->p1 + offSetPos1_; }
 		/** @brief 終点座標を返します、この値はオフセットされた値です*/
 		const Vec2 getEndPosition() const { return line_->p2 + offSetPos2_; }
+	};
+
+
+	class SphereCollider :public ComponentSystem
+	{
+	private:
+
+	public:
 	};
 }

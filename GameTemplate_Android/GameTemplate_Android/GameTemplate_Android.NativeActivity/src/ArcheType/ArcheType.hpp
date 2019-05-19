@@ -11,25 +11,25 @@
 */
 #pragma once
 #include "../GameController/GameController.h"
-#include "../Components/BasicComponents.hpp"
 #include "../Components/Renderer.hpp"
+#include "../Input/Input.hpp"
 namespace ECS
 {
 	struct ArcheType
 	{
-		//!Transformだけ持っているエンティティの生成
-		inline static Entity* CreatePlainEntity(const Vec2& pos, EntityManager& entityManager)
+		//!Transform2Dだけ持っているエンティティの生成
+		static Entity* CreatePlainEntity(const Vec2& pos, EntityManager& entityManager)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addGroup(ENTITY_GROUP::DEFAULT);
 			return entity;
 		}
 		//!画像を表示できるエンティティの生成
-		inline static Entity* CreateEntity(const char* graphicName, const Vec2& pos, EntityManager& entityManager ,const Group group)
+		static Entity* CreateEntity(const char* graphicName, const Vec2& pos, EntityManager& entityManager ,const Group group)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
 			entity->addComponent<SpriteDraw>(graphicName);
@@ -37,10 +37,10 @@ namespace ECS
 			return entity;
 		}
 		//!画像を表示できるエンティティの生成
-		inline static Entity* CreateRectEntity(const char* graphicName, const Vec2& pos, const Rectangle& rectangle, EntityManager& entityManager, const Group group)
+		static Entity* CreateRectEntity(const char* graphicName, const Vec2& pos, const Rectangle& rectangle, EntityManager& entityManager, const Group group)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
 			entity->addComponent<Rectangle>(rectangle);
@@ -49,10 +49,10 @@ namespace ECS
 			return entity;
 		}
 		//!分割画像を表示できるエンティティの生成
-		inline static Entity* CreateMultiSpriteEntity(const char* graphicName, const Vec2& pos, EntityManager& entityManager, const Group group)
+		static Entity* CreateMultiSpriteEntity(const char* graphicName, const Vec2& pos, EntityManager& entityManager, const Group group)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
 			entity->addComponent<MultiSpriteDraw>(graphicName);

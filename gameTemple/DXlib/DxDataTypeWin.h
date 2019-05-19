@@ -361,21 +361,21 @@ struct IUnknown;
 						#ifdef DX_USE_VC8_BULLET_PHYSICS_LIB
 							#ifdef _WIN64
 								#ifdef _DEBUG
-									#pragma comment( lib, "libbulletcollision_vc8_x64_d.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc8_x64_d.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc8_x64_d.lib" )
 									#pragma comment( lib, "libbulletmath_vc8_x64_d.lib" )
 								#else
-									#pragma comment( lib, "libbulletcollision_vc8_x64.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc8_x64.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc8_x64.lib" )
 									#pragma comment( lib, "libbulletmath_vc8_x64.lib" )
 								#endif
 							#else
 								#ifdef _DEBUG
-									#pragma comment( lib, "libbulletcollision_vc8_d.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc8_d.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc8_d.lib" )
 									#pragma comment( lib, "libbulletmath_vc8_d.lib" )
 								#else
-									#pragma comment( lib, "libbulletcollision_vc8.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc8.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc8.lib" )
 									#pragma comment( lib, "libbulletmath_vc8.lib" )
 								#endif
@@ -383,21 +383,21 @@ struct IUnknown;
 						#else // DX_USE_VC8_BULLET_PHYSICS_LIB
 							#ifdef _WIN64
 								#ifdef _DEBUG
-									#pragma comment( lib, "libbulletcollision_vc8_x64_d.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc8_x64_d.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc8_x64_d.lib" )
 									#pragma comment( lib, "libbulletmath_vc8_x64_d.lib" )
 								#else
-									#pragma comment( lib, "libbulletcollision_vc8_x64.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc8_x64.lib" )	// Visual C++ 8.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc8_x64.lib" )
 									#pragma comment( lib, "libbulletmath_vc8_x64.lib" )
 								#endif
 							#else
 								#ifdef _DEBUG
-									#pragma comment( lib, "libbulletcollision_vc6_d.lib" )	// Visual C++ 6.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc6_d.lib" )	// Visual C++ 6.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc6_d.lib" )
 									#pragma comment( lib, "libbulletmath_vc6_d.lib" )
 								#else
-									#pragma comment( lib, "libbulletcollision_vc6.lib" )	// Visual C++ 6.0 でコンパイルした Bullet Physics ライブラリ 
+									#pragma comment( lib, "libbulletcollision_vc6.lib" )	// Visual C++ 6.0 でコンパイルした Bullet Physics2D ライブラリ 
 									#pragma comment( lib, "libbulletdynamics_vc6.lib" )
 									#pragma comment( lib, "libbulletmath_vc6.lib" )
 								#endif
@@ -545,7 +545,7 @@ struct IUnknown;
 						#endif // _MSC_VER >= 1700
 					#endif // _MSC_VER < 1700
 				#else // _MSC_VER
-					#pragma comment( lib, "libbulletcollision.lib" )	// Bullet Physics ライブラリ 
+					#pragma comment( lib, "libbulletcollision.lib" )	// Bullet Physics2D ライブラリ 
 					#pragma comment( lib, "libbulletdynamics.lib" )
 					#pragma comment( lib, "libbulletmath.lib" )
 				#endif // _MSC_VER

@@ -159,7 +159,7 @@ public:
 	* テンプレート引数に指定したコンポーネント同士で衝突判定を行います
 	* @return bool
 	*/
-	template<class T = ECS::CircleCollider, class T2 = ECS::Position>
+	template<class T = ECS::CircleCollider, class T2 = ECS::Position2D>
 	[[nodiscard]] inline static bool CircleAndPoint(const ECS::Entity* e1, const ECS::Entity* e2)
 	{
 		if (!e1->hasComponent<T>() || !e2->hasComponent<T2>())
@@ -199,11 +199,11 @@ public:
 	* @brief 線分と線分の当たり判定
 	* @param e1 Entity
 	* @param e2 Entity
-	* LineDataが必要です
+	* LineData2Dが必要です
 	* テンプレート引数に指定したコンポーネント同士で衝突判定を行います
 	* @return bool
 	*/
-	template<class T1 = ECS::LineData, class T2 = ECS::LineData>
+	template<class T1 = ECS::LineData2D, class T2 = ECS::LineData2D>
 	[[nodiscard]] inline static bool LineAndLine(const ECS::Entity* e1, const ECS::Entity* e2)
 	{
 		if (!e1->hasComponent<T1>() || !e2->hasComponent<T2>())
@@ -252,7 +252,7 @@ public:
 	* @param l2 線分2
 	* @return bool
 	*/
-	[[nodiscard]] inline static bool LineAndLine(const ECS::LineData& l1, const ECS::LineData& l2) noexcept
+	[[nodiscard]] inline static bool LineAndLine(const ECS::LineData2D& l1, const ECS::LineData2D& l2) noexcept
 	{
 		{
 			const float baseX = l2.p2.x - l2.p1.x;
@@ -296,7 +296,7 @@ public:
 	* テンプレート引数に指定したコンポーネント同士で衝突判定を行います
 	* @return bool
 	*/
-	template<class T1 = ECS::CircleCollider, class T2 = ECS::LineData>
+	template<class T1 = ECS::CircleCollider, class T2 = ECS::LineData2D>
 	[[nodiscard]] inline static bool CirecleAndLine(const ECS::Entity* e1, const ECS::Entity* e2)
 	{
 
@@ -344,7 +344,7 @@ public:
 	* @param l   線分
 	* @return bool
 	*/
-	[[nodiscard]] inline static bool CirecleAndLine(const Vec2& pos,const float r, const ECS::LineData& l) noexcept
+	[[nodiscard]] inline static bool CirecleAndLine(const Vec2& pos,const float r, const ECS::LineData2D& l) noexcept
 	{
 		const Vec2 A = { pos.x - l.p1.x,pos.y - l.p1.y };		//線分の始点から円の中心点までのベクトルA
 		const Vec2 B = { l.p2.x - l.p1.x,l.p2.y - l.p1.y };		//線分の始点から線分の終点までのベクトルB

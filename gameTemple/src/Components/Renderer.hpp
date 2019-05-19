@@ -146,7 +146,7 @@ namespace ECS
 
 	/*!
 	@brief 多機能な描画機能です。画像の中心が基準です
-	* - Transfromが必要です。
+	* - Transfrom2Dが必要です。
 	* - 色を変えたい場合はColorが必要です
 	* - アルファブレンドをしたい場合はAlphaBlendが必要です
 	*/
@@ -155,8 +155,8 @@ namespace ECS
 	private:
 		bool isDiv_ = false;
 	protected:
-		Position* pos_ = nullptr;
-		Scale* scale_ = nullptr;
+		Position2D* pos_ = nullptr;
+		Scale2D* scale_ = nullptr;
 		Rotation* rota_ = nullptr;
 		Color* color_ = nullptr;
 		AlphaBlend* blend_ = nullptr;
@@ -179,9 +179,9 @@ namespace ECS
 		}
 		void initialize() override
 		{
-			pos_ = &owner->getComponent<Position>();
+			pos_ = &owner->getComponent<Position2D>();
 			rota_ = &owner->getComponent<Rotation>();
-			scale_ = &owner->getComponent<Scale>();
+			scale_ = &owner->getComponent<Scale2D>();
 			if (isDiv_)
 			{
 				GetGraphSize(ResourceManager::GetGraph().getDivHandle(name_, 0), &size_.x, &size_.y);
@@ -243,7 +243,7 @@ namespace ECS
 
 	/*!
 	@brief 多機能な分割画像描画機能です。画像の左上が基準です
-	* - Transfromが必要です。
+	* - Transfrom2Dが必要です。
 	* - 色を変えたい場合はColorが必要です
 	* - アルファブレンドをしたい場合はAlphaBlendが必要です
 	* - setPivotで基準座標を変更できます
@@ -291,7 +291,7 @@ namespace ECS
 
 	/*!
 	@brief 多機能な指定した範囲を描画する機能です。左上基準です
-	* - Transfromが必要です。
+	* - Transfrom2Dが必要です。
 	* - 色を変えたい場合はColorが必要です
 	* - アルファブレンドをしたい場合はAlphaBlendが必要です
 	* - Rectangleが必要です。
@@ -308,9 +308,9 @@ namespace ECS
 		{}
 		void initialize() override
 		{
-			__super::pos_ = &owner->getComponent<Position>();
+			__super::pos_ = &owner->getComponent<Position2D>();
 			__super::rota_ = &owner->getComponent<Rotation>();
-			__super::scale_ = &owner->getComponent<Scale>();
+			__super::scale_ = &owner->getComponent<Scale2D>();
 			rect_ = &owner->getComponent<Rectangle>();
 			RenderUtility::SetRenderDetail(owner, &color_, &blend_);
 		}

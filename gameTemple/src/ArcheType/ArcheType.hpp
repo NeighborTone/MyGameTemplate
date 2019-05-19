@@ -17,11 +17,11 @@ namespace ECS
 {
 	struct ArcheType
 	{
-		//!Transformだけ持っているエンティティの生成
+		//!Transform2Dだけ持っているエンティティの生成
 		static Entity* CreatePlainEntity(const Vec2& pos, EntityManager& entityManager)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addGroup(ENTITY_GROUP::DEFAULT);
 			return entity;
 		}
@@ -29,7 +29,7 @@ namespace ECS
 		static Entity* CreateEntity(const char* graphicName, const Vec2& pos, EntityManager& entityManager ,const Group group)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
 			entity->addComponent<SpriteDraw>(graphicName);
@@ -40,7 +40,7 @@ namespace ECS
 		static Entity* CreateRectEntity(const char* graphicName, const Vec2& pos, const Rectangle& rectangle, EntityManager& entityManager, const Group group)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
 			entity->addComponent<Rectangle>(rectangle);
@@ -52,7 +52,7 @@ namespace ECS
 		static Entity* CreateMultiSpriteEntity(const char* graphicName, const Vec2& pos, EntityManager& entityManager, const Group group)
 		{
 			auto* entity = &entityManager.addEntity();
-			entity->addComponent<Transform>(pos);
+			entity->addComponent<Transform2D>(pos);
 			entity->addComponent<Color>();
 			entity->addComponent<AlphaBlend>();
 			entity->addComponent<MultiSpriteDraw>(graphicName);

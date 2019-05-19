@@ -118,7 +118,7 @@
 // モデルデータを扱う機能を使用しない方は次のコメントを外してください
 //#define DX_NON_MODEL
 
-// Bullet Physics をリンクしない場合は次のコメントを外してください
+// Bullet Physics2D をリンクしない場合は次のコメントを外してください
 // ※DxUseCLib.lib も再コンパイルする必要があります
 //#define DX_NON_BULLET_PHYSICS
 

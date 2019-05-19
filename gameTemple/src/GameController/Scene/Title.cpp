@@ -20,11 +20,10 @@ namespace Scene
 			float r = 0;
 			Sphere()
 			{
-				
+				json.load("data.json");
 			}
 			void draw()
 			{
-				auto a = json.load("data.json");
 				MATERIALPARAM MatParam;
 				auto d_r = json.getParameter<float>("mat", "Diffuse", 0);
 				auto d_g = json.getParameter<float>("mat", "Diffuse", 1);
@@ -118,7 +117,6 @@ namespace Scene
 					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
 					GetColor(int(d_r * 255), (int(d_g * 255)), (int(d_b * 255))),
 					true);
-
 			}
 		};
 		Cube c[5];
