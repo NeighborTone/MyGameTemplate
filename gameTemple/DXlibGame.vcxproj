@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="src\ECS\ECS.cpp" />
     <ClCompile Include="src\GameController\GameController.cpp" />
     <ClCompile Include="src\GameController\Scene\Game.cpp" />
     <ClCompile Include="src\GameController\Scene\Title.cpp" />
-    <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ArcheType\ArcheType.hpp" />

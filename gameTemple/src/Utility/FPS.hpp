@@ -51,7 +51,7 @@ private:
 			int waitTime = count_ * 1000 / FPS - tookTime;	//待つべき時間
 			if (waitTime > 0)
 			{
-				Sleep(waitTime);	//待機
+				DxLib::WaitTimer(waitTime);	//待機
 			}
 		}
 		void debugOut()

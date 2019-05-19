@@ -96,7 +96,7 @@ public:
 	*/
 	[[nodiscard]] static const T Dot(const Vec2T& v1, const Vec2T& v2)
 	{
-		return v1.x * v2.x + v1.y * v2.y;
+		return v1.x* v2.x + v1.y * v2.y;
 	}
 
 	/*!
@@ -105,12 +105,12 @@ public:
 	*/
 	[[nodiscard]] static const T Cross(const Vec2T& v1, const Vec2T& v2)
 	{
-		return v1.x * v2.y - v2.x * v1.y;
+		return v1.x* v2.y - v2.x * v1.y;
 	}
 	/*
 	* @brief 直線上にある２つのベクトル間を補間します
 	*/
-	[[nodiscard]] static const Vec2T Lerp(Vec2T& start,  Vec2T& end, const T& percent)
+	[[nodiscard]] static const Vec2T Lerp(Vec2T& start, Vec2T& end, const T& percent)
 	{
 		return (start * (1.f - percent)) + (end * percent);
 	}
@@ -119,7 +119,7 @@ public:
 	* @brief 2点間の距離を返します
 	* @return 距離
 	*/
-	[[nodiscard]] const T getDistance(const Vec2T& v) const
+	[[nodiscard]] const T getDistance(const Vec2T & v) const
 	{
 		const T dx = x - v.x;
 		const T dy = y - v.y;
@@ -139,7 +139,7 @@ public:
 	* @brief 自分自身を正規化した値を返します
 	* @return Vec2
 	*/
-	const Vec2T&  normalize()
+	const Vec2T& normalize()
 	{
 		T tmp = length();
 		x /= tmp;
@@ -150,7 +150,7 @@ public:
 	* @brief 自分自身を正規化した値のコピーを返します。自身の値は変わりません
 	* @return Vec2
 	*/
-	[[nodiscard]] const Vec2T&  getNormalize() const
+	[[nodiscard]] const Vec2T& getNormalize() const
 	{
 		Vec2T result = *this;
 		return result.normalize();
@@ -160,7 +160,7 @@ public:
 	* @brief 正規化しします
 	* @return Vec2
 	*/
-	[[nodiscard]] static void Normalize(Vec2T& normal)
+	static void Normalize(Vec2T & normal)
 	{
 		normal.normalize();
 	}
@@ -175,126 +175,126 @@ public:
 		return { -x, -y };
 	}
 
-	Vec2T operator+(const Vec2T& v) const
+	Vec2T operator+(const Vec2T & v) const
 	{
 		Vec2T ret(*this);
 		ret += v;
 		return ret;
 	}
 
-	Vec2T operator+(const T& t)
+	Vec2T operator+(const T & t)
 	{
 		Vec2T ret(*this);
 		ret += t;
 		return ret;
 	}
 
-	Vec2T operator-(const Vec2T& v) const
+	Vec2T operator-(const Vec2T & v) const
 	{
 		Vec2T ret(*this);
 		ret -= v;
 		return ret;
 	}
 
-	Vec2T operator-(const T& t) const
+	Vec2T operator-(const T & t) const
 	{
 		Vec2T ret(*this);
 		ret -= t;
 		return ret;
 	}
 
-	Vec2T operator*(const Vec2T& v)
+	Vec2T operator*(const Vec2T & v)
 	{
 		Vec2T ret(*this);
 		ret *= v;
 		return ret;
 	}
 
-	Vec2T operator*(const T& t)
+	Vec2T operator*(const T & t)
 	{
 		Vec2T ret(*this);
 		ret *= t;
 		return ret;
 	}
 
-	Vec2T operator/(const Vec2T& v)
+	Vec2T operator/(const Vec2T & v)
 	{
 		Vec2T ret(*this);
 		ret /= v;
 		return ret;
 	}
 
-	Vec2T operator/(const T& t)
+	Vec2T operator/(const T & t)
 	{
 		Vec2T ret(*this);
 		ret /= t;
 		return ret;
 	}
 
-	Vec2T& operator=(const Vec2T& v)
+	Vec2T& operator=(const Vec2T & v)
 	{
 		x = v.x;
 		y = v.y;
 		return *this;
 	}
 
-	Vec2T& operator=(const T& v)
+	Vec2T& operator=(const T & v)
 	{
 		x = v;
 		y = v;
 		return *this;
 	}
 
-	Vec2T& operator+=(const Vec2T& v)
+	Vec2T& operator+=(const Vec2T & v)
 	{
 		x += v.x;
 		y += v.y;
 		return *this;
 	}
 
-	Vec2T& operator+=(const T& v)
+	Vec2T& operator+=(const T & v)
 	{
 		x += v;
 		y += v;
 		return *this;
 	}
 
-	Vec2T& operator-=(const Vec2T& v)
+	Vec2T& operator-=(const Vec2T & v)
 	{
 		x -= v.x;
 		y -= v.y;
 		return *this;
 	}
 
-	Vec2T& operator-=(const T& v)
+	Vec2T& operator-=(const T & v)
 	{
 		x -= v;
 		y -= v;
 		return *this;
 	}
 
-	Vec2T& operator*=(const Vec2T& v)
+	Vec2T& operator*=(const Vec2T & v)
 	{
 		x *= v.x;
 		y *= v.y;
 		return *this;
 	}
 
-	Vec2T& operator*=(const T& v)
+	Vec2T& operator*=(const T & v)
 	{
 		x *= v;
 		y *= v;
 		return *this;
 	}
 
-	Vec2T& operator/=(const Vec2T& v)
+	Vec2T& operator/=(const Vec2T & v)
 	{
 		x /= v.x;
 		y /= v.y;
 		return *this;
 	}
 
-	Vec2T& operator/=(const T& v)
+	Vec2T& operator/=(const T & v)
 	{
 		x /= v;
 		y /= v;
@@ -308,11 +308,11 @@ public:
 
 	}
 
-	bool operator==(const Vec2T &v) const
+	bool operator==(const Vec2T & v) const
 	{
 		return x == v.x && y == v.y;
 	}
-	bool operator!=(const Vec2T &v) const
+	bool operator!=(const Vec2T & v) const
 	{
 		return !(*this == v);
 	}
@@ -354,7 +354,7 @@ public:
 		y = v.y;
 		z = v.z;
 	}
-	
+
 	~Vec3T() {};
 	/*!
 	* @brief オフセット値を返します
@@ -395,7 +395,7 @@ public:
 	*/
 	[[nodiscard]] static const T Dot(const Vec3T& v1, const Vec3T& v2)
 	{
-		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+		return v1.x* v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
 
 	/*!
@@ -442,7 +442,7 @@ public:
 	* @brief 自分自身を正規化した値のコピーを返します。自身の値は変わりません
 	* @return Vec3
 	*/
-	[[nodiscard]] const Vec3T& getNormalize() const
+	[[nodiscard]] const Vec3T& Normalize() const
 	{
 		Vec3T result = *this;
 		return result.normalize();
@@ -451,7 +451,7 @@ public:
 	/*
 	* @brief 直線上にある２つのベクトル間を補間します
 	*/
-	[[nodiscard]] static const Vec3T Lerp(Vec3T& start, Vec3T& end, const T& percent)
+	[[nodiscard]] static const Vec3T Lerp(Vec3T & start, Vec3T & end, const T & percent)
 	{
 		return start * (1.f - percent) + end * percent;
 	}
@@ -462,7 +462,7 @@ public:
 	* @param[in] normal   平面の法線
 	* @return 距離
 	*/
-	[[nodiscard]] const T getDistanceToPlain(const Vec3T& plainPos, const Vec3T& normal) const
+	[[nodiscard]] const T getDistanceToPlain(const Vec3T & plainPos, const Vec3T & normal) const
 	{
 		Vec3T sub = *this - plainPos;
 		T dist = Vec3T::Dot(sub, normal);
@@ -475,19 +475,18 @@ public:
 	* @param[in] normal   法線
 	* @return 反射ベクトル
 	*/
-	[[nodiscard]] static const Vec3T GetReflection(const Vec3T& velocity, const Vec3T& normal)
+	[[nodiscard]] static const Vec3T GetReflection(const Vec3T & velocity, const Vec3T & normal)
 	{
 		T h = std::abs((velocity.dot(normal)));
-		Vec3T reflect = velocity + normal *2 * h;
+		Vec3T reflect = velocity + normal * 2 * h;
 		return reflect;
 	}
 
 	/*!
-	* @brief 反射ベクトルを求めます
-	* @param[in,out] velocity 速度
+	* @brief 反射ベクトルを求めます。thisが反射ベクトル化します
 	* @param[in] normal  法線
 	*/
-	[[nodiscard]] const void calcReflection(const Vec3T& normal)
+	const void calcReflection(const Vec3T & normal)
 	{
 		T h = std::abs(Vec3T::Dot(*this, normal));
 		Vec3T reflect = *this + normal * 2 * h;
@@ -509,7 +508,7 @@ public:
 	* @note C++17でないとエラー?
 	* @return 距離
 	*/
-	[[nodiscard]] const T getDistance(const Vec3T& v) const
+	[[nodiscard]] const T getDistance(const Vec3T & v) const
 	{
 		const T dx = x - v.x;
 		const T dy = y - v.y;
@@ -517,7 +516,7 @@ public:
 		return std::hypot(dx, dy, dz);
 	}
 
-	Vec3T& operator=(const  Vec3T& v)
+	Vec3T& operator=(const  Vec3T & v)
 	{
 		x = v.x;
 		y = v.y;
@@ -525,7 +524,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator=(const  T& v)
+	Vec3T& operator=(const  T & v)
 	{
 		x = v;
 		y = v;
@@ -543,63 +542,63 @@ public:
 		return { -x, -y, -z };
 	}
 
-	Vec3T operator+(const Vec3T& v) const
+	Vec3T operator+(const Vec3T & v) const
 	{
 		Vec3T ret(*this);
 		ret += v;
 		return ret;
 	}
 
-	Vec3T operator+(const T& t)
+	Vec3T operator+(const T & t)
 	{
 		Vec3T ret(*this);
 		ret += t;
 		return ret;
 	}
 
-	Vec3T operator-(const Vec3T& v) const
+	Vec3T operator-(const Vec3T & v) const
 	{
 		Vec3T ret(*this);
 		ret -= v;
 		return ret;
 	}
 
-	Vec3T operator-(const T& t)
+	Vec3T operator-(const T & t)
 	{
 		Vec3T ret(*this);
 		ret -= t;
 		return ret;
 	}
 
-	Vec3T operator*(const Vec3T& v)
+	Vec3T operator*(const Vec3T & v)
 	{
 		Vec3T ret(*this);
 		ret *= v;
 		return ret;
 	}
 
-	const Vec3T operator*(const T& t) const
+	const Vec3T operator*(const T & t) const
 	{
 		Vec3T ret(*this);
 		ret *= t;
 		return ret;
 	}
 
-	Vec3T operator/(const Vec3T& v)
+	Vec3T operator/(const Vec3T & v)
 	{
 		Vec3T ret(*this);
 		ret /= v;
 		return ret;
 	}
 
-	Vec3T operator/(const T& t)
+	Vec3T operator/(const T & t)
 	{
 		Vec3T ret(*this);
 		ret /= t;
 		return ret;
 	}
 
-	Vec3T& operator+=(const Vec3T& v)
+	Vec3T& operator+=(const Vec3T & v)
 	{
 		x += v.x;
 		y += v.y;
@@ -607,7 +606,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator+=(const T& v)
+	Vec3T& operator+=(const T & v)
 	{
 		x += v;
 		y += v;
@@ -615,7 +614,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator-=(const Vec3T& v)
+	Vec3T& operator-=(const Vec3T & v)
 	{
 		x -= v.x;
 		y -= v.y;
@@ -623,7 +622,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator-=(const T& v)
+	Vec3T& operator-=(const T & v)
 	{
 		x -= v;
 		y -= v;
@@ -631,7 +630,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator*=(const Vec3T& v)
+	Vec3T& operator*=(const Vec3T & v)
 	{
 		x *= v.x;
 		y *= v.y;
@@ -639,7 +638,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator*=(const T& v)
+	Vec3T& operator*=(const T & v)
 	{
 		x *= v;
 		y *= v;
@@ -647,7 +646,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator/=(const Vec3T& v)
+	Vec3T& operator/=(const Vec3T & v)
 	{
 		x /= v.x;
 		y /= v.y;
@@ -655,7 +654,7 @@ public:
 		return *this;
 	}
 
-	Vec3T& operator/=(const T& v)
+	Vec3T& operator/=(const T & v)
 	{
 		x /= v;
 		y /= v;
@@ -670,11 +669,11 @@ public:
 		if (idx == 2) return z;
 	}
 
-	bool operator==(const Vec3T &v) const
+	bool operator==(const Vec3T & v) const
 	{
 		return (x == v.x && y == v.y && v.z == z);
 	}
-	bool operator!=(const Vec3T &v) const
+	bool operator!=(const Vec3T & v) const
 	{
 		return !(*this == v);
 	}

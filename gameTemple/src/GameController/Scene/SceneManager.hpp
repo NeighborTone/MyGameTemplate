@@ -6,8 +6,6 @@
 */
 #pragma once
 #include "../../ECS/ECS.hpp"
-#include "../../Utility/Utility.hpp"
-#include "../../Utility/Parameter.hpp"
 /**
 * @brief
 * @param  SceneName	   切り替えたい次のシーン

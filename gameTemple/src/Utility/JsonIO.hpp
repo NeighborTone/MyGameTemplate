@@ -102,6 +102,7 @@ public:
 		return static_cast<int>(obj_[name].get<number>());
 	}
 
+	
 	/*
 	読み込んだjsonファイルから配列の値を取得します
 	@param name パラメータ名
@@ -116,6 +117,22 @@ public:
 		const auto& arr = obj_[name].get<jsonArray>().at(index);
 		return arr.get<T>();
 	}
+
+	/*
+	読み込んだjsonファイルから配列の値を取得します
+	@param name パラメータ名
+	@param index 配列の要素番号
+	@retrun 指定したパラメータ
+	@details number,bool,std::stringが指定できます。テンプレート引数で数値型はnumberを指定してください。
+	*/
+	template <>
+	[[nodiscard]] const float getParameter(const std::string& name, const size_t index)
+	{
+		picojson::object obj_ = v_.get<picojson::object>();
+		const auto& arr = obj_[name].get<jsonArray>().at(index);
+		return static_cast<float>(arr.get<number>());
+	}
+
 
 	/*
 	読み込んだjsonファイルから配列の値を取得します

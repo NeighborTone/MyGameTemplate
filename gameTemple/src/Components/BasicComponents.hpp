@@ -11,7 +11,7 @@
 #include "../Utility/Math.hpp"
 #include <DxLib.h>
 #include <functional>
-
+#include "../Utility/Utility.hpp"
 namespace ECS
 {
 	/*!
@@ -202,7 +202,7 @@ namespace ECS
 			collisionFunc_ = func;
 		}
 		//!引数に指定したEntityにめり込まないようにする
-		void pushOutEntity(std::vector<Entity*>&  e)
+		void pushOutEntity(std::vector<Entity*>& e)
 		{
 			otherEntity_ = e;
 		}
@@ -212,12 +212,12 @@ namespace ECS
 	@brief PositionとRotationとScaleの親子を作ります
 	@detail 親子関係を作ると生のPosition等のデータを直接変更できなくなります
 	- このコンポーネントがある場合は、translate系メソッドで動かすことができます
-	*/ 
+	*/
 	class Transform final : public ComponentSystem
 	{
 	private:
 		Vec2 initPos_;
-		Vec2 initScale_{1.f,1.f};
+		Vec2 initScale_{ 1.f,1.f };
 		Vec2 localPos_;
 		Vec2 localScale_;
 		float initRota_ = 0;
@@ -230,18 +230,18 @@ namespace ECS
 
 	public:
 		Transform() = default;
-		Transform(const Vec2& pos):
+		Transform(const Vec2& pos) :
 			initPos_(pos)
 		{}
 		Transform(const Vec2& pos, const Vec2& scale) :
 			initPos_(pos),
-			initRota_(0.f),
-			initScale_(scale)
+			initScale_(scale),
+			initRota_(0.f)
 		{}
 		Transform(const Vec2& pos, const Vec2& scale, const float& rotation) :
 			initPos_(pos),
-			initRota_(rotation),
-			initScale_(scale)
+			initScale_(scale),
+			initRota_(rotation)
 		{}
 
 		void initialize() override
@@ -287,8 +287,8 @@ namespace ECS
 		- 親との縁を切る場合はnullptrを指定してください
 		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
-		void setParent(const Entity* const pEntity)
-		{	
+		void setParent(const Entity * const pEntity)
+		{
 			if (pEntity == nullptr)
 			{
 				parent_ = nullptr;
@@ -313,20 +313,20 @@ namespace ECS
 		- 子を設定すると子のEntityは生のPosition等のデータを直接変更できなくなります
 		- 設定後はsetLocal系のメソッドやtranslate系のメソッドで動かしてください
 		*/
-		void addChild(const Entity* const child)
+		void addChild(const Entity * const child)
 		{
 			assert(child != nullptr);
 			child->getComponent<Transform>().setParent(owner);
 		}
 		//!指定した子を取得します
-		Transform* getChild(const size_t& id)
+		Transform* getChild(const size_t & id)
 		{
 			return childs_.at(id);
 		}
 		/*Entityをtranslation分移動します
 		@param translation 移動量
 		*/
-		void translatePosition(const Vec2& translation)
+		void translatePosition(const Vec2 & translation)
 		{
 			if (parent_)
 			{
@@ -356,7 +356,7 @@ namespace ECS
 		/*Entityをtranslation分拡大します
 		@param translation 拡大量
 		*/
-		void translateScale(const Vec2& translation)
+		void translateScale(const Vec2 & translation)
 		{
 			if (parent_)
 			{
@@ -375,7 +375,7 @@ namespace ECS
 			localPos_.y = y;
 		}
 		//!Entityの相対座標を設定します
-		void setLocalPosition(const Vec2& setPos)
+		void setLocalPosition(const Vec2 & setPos)
 		{
 			localPos_.x = setPos.x;
 			localPos_.y = setPos.y;
@@ -392,7 +392,7 @@ namespace ECS
 			localScale_.y = scaleY;
 		}
 		//!Entityの相対拡大率を設定します
-		void setLocalScale(const Vec2& scale)
+		void setLocalScale(const Vec2 & scale)
 		{
 			localScale_.x = scale.x;
 			localScale_.y = scale.y;

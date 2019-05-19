@@ -11,8 +11,6 @@
 #include "../../System/System.hpp"
 #include "../../ArcheType/ArcheType.hpp"
 #include "../../ArcheType/Primitive2D.hpp"
-#include "../../Utility/Parameter.hpp"
-#include "../../Utility/String.hpp"
 #include "../../Utility/JsonIO.hpp"
 
 namespace Scene

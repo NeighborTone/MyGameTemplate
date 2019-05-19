@@ -7,7 +7,6 @@
 #pragma once
 #include "../ECS/ECS.hpp"
 #include "BasicComponents.hpp"
-#include "../Collision/Collision.hpp"
 #include <DxLib.h>
 
 namespace ECS

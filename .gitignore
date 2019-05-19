@@ -1,4 +1,10 @@
 
-gameTemple/\.vs/
+.vs/
 
-gameTemple/x64/
+x64/
+
+x86/
+
+ARM
+
+ARM64

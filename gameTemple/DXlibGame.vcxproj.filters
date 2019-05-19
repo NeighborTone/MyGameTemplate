@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="src\ECS\ECS.cpp">
       <Filter>src\ECS</Filter>
     </ClCompile>
@@ -14,6 +13,7 @@
     <ClCompile Include="src\GameController\Scene\Title.cpp">
       <Filter>src\GameController\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">

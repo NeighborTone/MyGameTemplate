@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="src\ECS\ECS.cpp">
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">c11</CLanguageStandard>
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">c11</CLanguageStandard>
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">c11</CLanguageStandard>
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">c11</CLanguageStandard>
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">c11</CLanguageStandard>
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x86'">c11</CLanguageStandard>
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">c11</CLanguageStandard>
+      <CLanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x64'">c11</CLanguageStandard>
+    </ClCompile>
+    <ClCompile Include="src\GameController\GameController.cpp" />
+    <ClCompile Include="src\GameController\Scene\Title.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ArcheType\ArcheType.hpp" />
+    <ClInclude Include="src\ArcheType\Primitive2D.hpp" />
+    <ClInclude Include="src\Class\ResourceManager.hpp" />
+    <ClInclude Include="src\Class\Sound.hpp" />
+    <ClInclude Include="src\Collision\Collision.hpp" />
+    <ClInclude Include="src\Components\BasicComponents.hpp" />
+    <ClInclude Include="src\Components\Collider.hpp" />
+    <ClInclude Include="src\Components\Renderer.hpp" />
+    <ClInclude Include="src\ECS\ECS.hpp" />
+    <ClInclude Include="src\GameController\GameController.h" />
+    <ClInclude Include="src\GameController\GameMain.hpp" />
+    <ClInclude Include="src\GameController\Scene\Scene.hpp" />
+    <ClInclude Include="src\GameController\Scene\SceneManager.hpp" />
+    <ClInclude Include="src\GameController\Scene\Title.h" />
+    <ClInclude Include="src\Input\Input.hpp" />
+    <ClInclude Include="src\System\System.hpp" />
+    <ClInclude Include="src\Utility\Counter.hpp" />
+    <ClInclude Include="src\Utility\DXFileRead.hpp" />
+    <ClInclude Include="src\Utility\Easing.hpp" />
+    <ClInclude Include="src\Utility\FPS.hpp" />
+    <ClInclude Include="src\Utility\JsonIO.hpp" />
+    <ClInclude Include="src\Utility\Math.hpp" />
+    <ClInclude Include="src\Utility\Parameter.hpp" />
+    <ClInclude Include="src\Utility\picojson.h" />
+    <ClInclude Include="src\Utility\Random.hpp" />
+    <ClInclude Include="src\Utility\String.hpp" />
+    <ClInclude Include="src\Utility\Utility.hpp" />
+    <ClInclude Include="src\Utility\Vec.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{28d92dcd-7a64-41fc-8e45-7664003024a7}</ProjectGuid>
+    <Keyword>Android</Keyword>
+    <RootNamespace>GameTemplate_Android</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <ApplicationType>Android</ApplicationType>
+    <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <UseMultiToolTask>true</UseMultiToolTask>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/ARM64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/ARM64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/ARM64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/ARM64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/ARM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/ARM;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/ARM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/ARM;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/x64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/x64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>./DXlib/x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <EnableNeonCodegen>true</EnableNeonCodegen>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DataLevelLinking>false</DataLevelLinking>
+      <CLanguageStandard>Default</CLanguageStandard>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;stdc++;GLESv2;OpenSLES;m;DxLib;DxUseCLib;jpeg;png;zlib;tiff;theora_static;vorbis_static;vorbisfile_static;ogg_static;bullet;opus</LibraryDependencies>
+      <AdditionalLibraryDirectories>./DXlib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IncrementalLink>false</IncrementalLink>
+      <WholeArchiveBegin>false</WholeArchiveBegin>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

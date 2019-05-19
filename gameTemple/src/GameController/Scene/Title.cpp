@@ -5,7 +5,7 @@
 #include "../GameController.h"
 #include "../src/Utility/Parameter.hpp"
 #include "../../Utility/Math.hpp"
-#include <filesystem>
+//#include <filesystem>
 namespace Scene
 {
 	using namespace ECS;
@@ -14,17 +14,17 @@ namespace Scene
 	{
 		struct Sphere
 		{
-			JsonRead json{};
+			JsonRead json;
 
 			Vec3 pos;
 			float r = 0;
 			Sphere()
 			{
-				json.load("mat.json");
+				
 			}
 			void draw()
 			{
-				
+				auto a = json.load("data.json");
 				MATERIALPARAM MatParam;
 				auto d_r = json.getParameter<float>("mat", "Diffuse", 0);
 				auto d_g = json.getParameter<float>("mat", "Diffuse", 1);
@@ -74,7 +74,7 @@ namespace Scene
 			Vec3 scale;
 			Cube()
 			{
-				json.load("mat.json");
+				json.load("data.json");
 			}
 			void draw()
 			{
@@ -142,23 +142,23 @@ namespace Scene
 		: AbstractScene(sceneTitleChange)
 		, entityManager_(entityManager)
 	{
-		namespace sys = std::filesystem;
+		//namespace sys = std::filesystem;
 
-		sys::path p("Resource/image/"); // 列挙の起点
+		//sys::path p("Resource/image/"); // 列挙の起点
 
-		std::for_each(sys::directory_iterator(p), sys::directory_iterator(),
-			[=](const sys::path & p) mutable
-			{
-				if (sys::is_regular_file(p))
-				{
-					;
+		//std::for_each(sys::directory_iterator(p), sys::directory_iterator(),
+		//	[=](const sys::path & p) mutable
+		//	{
+		//		if (sys::is_regular_file(p))
+		//		{
+		//			;
 
-					ResourceManager::GetGraph().load("Resource/image/" + p.filename().string(), p.filename().string() + "p");
-				}
-				//else if (sys::is_directory(p)) { // ディレクトリなら...
-				//	std::cout << "dir.: " << p.string() << std::endl;
-				//}
-			});
+		//			ResourceManager::GetGraph().load("Resource/image/" + p.filename().string(), p.filename().string() + "p");
+		//		}
+		//		//else if (sys::is_directory(p)) { // ディレクトリなら...
+		//		//	std::cout << "dir.: " << p.string() << std::endl;
+		//		//}
+		//	});
 	}
 
 	void Title::initialize()

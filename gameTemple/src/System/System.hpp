@@ -7,10 +7,8 @@
 #pragma once
 #include <DxLib.h>
 #include <cassert>
-#include "../Utility/JsonIO.hpp"
 #include "../Input/Input.hpp"
 #ifndef __ANDROID__
-#include "../Utility/DXFileRead.hpp"
 #include <Windows.h>
 namespace
 {
@@ -30,26 +28,20 @@ namespace
 	}
 }
 #endif
- /*!
- @brief DXlibの処理を隠蔽します
- */
+/*!
+@brief DXlibの処理を隠蔽します
+*/
 class System final
 {
 private:
-	int w_;
-	int h_;
+	int w_ = 0;
+	int h_ = 0;
 	void systemInit()
 	{
-#if defined(_WIN64) || defined(_WIN32)
-		JsonRead json("systemconf.json");
-#endif
-#if defined(__ANDROID__)
-		JsonRead json(DXFileRead().GetPath("", "/systemconf.json"));
-#endif
 		//ウィンドウを常にアクティブにするか？
-		SetAlwaysRunFlag(json.getParameter<bool>("RunFlag"));
+		SetAlwaysRunFlag(true);
 		//ログ消し
-		SetOutApplicationLogValidFlag(json.getParameter<bool>("Log"));
+		SetOutApplicationLogValidFlag(false);
 		//縦横比維持
 		SetFullScreenResolutionMode(DX_FSRESOLUTIONMODE_DESKTOP);
 #if defined(_WIN64) || defined(_WIN32)
@@ -59,13 +51,13 @@ private:
 		SetEnableXAudioFlag(true);
 		SetUseDirect3D11(true);
 		//ウインドウタイトルを変更
-		SetMainWindowText(json.getParameter<std::string>("Title").c_str());
+		SetMainWindowText("Game");
 #endif
 		//画面サイズ変更
-		w_ = json.getParameter<int>("Width");
-		h_ = json.getParameter<int>("Height");
+		w_ = 1280;
+		h_ = 720;
 		SetGraphMode(w_, h_, 32);
-		
+		SetBackgroundColor(0, 0, 0);
 		//ウィンドウモード変更
 		//初期化
 		DxLib_Init();

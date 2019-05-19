@@ -38,7 +38,7 @@ private:
 		void update()
 		{
 			auto& sounds = ResourceManager::GetSound().getSoundMap();
-			for (auto&[key, val] : sounds)
+			for (auto& [key, val] : sounds)
 			{
 				switch (val.second)
 				{
@@ -69,7 +69,6 @@ class Sound final
 private:
 	std::string name_;
 	int handle_;
-	float gain_ = 1.f;
 public:
 	//!コンストラクタで登録したサウンドハンドル名を指定します
 	Sound(const std::string& soundName)
