@@ -17,7 +17,7 @@ public:
 		return radian * (static_cast<float>(180.0f / M_PI));
 	}
 	//1、向きベクトル2、衝突点
-	inline static const Vec2& GetReflectVec(const Vec2& direction, Vec2& pointNormal)
+	inline static const Vec2 GetReflectVec(const Vec2& direction, Vec2& pointNormal)
 	{
 		auto velocity_vector = -direction.getNormalize();
 		auto reflect_vector = 2.0f * velocity_vector.dot(pointNormal);
@@ -25,7 +25,7 @@ public:
 		return (pointNormal * reflect_vector - velocity_vector).getNormalize();
 	}
 	//線分の法線を求める
-	inline static const Vec2 GetLineNormal(const Vec2 & p1, const Vec2 & p2)
+	inline static const Vec2 GetLineNormal(const Vec2& p1, const Vec2& p2)
 	{
 		auto dirVec = p1 - p2;
 		auto normal = Vec2{ -dirVec.y, dirVec.x };
@@ -33,7 +33,7 @@ public:
 		return normal.normalize();
 	}
 	//反射ベクトルを求める
-	inline static const Vec2& GetReflect(const Vec2 & velocity, const Vec2 & normal)
+	inline static const Vec2 GetReflect(const Vec2 & velocity, const Vec2 & normal)
 	{
 		auto n = (velocity.dot(normal) >= 0) ?
 			normal :

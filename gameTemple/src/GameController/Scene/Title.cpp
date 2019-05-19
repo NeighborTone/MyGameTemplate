@@ -131,19 +131,17 @@ namespace Scene
 			Vec3{0,0,1}
 		};
 
-		// 壁ずりベクトル
-		//
-		// out : 正規化壁ずりベクトル（戻り値）
-		// front : 進行ベクトル
-		// normal: 衝突点での法線ベクトル
-		//
-		Vec3* calcWallScratchVector(Vec3* out, const Vec3& front, const Vec3& normal) {
-			Vec3 normal_n;
-			normal_n = normal.Normalize();
-			auto nom = front - normal_n * Vec3::Dot(front, normal_n);
-			*out = nom.Normalize();
-			return out;
+		static const Vec2& GetWallScratchVector(Vec2& velocity, Vec2& normal)
+		{
+			Vec2 nom = velocity - normal * Vec2::Dot(velocity, normal);
+			velocity = nom.normalize();
+			return velocity;
 		}
+		Entity* circle;
+		Entity* l;
+		Entity* l2;
+		Vec2 dir{ 1,0 };//向き
+		float speed = 5;
 	}
 
 	Title::~Title()
@@ -191,38 +189,93 @@ namespace Scene
 		velocity.y = -1;
 		velocity.x = -1;
 		ResourceManager::GetGraph().load("Resource/image/bb.png","p");
+
+		circle = ECS::Primitive2D::CreateCircle(Vec2{ 30.f,640.f }, 20.f, *entityManager_);
+		circle->addComponent<Physics2D>();
+		l = ECS::Primitive2D::CreateLine(Vec2{ 0.f,720.f }, Vec2{ 900.f,300.f }, *entityManager_);
+		l2 = ECS::Primitive2D::CreateLine(Vec2{ 900.f,300.f }, Vec2{ 1280.f,300.f }, *entityManager_);
 	}
 
 	void Title::update()
 	{
-		for (size_t i = 0; i < std::size(c); ++i)
+		if (Input::Get().getKeyFrame(KEY_INPUT_RIGHT) >= 1)
 		{
-			//if (s.pos.getDistanceToPlain(c[i].pos, NORMALS[i]) <= 5)
-			{
-			//	velocity.calcWallScratchVector(NORMALS[i]);
-				//velocity.calcReflection(NORMALS[i]);
-			}
+			speed = 5;
+			dir.x = 1;
 		}
-		if (s.pos.getDistanceToPlain(c[0].pos, NORMALS[0]) <= 5)
+		if (Input::Get().getKeyFrame(KEY_INPUT_LEFT) >= 1)
 		{
-			velocity.calcWallScratchVector(NORMALS[0]);
-			
+			speed = 5;
+			dir.x = -1;
 		}
-		//手前(透明な壁)
-		if (s.pos.getDistanceToPlain(Vec3{ 0,0,-80 }, NORMALS[5]) <= 5)
+		if (Input::Get().getKeyFrame(KEY_INPUT_UP) == 1)
 		{
-			velocity.calcReflection(NORMALS[5]);
+			speed = 5;
+			circle->getComponent<Velocity2D>().val.y += 16;
+		}
+		if (!Input::Get().getIsAnyInput())
+		{
+			speed = 0.0000001f;
+		}
+		
+		circle->getComponent<Velocity2D>().val.x = dir.x * speed;
+		
+		if (Collision2D::CirecleAndLine(circle, l))
+		{
+			auto n = Math::GetLineNormal(l->getComponent<LineData2D>().p1, l->getComponent<LineData2D>().p2);
+			circle->getComponent<Velocity2D>().val = GetWallScratchVector(circle->getComponent<Velocity2D>().val, n);
+			DOUT << circle->getComponent<Velocity2D>().val.x << ":::::"<< circle->getComponent<Velocity2D>().val.y << std::endl;
+			circle->getComponent<Velocity2D>().val *= speed;
+			circle->getComponent<Gravity>().val = 0;
+		}
+		else
+		{
+			circle->getComponent<Physics2D>().setGravity();
 		}
 
-		s.pos += velocity * 1;
-		static float x = 0, y = 0, z = -90;
-		if (Input::Get().getKeyFrame(KEY_INPUT_UP) > 0) { ++z; }
-		if (Input::Get().getKeyFrame(KEY_INPUT_DOWN) > 0) { --z; }
-		if (Input::Get().getKeyFrame(KEY_INPUT_LEFT) > 0) { --x; }
-		if (Input::Get().getKeyFrame(KEY_INPUT_RIGHT) > 0) { ++x; }
-		if (Input::Get().getKeyFrame(KEY_INPUT_Q) > 0) { ++y; }
-		if (Input::Get().getKeyFrame(KEY_INPUT_E) > 0) { --y; }
-		SetCameraPositionAndAngle(VGet(x, y, z), Math::ToRadian(0.f), 0.0f, 0.0f);
+		if (Collision2D::CirecleAndLine(circle, l2))
+		{
+			auto n = Math::GetLineNormal(l2->getComponent<LineData2D>().p1, l2->getComponent<LineData2D>().p2);
+			circle->getComponent<Velocity2D>().val = GetWallScratchVector(circle->getComponent<Velocity2D>().val, n);
+			circle->getComponent<Velocity2D>().val *= speed;
+			circle->getComponent<Gravity>().val = 0;
+		}
+		//else
+		//{
+			//circle->getComponent<Physics2D>().setGravity();
+		//}
+		
+
+
+		
+		//for (size_t i = 0; i < std::size(c); ++i)
+		//{
+		//	//if (s.pos.getDistanceToPlain(c[i].pos, NORMALS[i]) <= 5)
+		//	{
+		//	//	velocity.calcWallScratchVector(NORMALS[i]);
+		//		//velocity.calcReflection(NORMALS[i]);
+		//	}
+		//}
+		//if (s.pos.getDistanceToPlain(c[0].pos, NORMALS[0]) <= 5)
+		//{
+		//	velocity.calcWallScratchVector(NORMALS[0]);
+		//	
+		//}
+		////手前(透明な壁)
+		//if (s.pos.getDistanceToPlain(Vec3{ 0,0,-80 }, NORMALS[5]) <= 5)
+		//{
+		//	velocity.calcReflection(NORMALS[5]);
+		//}
+
+		//s.pos += velocity * 1;
+		//static float x = 0, y = 0, z = -90;
+		//if (Input::Get().getKeyFrame(KEY_INPUT_UP) > 0) { ++z; }
+		//if (Input::Get().getKeyFrame(KEY_INPUT_DOWN) > 0) { --z; }
+		//if (Input::Get().getKeyFrame(KEY_INPUT_LEFT) > 0) { --x; }
+		//if (Input::Get().getKeyFrame(KEY_INPUT_RIGHT) > 0) { ++x; }
+		//if (Input::Get().getKeyFrame(KEY_INPUT_Q) > 0) { ++y; }
+		//if (Input::Get().getKeyFrame(KEY_INPUT_E) > 0) { --y; }
+		//SetCameraPositionAndAngle(VGet(x, y, z), Math::ToRadian(0.f), 0.0f, 0.0f);
 		entityManager_->update();
 	}
 
@@ -232,11 +285,9 @@ namespace Scene
 		//グループ順に描画
 		entityManager_->orderByDraw(ENTITY_GROUP::MAX);
 
-		s.draw();
-		for (auto& it : c) { it.draw(); }
-	//	DrawBillboard3D(VGet(0,0,0), 0.5f, 0.5f, 1, 0, ResourceManager::GetGraph().getHandle("p"), true,false,false);
-		DrawExtendGraph3D(0, 0, 0, 0.1f, 0.1f,ResourceManager::GetGraph().getHandle("p"), true);
-		entityManager_->draw3D();
+		//s.draw();
+		//for (auto& it : c) { it.draw(); }
+		//entityManager_->draw3D();
 		SetDrawMode(DX_DRAWMODE_NEAREST);
 	}
 

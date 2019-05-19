@@ -150,7 +150,7 @@ public:
 	* @brief 自分自身を正規化した値のコピーを返します。自身の値は変わりません
 	* @return Vec2
 	*/
-	[[nodiscard]] const Vec2T& getNormalize() const
+	[[nodiscard]] const Vec2T getNormalize() const
 	{
 		Vec2T result = *this;
 		return result.normalize();
