@@ -140,23 +140,6 @@ namespace Scene
 		: AbstractScene(sceneTitleChange)
 		, entityManager_(entityManager)
 	{
-		//namespace sys = std::filesystem;
-
-		//sys::path p("Resource/image/"); // 列挙の起点
-
-		//std::for_each(sys::directory_iterator(p), sys::directory_iterator(),
-		//	[=](const sys::path & p) mutable
-		//	{
-		//		if (sys::is_regular_file(p))
-		//		{
-		//			;
-
-		//			ResourceManager::GetGraph().load("Resource/image/" + p.filename().string(), p.filename().string() + "p");
-		//		}
-		//		//else if (sys::is_directory(p)) { // ディレクトリなら...
-		//		//	std::cout << "dir.: " << p.string() << std::endl;
-		//		//}
-		//	});
 	}
 
 	void Title::initialize()

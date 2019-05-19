@@ -1,6 +1,6 @@
 ﻿/**
-* @file Collision.hpp
-* @brief Collisionの式をまとめたファイルです
+* @file Collision2D.hpp
+* @brief Collision2Dの式をまとめたファイルです
 * @author tonarinohito
 * @date 2018/10/05
 */
@@ -10,11 +10,11 @@
 #include "../Components/Collider.hpp"
 
 /**
-* @brief Collisionの式をまとめたクラスです。
+* @brief Collision2Dの式をまとめたクラスです。
 * -メソッドはすべてstaticです
 * -引数にEntity*を指定するものはデフォルトのテンプレート引数が指定されています
 */
-class Collision
+class Collision2D
 {
 public:
 	/**

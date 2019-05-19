@@ -25,6 +25,16 @@ namespace ECS
 		explicit Position2D(const float& x, const float& y) :val(x, y) {}
 	};
 	/*!
+	@brief  座標です。データの型はVec3です
+	*/
+	struct Position3D final : public ComponentData
+	{
+		Vec3 val;
+		Position3D() = default;
+		explicit Position3D(const Vec3& v) :val(v) {}
+		explicit Position3D(const float& x, const float& y, const float& z) :val(x, y, z) {}
+	};
+	/*!
 	@brief  回転値です。データの型はfloatです
 	*/
 	struct Rotation final : public ComponentData
@@ -43,6 +53,18 @@ namespace ECS
 		explicit Scale2D(const Vec2& scale) : val(scale) {}
 		explicit Scale2D(const float& scale) : val(scale, scale) {}
 		explicit Scale2D(const float& scaleX, const float& scaleY) : val(scaleX, scaleY) {}
+	};
+	/*!
+	@brief  x,y方向の拡大率です。データの型はVec3です
+	*/
+	struct Scale3D final : public ComponentData
+	{
+		Vec3 val;
+		Scale3D() = default;
+		explicit Scale3D(const Vec3& scale) : val(scale) {}
+		explicit Scale3D(const float& scale) : val(scale, scale, scale) {}
+		explicit Scale3D(const float& scaleX, const float& scaleY, const float& scaleZ) : 
+			val(scaleX, scaleY, scaleZ) {}
 	};
 	/*!
 	@brief  速度です。データの型はVec2です

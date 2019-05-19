@@ -127,6 +127,70 @@ namespace ECS
 		float y() const override { return pos_->val.y + offSetPos_.y; }
 	};
 	
+	class CubeCollider :public ComponentSystem
+	{
+	private:
+		Position3D* pos_ = nullptr;
+		Vec3 offSetPos_{ 0.f,0.f,0.f };
+		Scale3D* scale_ = nullptr;
+		MATERIALPARAM material_;
+		bool isFill_ = false;
+		bool isDraw_ = true;
+	public:
+		CubeCollider()
+		{
+			material_.Diffuse = GetColorF(1, 1, 1, 1);
+			material_.Ambient = GetColorF(0, 0, 0, 1);
+			material_.Specular = GetColorF(1, 1, 1, 1);
+			material_.Emissive = GetColorF(0, 0, 0, 0);
+		}
+		void initialize() override
+		{
+			pos_ = &owner->getComponent<Position3D>();
+			scale_ = &owner->getComponent<Scale3D>();
+		}
+
+		void draw3D() override
+		{
+			if (isDraw_)
+			{
+				//posをキューブの中心として描画する
+				auto radius = scale_->val * 0.5f;
+				auto start = pos_->val - radius;
+				auto end = pos_->val + radius;
+				//マテリアルのパラメータをセット
+				SetMaterialParam(material_);
+				DrawCube3D(
+					start.getVector<VECTOR>(),
+					end.getVector<VECTOR>(),
+					GetColor(int(material_.Diffuse.r * 255), (int(material_.Diffuse.g * 255)), (int(material_.Diffuse.b * 255))),
+					GetColor(int(material_.Specular.r * 255), (int(material_.Specular.g * 255)), (int(material_.Specular.b * 255))),
+					isFill_);
+			}
+		}
+		void setOffset(const float& x, const float& y, const float& z)
+		{
+			offSetPos_.x = x;
+			offSetPos_.y = y;
+			offSetPos_.z = z;
+		}
+
+		void setMaterial(const MATERIALPARAM& mat)
+		{
+			material_.Diffuse = mat.Diffuse;	// デフューズカラー
+			material_.Ambient = mat.Ambient;	// アンビエントカラー
+			material_.Specular = mat.Specular;	// スペキュラカラー
+			material_.Emissive = mat.Emissive;	// エミッシブカラー( 自己発光 )
+			material_.Power = mat.Power;		// スペキュラの強さ
+		}
+		void fillEnable() { isFill_ = true; }
+		void fillDisable() { isFill_ = false; }
+		void drawEnable() { isDraw_ = true; }
+		void drawDisable() { isDraw_ = false; }
+		const float x() const { return pos_->val.x + offSetPos_.x; }
+		const float y() const { return pos_->val.y + offSetPos_.y; }
+		const float z() const { return pos_->val.z + offSetPos_.z; }
+	};
 
 	/*!
 	@brief 円です
@@ -183,6 +247,70 @@ namespace ECS
 		float radius() const override { return r_; }
 		float x() const override { return pos_->val.x + offSetPos_.x; }
 		float y() const override { return pos_->val.y + offSetPos_.y; }
+	};
+
+	class SphereCollider :public ComponentSystem
+	{
+	private:
+		Position3D* pos_ = nullptr;
+		Vec3 offSetPos_{0.f,0.f,0.f};
+		float r_;
+		MATERIALPARAM material_;
+		bool isFill_ = false;
+		bool isDraw_ = true;
+	public:
+		SphereCollider(const float& radius):
+		r_(radius)
+		{
+			material_.Diffuse = GetColorF(1, 1, 1, 1);
+			material_.Ambient = GetColorF(0, 0, 0, 1);
+			material_.Specular = GetColorF(1, 1, 1, 1);
+			material_.Emissive = GetColorF(0, 0, 0, 0);
+		}
+		void initialize() override
+		{
+			pos_ = &owner->getComponent<Position3D>();
+		}
+
+		void draw3D() override
+		{
+			if (isDraw_)
+			{
+				auto convert = pos_->val.offsetCopy(offSetPos_.x, offSetPos_.y, offSetPos_.z);
+				//マテリアルのパラメータをセット
+				SetMaterialParam(material_);
+				DrawSphere3D(
+					convert.getVector<VECTOR>(),
+					r_,
+					16,
+					GetColor(int(material_.Diffuse.r * 255), (int(material_.Diffuse.g * 255)), (int(material_.Diffuse.b * 255))),
+					GetColor(int(material_.Specular.r * 255), (int(material_.Specular.g * 255)), (int(material_.Specular.b * 255))),
+					isFill_);
+			}
+		}
+		void setOffset(const float& x, const float& y, const float& z)
+		{
+			offSetPos_.x = x;
+			offSetPos_.y = y;
+			offSetPos_.z = z;
+		}
+
+		void setMaterial(const MATERIALPARAM& mat)
+		{
+			material_.Diffuse = mat.Diffuse;	// デフューズカラー
+			material_.Ambient = mat.Ambient;	// アンビエントカラー
+			material_.Specular = mat.Specular;	// スペキュラカラー
+			material_.Emissive = mat.Emissive;	// エミッシブカラー( 自己発光 )
+			material_.Power = mat.Power;		// スペキュラの強さ
+		}
+		void fillEnable() { isFill_ = true; }
+		void fillDisable() { isFill_ = false; }
+		void drawEnable() { isDraw_ = true; }
+		void drawDisable() { isDraw_ = false; }
+		float radius() const  { return r_; }
+		float x() const { return pos_->val.x + offSetPos_.x; }
+		float y() const { return pos_->val.y + offSetPos_.y; }
+		float z() const { return pos_->val.z + offSetPos_.z; }
 	};
 
 	/*!
@@ -262,10 +390,5 @@ namespace ECS
 	};
 
 
-	class SphereCollider :public ComponentSystem
-	{
-	private:
-
-	public:
-	};
+	
 }
